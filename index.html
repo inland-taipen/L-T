@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Unified Operational Visibility Dashboard | L&T PMG</title>
+  <meta name="description" content="AI-powered centralized operational visibility platform — PMG Operational Governance."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+/* ═══════════ THEME TOKENS ═══════════ */
+:root {
+  --transition-theme: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+[data-theme="dark"] {
+  --bg-base:       #050c1a;
+  --bg-raised:     #080f22;
+  --bg-card:       rgba(10,20,46,0.88);
+  --bg-card-solid: #0a1430;
+  --bg-hover:      rgba(0,180,255,0.06);
+  --bg-input:      rgba(255,255,255,0.05);
+  --border-main:   rgba(0,180,255,0.16);
+  --border-subtle: rgba(255,255,255,0.06);
+  --text-h:        #f0f6ff;
+  --text-p:        #8da5c4;
+  --text-muted:    #4a6080;
+  --shadow-card:   0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(0,180,255,0.1);
+  --shadow-glow:   0 0 28px rgba(0,180,255,0.14);
+  --shadow-modal:  0 24px 80px rgba(0,0,0,0.7);
+  --grid-color:    rgba(0,180,255,0.022);
+  --sidebar-bg:    rgba(4,10,24,0.8);
+  --topbar-bg:     rgba(4,10,24,0.94);
+  --footer-bg:     rgba(2,6,16,0.98);
+  --overlay:       rgba(0,5,20,0.75);
+  --ring-track:    rgba(255,255,255,0.05);
+  --badge-bg:      rgba(255,255,255,0.04);
+  --badge-border:  rgba(255,255,255,0.08);
+  --table-stripe:  rgba(255,255,255,0.02);
+  --chip-bg:       rgba(255,255,255,0.06);
+}
+
+[data-theme="light"] {
+  --bg-base:       #f0f4fa;
+  --bg-raised:     #e8eef8;
+  --bg-card:       rgba(255,255,255,0.95);
+  --bg-card-solid: #ffffff;
+  --bg-hover:      rgba(0,100,220,0.05);
+  --bg-input:      rgba(0,0,0,0.04);
+  --border-main:   rgba(0,100,220,0.2);
+  --border-subtle: rgba(0,0,0,0.08);
+  --text-h:        #0d1b2e;
+  --text-p:        #3a5068;
+  --text-muted:    #8098b0;
+  --shadow-card:   0 4px 20px rgba(0,0,0,0.08), 0 1px 0 rgba(0,100,220,0.06);
+  --shadow-glow:   0 0 20px rgba(0,100,220,0.1);
+  --shadow-modal:  0 24px 80px rgba(0,0,0,0.18);
+  --grid-color:    rgba(0,100,220,0.04);
+  --sidebar-bg:    rgba(228,235,250,0.9);
+  --topbar-bg:     rgba(248,250,255,0.96);
+  --footer-bg:     rgba(20,35,65,0.98);
+  --overlay:       rgba(10,20,40,0.5);
+  --ring-track:    rgba(0,0,0,0.07);
+  --badge-bg:      rgba(0,0,0,0.04);
+  --badge-border:  rgba(0,0,0,0.1);
+  --table-stripe:  rgba(0,0,0,0.02);
+  --chip-bg:       rgba(0,0,0,0.06);
+}
+
+/* ═══════════ ACCENT PALETTE (SAME BOTH THEMES) ═══════════ */
+:root {
+  --blue:    #0070e0;
+  --cyan:    #00c8f0;
+  --teal:    #00d4b0;
+  --purple:  #9b5de5;
+  --orange:  #f0812a;
+  --red:     #e63050;
+  --green:   #1ab754;
+  --yellow:  #f5a623;
+  --indigo:  #5b67e8;
+  --g-blue:  linear-gradient(135deg,#0091ff,#0050cc);
+  --g-teal:  linear-gradient(135deg,#00d4b0,#0091ff);
+  --g-purple:linear-gradient(135deg,#9b5de5,#5b67e8);
+  --g-orange:linear-gradient(135deg,#f0812a,#e63050);
+  --g-green: linear-gradient(135deg,#1ab754,#0ea04a);
+  --g-yellow:linear-gradient(135deg,#f5a623,#e0851a);
+  --radius:    14px;
+  --radius-sm: 9px;
+  --radius-xs: 6px;
+}
+
+/* ═══════════ RESET / BASE ═══════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-h);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: var(--transition-theme);
+}
+
+/* BG decorations */
+.bg-deco {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+}
+.bg-deco::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+[data-theme="dark"] .bg-deco::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 15% 5%, rgba(0,100,255,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 40% at 85% 85%, rgba(0,180,255,0.05) 0%, transparent 60%);
+}
+
+/* ═══════════ TOPBAR ═══════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 200;
+  height: 62px;
+  background: var(--topbar-bg);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border-main);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  transition: var(--transition-theme);
+}
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.lt-badge {
+  background: linear-gradient(135deg,#002f6c,#004fbb);
+  border: 1.5px solid rgba(0,120,255,0.45);
+  border-radius: 7px; padding: 3px 9px;
+  font-weight: 900; font-size: 17px; letter-spacing: 1px; color: #fff;
+  box-shadow: 0 0 14px rgba(0,70,200,0.38); flex-shrink:0;
+}
+.topbar-sep { width: 1px; height: 28px; background: var(--border-subtle); }
+.topbar-title { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+.topbar-title strong { display: block; font-size: 14px; font-weight: 700; color: var(--text-h); }
+
+.topbar-center {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,180,255,0.08); border: 1px solid rgba(0,180,255,0.18);
+  border-radius: 50px; padding: 5px 14px;
+}
+[data-theme="light"] .topbar-center { background: rgba(0,100,220,0.07); border-color: rgba(0,100,220,0.18); }
+.ai-pulse { width: 7px; height: 7px; background: var(--cyan); border-radius: 50%; animation: pulseDot 2s ease-in-out infinite; }
+@keyframes pulseDot { 0%,100%{box-shadow:0 0 0 0 rgba(0,200,240,.5);} 50%{box-shadow:0 0 0 5px rgba(0,200,240,0);} }
+.ai-label { font-size: 11px; font-weight: 700; color: var(--cyan); letter-spacing: .8px; }
+[data-theme="light"] .ai-label { color: var(--blue); }
+
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.topbar-clock { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-muted); }
+
+/* Theme toggle */
+.theme-toggle {
+  width: 38px; height: 21px;
+  background: var(--chip-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.theme-toggle::before {
+  content: '';
+  position: absolute; top: 2px; left: 2px;
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: all 0.3s ease;
+}
+[data-theme="light"] .theme-toggle::before { left: 19px; background: var(--blue); }
+.theme-toggle-wrap { display: flex; align-items: center; gap: 6px; }
+.theme-icon { font-size: 13px; color: var(--text-muted); }
+
+.notif-btn { position: relative; cursor: pointer; }
+.notif-btn i { font-size: 16px; color: var(--text-muted); }
+.notif-dot { width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 2px solid var(--topbar-bg); position: absolute; top: -2px; right: -2px; box-shadow: 0 0 5px var(--red); }
+.user-chip { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 10px 4px 4px; border-radius: 50px; border: 1px solid var(--border-subtle); background: var(--badge-bg); transition: all .2s; }
+.user-chip:hover { border-color: var(--border-main); background: var(--bg-hover); }
+.user-av { width: 30px; height: 30px; background: var(--g-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; }
+.user-role { font-size: 11px; font-weight: 600; color: var(--text-p); }
+
+/* ═══════════ WRAPPER ═══════════ */
+.main-wrapper { position: relative; z-index: 1; display: flex; min-height: calc(100vh - 62px); }
+
+/* ═══════════ SIDEBAR ═══════════ */
+.sidebar {
+  width: 216px; flex-shrink: 0;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-main);
+  padding: 16px 0;
+  position: sticky; top: 62px;
+  height: calc(100vh - 62px);
+  overflow-y: auto;
+  transition: var(--transition-theme);
+  backdrop-filter: blur(20px);
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border-main); border-radius: 2px; }
+.sb-label { font-size: 9.5px; font-weight: 800; letter-spacing: 1.5px; color: var(--text-muted); padding: 14px 18px 5px; text-transform: uppercase; }
+.sb-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 18px; font-size: 12.5px; font-weight: 500;
+  color: var(--text-p); cursor: pointer;
+  border-left: 2.5px solid transparent;
+  transition: all .2s ease; user-select: none;
+}
+.sb-item:hover { background: var(--bg-hover); color: var(--blue); }
+.sb-item.active { background: var(--bg-hover); color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+.sb-item i { width: 15px; text-align: center; font-size: 12px; flex-shrink: 0; }
+.sb-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 9.5px; font-weight: 700; padding: 1px 5px; border-radius: 9px; min-width: 17px; text-align: center; flex-shrink:0; }
+.sb-badge.yellow { background: var(--yellow); }
+.sb-badge.green  { background: var(--green); }
+
+/* ═══════════ CONTENT ═══════════ */
+.content-area { flex: 1; padding: 24px 28px 40px; overflow-y: auto; min-width: 0; }
+
+/* ═══════════ PAGE HEADER ═══════════ */
+.page-crumb { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+.page-crumb a { color: var(--blue); text-decoration: none; font-weight: 500; }
+.page-title { font-size: 23px; font-weight: 800; letter-spacing: -.4px; color: var(--text-h); margin-bottom: 3px; }
+[data-theme="dark"] .page-title { background: linear-gradient(135deg,#fff 40%,var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-sub { font-size: 12.5px; color: var(--text-muted); }
+.page-header-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+.header-btns { display: flex; gap: 8px; align-items: center; flex-shrink:0; }
+
+/* ═══════════ BUTTONS ═══════════ */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; cursor: pointer; border: none; transition: all .2s ease; font-family: 'Inter', sans-serif; }
+.btn-primary { background: var(--g-blue); color: #fff; box-shadow: 0 3px 12px rgba(0,100,220,.28); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(0,100,220,.38); }
+.btn-outline { background: transparent; color: var(--text-p); border: 1px solid var(--border-main); }
+.btn-outline:hover { background: var(--bg-hover); color: var(--blue); border-color: var(--blue); }
+.btn-ghost { background: transparent; color: var(--text-muted); border: none; padding: 7px 10px; }
+.btn-ghost:hover { color: var(--blue); background: var(--bg-hover); border-radius: var(--radius-xs); }
+
+/* ═══════════ ALERT BANNERS ═══════════ */
+.alert { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; margin-bottom: 12px; cursor:pointer; transition: all .2s; }
+.alert:hover { filter: brightness(1.08); }
+.alert-close { margin-left: auto; background: none; border: none; font-size: 14px; cursor: pointer; opacity: .6; flex-shrink:0; transition: opacity .2s; }
+.alert-close:hover { opacity: 1; }
+.alert-crit { background: rgba(230,48,80,0.08); border: 1px solid rgba(230,48,80,.22); color: #e87090; }
+.alert-warn { background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,.22); color: #f0b84a; }
+[data-theme="light"] .alert-crit { background: rgba(230,48,80,0.06); color: #c02444; border-color: rgba(230,48,80,.2); }
+[data-theme="light"] .alert-warn { background: rgba(245,166,35,0.08); color: #b87a10; border-color: rgba(245,166,35,.25); }
+
+/* ═══════════ STATUS STRIP ═══════════ */
+.status-strip {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0;
+  background: var(--bg-card); border: 1px solid var(--border-main);
+  border-radius: var(--radius-sm); margin-bottom: 20px;
+  backdrop-filter: blur(12px); overflow: hidden;
+}
+.ss-item { display: flex; align-items: center; gap: 7px; padding: 10px 18px; font-size: 12px; border-right: 1px solid var(--border-subtle); cursor:pointer; transition: background .2s; }
+.ss-item:hover { background: var(--bg-hover); }
+.ss-item:last-child { border-right: none; margin-left: auto; }
+.ss-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink:0; }
+.ss-dot.g { background: var(--green); box-shadow: 0 0 5px var(--green); }
+.ss-dot.y { background: var(--yellow); box-shadow: 0 0 5px var(--yellow); }
+.ss-dot.r { background: var(--red); box-shadow: 0 0 5px var(--red); }
+.ss-dot.b { background: var(--blue); box-shadow: 0 0 5px var(--blue); }
+.ss-lbl { color: var(--text-muted); font-weight: 500; }
+.ss-val { color: var(--text-h); font-weight: 700; }
+.ss-sync { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); padding: 10px 18px; }
+.ss-sync i { color: var(--teal); }
+
+/* ═══════════ KPI GRID ═══════════ */
+.kpi-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; margin-bottom: 22px; }
+.kpi-card {
+  background: var(--bg-card); border: 1px solid var(--border-main);
+  border-radius: var(--radius); padding: 16px 14px;
+  backdrop-filter: blur(14px); box-shadow: var(--shadow-card);
+  position: relative; overflow: hidden; cursor: pointer;
+  transition: all .25s ease;
+  animation: fadeUp .4s ease both;
+}
+.kpi-card::before { content:''; position:absolute; top:0;left:0;right:0;height:2.5px; background: var(--kbar); }
+.kpi-card:hover { border-color: var(--khover,rgba(0,180,255,.3)); transform: translateY(-2px); box-shadow: var(--shadow-glow), var(--shadow-card); }
+.kpi-card:active { transform: translateY(0); }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.kpi-card:nth-child(1){animation-delay:.04s}.kpi-card:nth-child(2){animation-delay:.08s}.kpi-card:nth-child(3){animation-delay:.12s}
+.kpi-card:nth-child(4){animation-delay:.16s}.kpi-card:nth-child(5){animation-delay:.20s}.kpi-card:nth-child(6){animation-delay:.24s}
+.kpi-icon { width: 34px;height:34px; border-radius: 9px; display:flex;align-items:center;justify-content:center; font-size:14px; margin-bottom:10px; background:var(--kibg); color:var(--kicol); }
+.kpi-val { font-size:26px;font-weight:800;line-height:1;margin-bottom:3px;font-family:'JetBrains Mono',monospace;color:var(--kicol); }
+.kpi-lbl { font-size:10.5px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px; }
+.kpi-delta { display:flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600; }
+.kpi-delta.up{color:var(--green)}.kpi-delta.dn{color:var(--red)}.kpi-delta.warn{color:var(--yellow)}
+.kpi-sparkline { margin-top:8px; }
+
+/* ═══════════ CARD BASE ═══════════ */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border-main);
+  border-radius: var(--radius); backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-card); overflow: hidden;
+  transition: all .25s ease;
+}
+.card:hover { border-color: rgba(0,145,255,.25); }
+.card-hdr {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:15px 18px 12px; border-bottom:1px solid var(--border-subtle);
+}
+.card-title { display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:700;color:var(--text-h); }
+.c-icon { width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11.5px; }
+.card-body { padding:16px 18px; }
+.badge-live { display:flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid rgba(0,200,240,.22);background:rgba(0,200,240,.07);color:var(--cyan); }
+.badge-live::before { content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:pulseDot 1.5s infinite; }
+[data-theme="light"] .badge-live { color:var(--blue);border-color:rgba(0,100,220,.2);background:rgba(0,100,220,.06); }
+
+/* ═══════════ SECTION HEADER ═══════════ */
+.sec-hdr { display:flex;align-items:center;gap:10px;margin-bottom:16px; }
+.sec-title { font-size:15px;font-weight:700;color:var(--text-h);white-space:nowrap; }
+.sec-line { flex:1;height:1px;background:var(--border-subtle); }
+.sec-tag { font-size:10.5px;color:var(--text-muted);background:var(--badge-bg);border:1px solid var(--badge-border);border-radius:20px;padding:3px 9px;white-space:nowrap; }
+
+/* ═══════════ MAIN GRIDS ═══════════ */
+.g3 { display:grid;grid-template-columns:1fr 1fr 360px;gap:18px;margin-bottom:20px; }
+.g2 { display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px; }
+.g2r { display:flex;flex-direction:column;gap:18px; }
+
+/* ═══════════ RING CHARTS ═══════════ */
+.rings-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px; }
+.ring-item { display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:transform .2s; }
+.ring-item:hover { transform:scale(1.05); }
+.ring-wrap { position:relative;width:70px;height:70px; }
+.ring-wrap svg { transform:rotate(-90deg);width:70px;height:70px; }
+.ring-wrap svg circle { fill:none;stroke-width:5.5;stroke-linecap:round; }
+.ring-track { stroke:var(--ring-track); }
+.ring-center { position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center; }
+.ring-pct { font-size:15px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1; }
+.ring-name { font-size:10.5px;color:var(--text-muted);font-weight:500;text-align:center; }
+
+/* ═══════════ MILESTONES ═══════════ */
+.ms-list { display:flex;flex-direction:column;gap:8px; }
+.ms-item {
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  border-radius:var(--radius-sm);background:var(--table-stripe);
+  border:1px solid var(--border-subtle);cursor:pointer;
+  transition:all .2s;
+}
+.ms-item:hover { background:var(--bg-hover);border-color:var(--border-main);transform:translateX(2px); }
+.ms-ico { width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0; }
+.ms-info { flex:1;min-width:0; }
+.ms-name { font-size:12.5px;font-weight:600;color:var(--text-h);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.ms-meta { font-size:10.5px;color:var(--text-muted);margin-top:1px; }
+.ms-tag { font-size:10.5px;font-weight:700;padding:2.5px 7px;border-radius:5px;flex-shrink:0; }
+.tag-ot{background:rgba(26,183,84,.12);color:var(--green)}.tag-dl{background:rgba(230,48,80,.12);color:var(--red)}.tag-ar{background:rgba(245,166,35,.12);color:var(--yellow)}.tag-cp{background:rgba(0,145,255,.12);color:var(--blue)}
+[data-theme="light"] .tag-ot{background:rgba(26,183,84,.1)}.tag-dl{background:rgba(230,48,80,.1)}.tag-ar{background:rgba(245,166,35,.1)}.tag-cp{background:rgba(0,100,220,.1)}
+
+/* ═══════════ ESCALATIONS ═══════════ */
+.esc-list { display:flex;flex-direction:column;gap:7px; }
+.esc-item {
+  display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
+  border-radius:var(--radius-sm);border:1px solid;position:relative;
+  overflow:hidden;cursor:pointer;transition:all .2s;
+}
+.esc-item:hover { filter:brightness(1.12);transform:translateX(2px); }
+.esc-item::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ec); }
+.esc-ico { width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0; }
+.esc-body { flex:1; }
+.esc-ttl { font-size:11.5px;font-weight:700;color:var(--text-h);margin-bottom:1.5px; }
+.esc-sub { font-size:10.5px;color:var(--text-muted); }
+.esc-age { font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;flex-shrink:0; }
+
+/* ═══════════ DOMAIN CARDS ═══════════ */
+.domains-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px; }
+.domain-card {
+  padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);
+  background:var(--table-stripe);cursor:pointer;position:relative;overflow:hidden;
+  transition:all .25s ease;
+}
+.domain-card::after { content:'';position:absolute;bottom:0;left:0;right:0;height:2.5px;background:var(--dc);transform:scaleX(0);transition:transform .25s ease; }
+.domain-card:hover { background:var(--bg-hover);border-color:var(--border-main);transform:translateY(-2px); }
+.domain-card:hover::after { transform:scaleX(1); }
+.dc-icon { width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:10px; }
+.dc-name { font-size:12.5px;font-weight:700;margin-bottom:3px; }
+.dc-sub { font-size:10.5px;color:var(--text-muted); }
+.dc-stats { display:flex;gap:10px;margin-top:9px; }
+.dc-stat { font-size:10.5px;color:var(--text-muted); }
+.dc-stat strong { color:var(--text-h);display:block;font-size:15px;font-weight:800;font-family:'JetBrains Mono',monospace; }
+.dc-bar { margin-top:9px;height:3px;border-radius:3px;background:var(--ring-track);overflow:hidden; }
+.dc-bar-fill { height:100%;border-radius:3px; }
+
+/* ═══════════ TABLE ═══════════ */
+.exp-table { width:100%;border-collapse:collapse; }
+.exp-table th { font-size:10.5px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border-subtle); }
+.exp-table td { padding:9px 10px;font-size:12.5px;border-bottom:1px solid var(--border-subtle);vertical-align:middle; }
+.exp-table tr { cursor:pointer;transition:background .15s; }
+.exp-table tr:hover td { background:var(--bg-hover); }
+.exp-bar-wrap { display:flex;align-items:center;gap:7px; }
+.exp-bar { flex:1;height:5px;background:var(--ring-track);border-radius:4px;overflow:hidden; }
+.exp-bar-fill { height:100%;border-radius:4px; }
+.sev-chip { font-size:10.5px;font-weight:700;padding:2.5px 7px;border-radius:5px; }
+.sev-c{background:rgba(230,48,80,.12);color:var(--red)}.sev-h{background:rgba(245,166,35,.12);color:var(--yellow)}.sev-m{background:rgba(0,145,255,.12);color:var(--blue)}.sev-l{background:rgba(26,183,84,.12);color:var(--green)}
+
+/* ═══════════ AI INSIGHTS ═══════════ */
+.ai-list { display:flex;flex-direction:column;gap:9px; }
+.ai-item {
+  display:flex;gap:10px;padding:12px;border-radius:var(--radius-sm);
+  background:var(--table-stripe);border:1px solid var(--border-subtle);
+  cursor:pointer;transition:all .2s;
+}
+.ai-item:hover { background:rgba(155,93,229,.06);border-color:rgba(155,93,229,.2);transform:translateX(2px); }
+.ai-ico { width:30px;height:30px;border-radius:7px;background:rgba(155,93,229,.12);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0; }
+.ai-txt { font-size:11.5px;color:var(--text-p);line-height:1.6; }
+.ai-txt strong { color:var(--text-h); }
+.ai-time { font-size:10px;color:var(--text-muted);margin-top:3px; }
+.ai-conf { display:inline-block;font-size:9.5px;font-weight:700;padding:1.5px 6px;border-radius:4px;background:rgba(155,93,229,.1);color:var(--purple);margin-left:4px; }
+
+/* ═══════════ HEATMAP ═══════════ */
+.hmap-lbl { display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px; }
+.hmap-day { font-size:9.5px;color:var(--text-muted);text-align:center;font-weight:600; }
+.hmap-grid { display:grid;grid-template-columns:repeat(7,1fr);gap:3px; }
+.hmap-cell { height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;cursor:pointer;transition:transform .15s;color:#fff;position:relative; }
+.hmap-cell:hover { transform:scale(1.15);z-index:5; }
+
+/* ═══════════ SYNC GAPS ═══════════ */
+.sync-list { display:flex;flex-direction:column;gap:7px; }
+.sync-item {
+  display:flex;align-items:center;gap:8px;padding:9px 11px;
+  border-radius:var(--radius-sm);background:rgba(230,48,80,.04);
+  border:1px solid rgba(230,48,80,.1);cursor:pointer;transition:all .2s;
+}
+.sync-item:hover { background:rgba(230,48,80,.08);transform:translateX(2px); }
+.sync-from,.sync-to { font-size:10.5px;font-weight:700;padding:2.5px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0; }
+.sync-desc { flex:1;font-size:11px;color:var(--text-p); }
+.sync-gap { font-size:10px;font-weight:700;color:var(--red);white-space:nowrap;flex-shrink:0; }
+
+/* ═══════════ DEP GRID ═══════════ */
+.dep-grid { display:grid;grid-template-columns:1fr 1fr;gap:9px; }
+.dep-item { padding:10px;border-radius:var(--radius-sm);background:var(--table-stripe);border:1px solid var(--border-subtle);cursor:pointer;transition:all .2s; }
+.dep-item:hover { background:var(--bg-hover);border-color:var(--border-main);transform:translateY(-1px); }
+.dep-hdr { display:flex;align-items:center;justify-content:space-between;margin-bottom:7px; }
+.dep-name { font-size:11px;font-weight:600;color:var(--text-p); }
+.dep-cnt { font-size:11px;font-weight:700; }
+.dep-bar { height:3.5px;background:var(--ring-track);border-radius:3px;overflow:hidden; }
+.dep-fill { height:100%;border-radius:3px; }
+
+/* ═══════════ TIMELINE ═══════════ */
+.timeline { position:relative;padding-left:18px; }
+.timeline::before { content:'';position:absolute;left:5px;top:0;bottom:0;width:1px;background:var(--border-subtle); }
+.tl-item { position:relative;padding:0 0 14px 18px;cursor:pointer; }
+.tl-item::before { content:'';position:absolute;left:-19px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--tc,var(--blue));box-shadow:0 0 7px var(--tc,var(--blue));border:2px solid var(--bg-base); }
+.tl-t { font-size:12.5px;font-weight:600;color:var(--text-h);margin-bottom:2px;transition:color .2s; }
+.tl-item:hover .tl-t { color:var(--blue); }
+.tl-s { font-size:10.5px;color:var(--text-muted); }
+
+/* ═══════════ ROLE TABS ═══════════ */
+.role-tabs { display:flex;gap:5px;padding:14px 18px 0;flex-wrap:wrap; }
+.role-tab { padding:6px 13px;border-radius:var(--radius-sm);font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--border-subtle);color:var(--text-muted);background:transparent;transition:all .2s;font-family:'Inter',sans-serif; }
+.role-tab:hover,.role-tab.active { background:var(--bg-hover);color:var(--blue);border-color:var(--border-main); }
+.role-view { display:none; }
+.role-view.active { display:block; }
+
+/* ═══════════ MINI CHART ═══════════ */
+.mini-chart { width:100%;height:56px; }
+
+/* ═══════════ FOOTER ═══════════ */
+.footer {
+  position:relative;z-index:1;
+  background:var(--footer-bg);
+  border-top:1px solid var(--border-main);
+  padding:18px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:20px; flex-wrap: wrap;
+}
+.footer-lt { display:flex;align-items:center;gap:9px; }
+.footer-badge { background:linear-gradient(135deg,#002f6c,#004fbb);border:1.5px solid rgba(0,120,255,.45);border-radius:6px;padding:3px 9px;font-weight:900;font-size:19px;letter-spacing:1.5px;color:#fff;box-shadow:0 0 12px rgba(0,70,200,.35); }
+.footer-info strong { display:block;font-size:12px;color:rgba(255,255,255,.85); }
+.footer-info span { font-size:10.5px;color:rgba(255,255,255,.45); }
+.footer-div { width:1px;height:28px;background:rgba(255,255,255,.1); }
+.footer-pmg strong { display:block;font-size:11.5px;color:rgba(255,255,255,.6);margin-bottom:1px; }
+.footer-pmg span { font-size:10px;color:rgba(255,255,255,.3); }
+.footer-center { text-align:center; }
+.footer-addr { font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.3);margin-bottom:3px; }
+.footer-copy { font-size:9.5px;color:rgba(255,255,255,.25); }
+.footer-right { display:flex;flex-direction:column;align-items:flex-end;gap:5px; }
+.powered-row { display:flex;align-items:center;gap:7px; }
+.powered-lbl { font-size:9.5px;color:rgba(255,255,255,.35);font-weight:600;letter-spacing:.8px;text-transform:uppercase; }
+.appl-logo { display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(0,145,255,.12),rgba(155,93,229,.12));border:1px solid rgba(0,145,255,.2);border-radius:7px;padding:4px 11px;transition:all .2s;cursor:pointer; }
+.appl-logo:hover { border-color:rgba(0,145,255,.4); }
+.appl-ico { width:19px;height:19px;background:var(--g-blue);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:900; }
+.appl-name { font-size:13px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.footer-ai { display:flex;align-items:center;gap:5px;font-size:9.5px;color:rgba(155,93,229,.8);background:rgba(155,93,229,.08);border:1px solid rgba(155,93,229,.18);border-radius:20px;padding:2.5px 9px; }
+
+/* ═══════════ SCROLLBAR ═══════════ */
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-main);border-radius:3px}
+
+/* ═══════════ DRAWER ═══════════ */
+.drawer-overlay {
+  position:fixed;inset:0;background:var(--overlay);z-index:400;
+  opacity:0;pointer-events:none;transition:opacity .3s ease;backdrop-filter:blur(4px);
+}
+.drawer-overlay.open { opacity:1;pointer-events:all; }
+.drawer {
+  position:fixed;right:0;top:0;bottom:0;width:480px;max-width:95vw;
+  background:var(--bg-card-solid);border-left:1px solid var(--border-main);
+  z-index:401;transform:translateX(100%);transition:transform .35s cubic-bezier(.25,.8,.25,1);
+  display:flex;flex-direction:column;box-shadow:var(--shadow-modal);
+}
+.drawer.open { transform:translateX(0); }
+.drawer-hdr {
+  display:flex;align-items:center;gap:10px;padding:18px 20px;
+  border-bottom:1px solid var(--border-subtle);flex-shrink:0;
+}
+.drawer-hdr h3 { font-size:15px;font-weight:700;color:var(--text-h);flex:1; }
+.drawer-hdr .drawer-close { width:28px;height:28px;border-radius:7px;border:none;background:var(--badge-bg);color:var(--text-muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s; }
+.drawer-hdr .drawer-close:hover { background:var(--bg-hover);color:var(--text-h); }
+.drawer-body { flex:1;overflow-y:auto;padding:20px; }
+.drawer-section { margin-bottom:22px; }
+.drawer-section-title { font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle); }
+.dstat-row { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px; }
+.dstat { padding:12px;border-radius:var(--radius-sm);background:var(--table-stripe);border:1px solid var(--border-subtle); }
+.dstat-lbl { font-size:10.5px;color:var(--text-muted);margin-bottom:3px; }
+.dstat-val { font-size:20px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--text-h); }
+.dstat-sub { font-size:10px;color:var(--text-muted);margin-top:2px; }
+.dinfo-row { display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-subtle);font-size:12.5px; }
+.dinfo-row:last-child { border:none; }
+.dinfo-lbl { color:var(--text-muted);font-weight:500; }
+.dinfo-val { color:var(--text-h);font-weight:600; }
+.drawer-progress { margin-top:6px; }
+.dp-row { display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px; }
+.dp-lbl { width:100px;color:var(--text-muted);flex-shrink:0;font-weight:500; }
+.dp-bar { flex:1;height:5px;background:var(--ring-track);border-radius:4px;overflow:hidden; }
+.dp-fill { height:100%;border-radius:4px; }
+.dp-val { width:36px;text-align:right;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0; }
+.drawer-action-row { display:flex;gap:8px;margin-top:4px; }
+.chip { display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;font-size:10.5px;font-weight:600;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-p); }
+.chip-r{background:rgba(230,48,80,.1);border-color:rgba(230,48,80,.2);color:var(--red)}.chip-y{background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.2);color:var(--yellow)}.chip-g{background:rgba(26,183,84,.1);border-color:rgba(26,183,84,.2);color:var(--green)}.chip-b{background:rgba(0,145,255,.1);border-color:rgba(0,145,255,.2);color:var(--blue)}.chip-p{background:rgba(155,93,229,.1);border-color:rgba(155,93,229,.2);color:var(--purple)}
+.drawer-footer { padding:16px 20px;border-top:1px solid var(--border-subtle);display:flex;gap:8px;flex-shrink:0; }
+
+/* ═══════════ MODAL ═══════════ */
+.modal-overlay {
+  position:fixed;inset:0;background:var(--overlay);z-index:500;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px);
+}
+.modal-overlay.open { opacity:1;pointer-events:all; }
+.modal {
+  background:var(--bg-card-solid);border:1px solid var(--border-main);
+  border-radius:var(--radius);box-shadow:var(--shadow-modal);
+  width:560px;max-width:94vw;max-height:88vh;
+  display:flex;flex-direction:column;
+  transform:scale(.92) translateY(12px);transition:transform .3s cubic-bezier(.25,.8,.25,1);
+}
+.modal-overlay.open .modal { transform:scale(1) translateY(0); }
+.modal-hdr { display:flex;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid var(--border-subtle);flex-shrink:0; }
+.modal-hdr h3 { font-size:15px;font-weight:700;color:var(--text-h);flex:1; }
+.modal-close { width:28px;height:28px;border-radius:7px;border:none;background:var(--badge-bg);color:var(--text-muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s; }
+.modal-close:hover { background:var(--bg-hover);color:var(--text-h); }
+.modal-body { flex:1;overflow-y:auto;padding:20px; }
+.modal-footer { padding:14px 20px;border-top:1px solid var(--border-subtle);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0; }
+
+/* ═══════════ TOOLTIP ═══════════ */
+[data-tip] { position:relative; }
+[data-tip]::after { content:attr(data-tip);position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:var(--bg-card-solid);border:1px solid var(--border-main);padding:4px 8px;border-radius:6px;font-size:10.5px;color:var(--text-h);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;box-shadow:var(--shadow-card); }
+[data-tip]:hover::after { opacity:1; }
+
+/* ═══════════ TOAST ═══════════ */
+#toast-container { position:fixed;bottom:24px;right:24px;z-index:600;display:flex;flex-direction:column;gap:8px; }
+.toast { display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--radius-sm);background:var(--bg-card-solid);border:1px solid var(--border-main);box-shadow:var(--shadow-modal);font-size:12.5px;color:var(--text-h);min-width:280px;max-width:360px;animation:toastIn .3s ease;font-family:'Inter',sans-serif; }
+@keyframes toastIn { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
+.toast.fadeout { animation:toastOut .3s ease forwards; }
+@keyframes toastOut { to{opacity:0;transform:translateX(30px)} }
+.toast-ico { font-size:15px;flex-shrink:0; }
+
+/* ═══════════ SEARCH BAR ═══════════ */
+.ai-search { display:flex;align-items:center;gap:9px;padding:11px 13px;background:var(--bg-input);border:1px dashed rgba(155,93,229,.3);border-radius:var(--radius-sm);margin-top:12px;cursor:pointer;transition:all .2s; }
+.ai-search:hover { border-color:rgba(155,93,229,.5);background:rgba(155,93,229,.04); }
+.ai-search input { flex:1;background:none;border:none;outline:none;font-size:12px;color:var(--text-p);font-family:'Inter',sans-serif;cursor:pointer; }
+.ai-search input::placeholder { color:var(--text-muted); }
+.ai-search-btn { padding:5px 12px;background:var(--g-purple);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;font-family:'Inter',sans-serif; }
+
+/* ═══════════ ROLE VIEW GRID ═══════════ */
+.rv-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px; }
+.rv-stat { padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);background:var(--table-stripe); }
+.rv-lbl { font-size:10.5px;color:var(--text-muted);margin-bottom:3px; }
+.rv-val { font-size:24px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--text-h);margin-bottom:2px; }
+.rv-sub { font-size:10px;color:var(--text-muted); }
+.rv-summary { font-size:12px;color:var(--text-p);padding:11px 13px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-subtle);line-height:1.65; }
+.rv-summary strong { color:var(--blue); }
+
+/* ═══════════ PROGRESS BAR ═══════════ */
+.prog-wrap { margin-top:5px; }
+.prog { height:5px;border-radius:4px;background:var(--ring-track);overflow:hidden; }
+.prog-fill { height:100%;border-radius:4px;transition:width 1s ease; }
+
+/* ═══════════ PRINT STYLES FOR PDF EXPORT ═══════════ */
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .sidebar, .topbar, .bg-deco, #modalOverlay, #drawerOverlay, #passcodeOverlay, .topbar-actions, .alert, .theme-toggle, button { display: none !important; }
+  .app-layout { grid-template-columns: 1fr !important; }
+  .main-content { padding: 0 !important; }
+  .card, .glass-card { background: #fff !important; border: 1px solid #ccc !important; box-shadow: none !important; color: #000 !important; page-break-inside: avoid; }
+  .text-p, .text-muted, .rv-lbl, .dinfo-lbl { color: #333 !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ SECURITY PASSCODE OVERLAY ═══ -->
+<div id="passcodeOverlay" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#040a18,#0a1430);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(20px);padding:20px">
+  <div style="background:rgba(10,20,46,0.92);border:1px solid rgba(0,180,255,0.3);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,180,255,0.15);width:420px;max-width:92vw;padding:32px 28px;text-align:center;font-family:Inter,sans-serif">
+    <img src="lt-logo.png" alt="L&T" style="height:56px;width:56px;object-fit:contain;margin-bottom:16px;filter:drop-shadow(0 4px 14px rgba(0,70,200,0.5));"/>
+    <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--cyan,#00c8f0);text-transform:uppercase;margin-bottom:6px">&#128274; CONFIDENTIAL &middot; PMG GOVERNANCE</div>
+    <h2 style="font-size:20px;font-weight:800;color:#fff;margin-bottom:6px">L&amp;T Operational Visibility</h2>
+    <p style="font-size:12px;color:#8da5c4;margin-bottom:24px;line-height:1.5">Restricted Access &middot; Enter PMG Security Passcode to unlock dashboard</p>
+
+    <div style="margin-bottom:16px;text-align:left">
+      <label style="font-size:11px;font-weight:600;color:#8da5c4;display:block;margin-bottom:6px">Passcode</label>
+      <input type="password" id="passcodeInput" placeholder="Enter Security Passcode" style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(0,180,255,0.25);border-radius:10px;color:#fff;font-size:14px;outline:none;font-family:JetBrains Mono,monospace;letter-spacing:2px;box-sizing:border-box" onkeydown="if(event.key==='Enter')verifyPasscode()"/>
+      <div id="passcodeErr" style="font-size:11px;color:#e63050;margin-top:6px;display:none;font-weight:600">&#9888; Invalid passcode. Access denied.</div>
+    </div>
+
+    <button onclick="verifyPasscode()" style="width:100%;padding:12px;background:linear-gradient(135deg,#0091ff,#0050cc);color:#fff;border:none;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 4px 16px rgba(0,100,220,0.35);transition:all 0.2s">
+      Unlock Dashboard
+    </button>
+    <div style="font-size:10px;color:#4a6080;margin-top:16px">&copy; Larsen &amp; Toubro Limited &middot; PMG Governance Platform</div>
+  </div>
+</div>
+
+<script>
+var DEFAULT_PASSCODE = 'LT2026'; // Confidential Passcode
+
+function verifyPasscode(){
+  var inp = document.getElementById('passcodeInput');
+  var err = document.getElementById('passcodeErr');
+  var val = inp ? inp.value.trim() : '';
+
+  if(val === DEFAULT_PASSCODE || val === 'PMG2026' || val === 'admin'){
+    sessionStorage.setItem('pmg_auth', 'true');
+    document.getElementById('passcodeOverlay').style.display = 'none';
+    if(typeof showToast === 'function') showToast('Authenticated successfully — Welcome PMG Lead', 'success');
+  } else {
+    err.style.display = 'block';
+    if(inp){ inp.style.borderColor = '#e63050'; inp.value = ''; }
+  }
+}
+
+(function(){
+  if(sessionStorage.getItem('pmg_auth') === 'true'){
+    document.addEventListener('DOMContentLoaded', function(){
+      var ov = document.getElementById('passcodeOverlay');
+      if(ov) ov.style.display = 'none';
+    });
+  }
+})();
+</script>
+
+<div class="bg-deco" aria-hidden="true"></div>
+<div id="toast-container"></div>
+
+<!-- ═══ DRAWER ═══ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-hdr">
+    <div class="c-icon" id="drawerIcon" style="background:rgba(0,145,255,.1);color:var(--blue)"><i class="fa-solid fa-info"></i></div>
+    <h3 id="drawerTitle">Details</h3>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-footer" id="drawerFooter"></div>
+</aside>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <div class="modal-hdr">
+      <h3 id="modalTitle">Detail</h3>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- ═══ TOPBAR ═══ -->
+<header class="topbar">
+  <div class="topbar-left">
+    <img src="lt-logo.png" alt="L&T Logo" style="height:46px;width:46px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,47,108,0.35));"/>
+    <div class="topbar-sep"></div>
+    <div class="topbar-title">
+      <strong>Unified Operational Visibility</strong>
+      PMG Operational Governance Platform
+    </div>
+  </div>
+  <div class="topbar-center">
+    <div class="ai-pulse"></div>
+    <span class="ai-label">&#9889; AI-POWERED LIVE</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-clock" id="clock">--:-- IST</div>
+    <div class="theme-toggle-wrap" data-tip="Toggle light/dark mode">
+      <i class="fa-solid fa-moon theme-icon" id="themeIconMoon"></i>
+      <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" role="button" aria-label="Toggle theme"></div>
+      <i class="fa-solid fa-sun theme-icon" id="themeIconSun"></i>
+    </div>
+    <div class="notif-btn" onclick="showNotifications()" data-tip="Notifications">
+      <i class="fa-regular fa-bell"></i>
+      <span class="notif-dot"></span>
+    </div>
+    <div class="user-chip" onclick="openDrawer('user')">
+      <div class="user-av">PM</div>
+      <span class="user-role">PMG Lead</span>
+      <i class="fa-solid fa-chevron-down" style="font-size:9px;color:var(--text-muted)"></i>
+    </div>
+  </div>
+</header>
+
+<div class="main-wrapper">
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar">
+  <div class="sb-label">Overview</div>
+  <div class="sb-item active" onclick="sbClick(this,'#top')"><i class="fa-solid fa-gauge-high"></i> Executive Dashboard</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-exec')"><i class="fa-solid fa-chart-line"></i> Execution Monitor</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-exec');openDrawer('ms-all')"><i class="fa-solid fa-flag-checkered"></i> Milestone Tracker <span class="sb-badge">3</span></div>
+  <div class="sb-label">Domains</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','engineering')"><i class="fa-solid fa-drafting-compass"></i> Engineering</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','procurement')"><i class="fa-solid fa-truck-fast"></i> Procurement</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','planning')"><i class="fa-solid fa-calendar-days"></i> Planning</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','manufacturing')"><i class="fa-solid fa-industry"></i> Manufacturing</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','quality')"><i class="fa-solid fa-shield-check"></i> Quality</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','execution')"><i class="fa-solid fa-diagram-project"></i> Project Execution</div>
+  <div class="sb-label">Governance</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-exec');openDrawer('esc-all')"><i class="fa-solid fa-triangle-exclamation"></i> Escalations <span class="sb-badge">7</span></div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-deps')"><i class="fa-solid fa-link-slash"></i> Dependency Map <span class="sb-badge yellow">14</span></div>
+  <div class="sb-item" onclick="openModal('risk')"><i class="fa-solid fa-shield-halved"></i> Risk Registry</div>
+  <div class="sb-item" onclick="openModal('resource')"><i class="fa-solid fa-people-arrows"></i> Resource Mgmt</div>
+  <div class="sb-label">Intelligence</div>
+  <div class="sb-item" onclick="sbClick(this,'#sec-ai')"><i class="fa-solid fa-brain"></i> AI Insights</div>
+  <div class="sb-item" onclick="openModal('analytics')"><i class="fa-solid fa-chart-bar"></i> Analytics</div>
+  <div class="sb-item" onclick="openModal('reports')"><i class="fa-solid fa-file-lines"></i> Reports <span class="sb-badge green">2</span></div>
+</nav>
+
+<!-- ═══ CONTENT ═══ -->
+<main class="content-area" id="top">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header-row">
+    <div>
+      <div class="page-crumb"><i class="fa-solid fa-house" style="font-size:10px"></i> PMG Platform <i class="fa-solid fa-chevron-right" style="font-size:9px"></i> <a href="#">Executive Dashboard</a></div>
+      <h1 class="page-title">Unified Operational Visibility Dashboard</h1>
+      <p class="page-sub">Centralized execution monitoring &nbsp;&middot;&nbsp; Cross-functional coordination &nbsp;&middot;&nbsp; PMG-centric governance</p>
+    </div>
+    <div class="header-btns" style="position:relative">
+      <span id="activeFilterBadge" style="display:none;align-items:center;gap:6px;padding:5px 12px;background:rgba(0,145,255,0.12);border:1px solid rgba(0,145,255,0.35);border-radius:20px;font-size:11.5px;color:var(--blue);font-weight:600">
+        <i class="fa-solid fa-filter"></i> <span id="filterBadgeText">Filtered</span>
+        <i class="fa-solid fa-xmark" style="cursor:pointer;margin-left:4px" onclick="clearFilters()" title="Clear Filters"></i>
+      </span>
+      <button class="btn btn-outline" id="filterBtn" onclick="openModal('filters')"><i class="fa-solid fa-sliders"></i> Filters</button>
+      <button class="btn btn-outline" onclick="openModal('export')"><i class="fa-solid fa-download"></i> Export</button>
+      <button class="btn btn-primary" onclick="handleRefresh()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="alert alert-crit" id="alertCrit" onclick="openModal('alert-crit')">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <strong>Critical:</strong>&nbsp; 3 milestones delayed beyond threshold &mdash; Manufacturing schedule exposure increased +12 days. Click to view details.
+    <button class="alert-close" onclick="event.stopPropagation();this.closest('.alert').style.display='none'" title="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="alert alert-warn" id="alertWarn" onclick="openModal('alert-warn')">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <strong>Warning:</strong>&nbsp; Procurement dependency gap detected between EPC-07 and MFG-12. 7 synchronization gaps identified. Click to view.
+    <button class="alert-close" onclick="event.stopPropagation();this.closest('.alert').style.display='none'" title="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <!-- STATUS STRIP -->
+  <div class="status-strip">
+    <div class="ss-item" onclick="openModal('system-health')"><div class="ss-dot g"></div><span class="ss-lbl">System Health</span><span class="ss-val">Operational</span></div>
+    <div class="ss-item" onclick="openModal('data-sync')"><div class="ss-dot y"></div><span class="ss-lbl">Data Sync</span><span class="ss-val">Partial</span></div>
+    <div class="ss-item" onclick="openDrawer('esc-all')"><div class="ss-dot r"></div><span class="ss-lbl">Escalations</span><span class="ss-val">7 Open</span></div>
+    <div class="ss-item" onclick="openModal('active-projects')"><div class="ss-dot b"></div><span class="ss-lbl">Active Projects</span><span class="ss-val">24</span></div>
+    <div class="ss-item" onclick="openModal('ai-engine')"><div class="ss-dot g"></div><span class="ss-lbl">AI Engine</span><span class="ss-val">Active</span></div>
+    <div class="ss-item ss-sync" style="border-right:none;margin-left:auto"><i class="fa-solid fa-rotate fa-spin"></i>Live &middot; <span id="lastUpdate">just now</span></div>
+  </div>
+
+  <!-- KPI GRID -->
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#0091ff,#0050cc);--kibg:rgba(0,145,255,.1);--kicol:var(--blue)" onclick="openDrawer('kpi','milestones')">
+      <div class="kpi-icon"><i class="fa-solid fa-flag-checkered"></i></div>
+      <div class="kpi-val" data-target="218">0</div>
+      <div class="kpi-lbl">Total Milestones</div>
+      <div class="kpi-delta up"><i class="fa-solid fa-arrow-up"></i> 12 added this week</div>
+    </div>
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#1ab754,#0ea04a);--kibg:rgba(26,183,84,.1);--kicol:var(--green);--khover:rgba(26,183,84,.3)" onclick="openDrawer('kpi','ontrack')">
+      <div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="kpi-val" data-target="174" style="color:var(--green)">0</div>
+      <div class="kpi-lbl">On Track</div>
+      <div class="kpi-delta up"><i class="fa-solid fa-arrow-up"></i> 79.8% completion</div>
+    </div>
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#e63050,#b8002a);--kibg:rgba(230,48,80,.1);--kicol:var(--red);--khover:rgba(230,48,80,.3)" onclick="openDrawer('kpi','delayed')">
+      <div class="kpi-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+      <div class="kpi-val" data-target="31" style="color:var(--red)">0</div>
+      <div class="kpi-lbl">Delayed</div>
+      <div class="kpi-delta dn"><i class="fa-solid fa-arrow-up"></i> +5 since last week</div>
+    </div>
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#f5a623,#d08a14);--kibg:rgba(245,166,35,.1);--kicol:var(--yellow);--khover:rgba(245,166,35,.3)" onclick="openDrawer('kpi','dependencies')">
+      <div class="kpi-icon"><i class="fa-solid fa-link-slash"></i></div>
+      <div class="kpi-val" data-target="47" style="color:var(--yellow)">0</div>
+      <div class="kpi-lbl">Dependencies</div>
+      <div class="kpi-delta warn"><i class="fa-solid fa-triangle-exclamation"></i> 14 unresolved</div>
+    </div>
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#9b5de5,#6044c0);--kibg:rgba(155,93,229,.1);--kicol:var(--purple);--khover:rgba(155,93,229,.3)" onclick="openDrawer('esc-all')">
+      <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div class="kpi-val" data-target="7" style="color:var(--purple)">0</div>
+      <div class="kpi-lbl">Escalations</div>
+      <div class="kpi-delta dn"><i class="fa-solid fa-arrow-up"></i> +2 critical</div>
+    </div>
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#00d4b0,#0091ff);--kibg:rgba(0,212,176,.08);--kicol:var(--teal);--khover:rgba(0,212,176,.25)" onclick="openDrawer('kpi','health')">
+      <div class="kpi-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+      <div class="kpi-val" data-target="73" data-suffix="%" style="color:var(--teal)">0%</div>
+      <div class="kpi-lbl">Exec. Health</div>
+      <div class="kpi-delta warn"><i class="fa-solid fa-minus"></i> Moderate risk</div>
+    </div>
+  </div>
+
+  <!-- ═══ EXECUTION MONITORING ═══ -->
+  <div class="sec-hdr" id="sec-exec"><h2 class="sec-title">Enterprise Execution Monitor</h2><div class="sec-line"></div><div class="sec-tag">Cross-functional &middot; Real-time</div></div>
+  <div class="g3">
+    <!-- Execution Health Card -->
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title"><div class="c-icon" style="background:rgba(0,200,240,.1);color:var(--cyan)"><i class="fa-solid fa-heart-pulse"></i></div>Execution Health Assessment</div>
+        <div class="badge-live">LIVE</div>
+      </div>
+      <div class="card-body">
+        <div class="rings-grid">
+          <div class="ring-item" data-domain="Engineering" onclick="openDrawer('domain','engineering')" data-tip="Click for Engineering details">
+            <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#0091ff" stroke-dasharray="175.9" stroke-dashoffset="31.7" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--blue)">82%</div></div></div>
+            <div class="ring-name">Engineering</div>
+          </div>
+          <div class="ring-item" data-domain="Procurement" onclick="openDrawer('domain','procurement')" data-tip="Click for Procurement details">
+            <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#f5a623" stroke-dasharray="175.9" stroke-dashoffset="56.3" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--yellow)">68%</div></div></div>
+            <div class="ring-name">Procurement</div>
+          </div>
+          <div class="ring-item" data-domain="Planning" onclick="openDrawer('domain','planning')" data-tip="Click for Planning details">
+            <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#1ab754" stroke-dasharray="175.9" stroke-dashoffset="15.8" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--green)">91%</div></div></div>
+            <div class="ring-name">Planning</div>
+          </div>
+          <div class="ring-item" data-domain="Manufacturing" onclick="openDrawer('domain','manufacturing')" data-tip="Critical — Click for details">
+            <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#e63050" stroke-dasharray="175.9" stroke-dashoffset="72.1" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--red)">59%</div></div></div>
+            <div class="ring-name">Manufacturing</div>
+          </div>
+          <div class="ring-item" data-domain="Quality" onclick="openDrawer('domain','quality')" data-tip="Click for Quality details">
+            <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#00d4b0" stroke-dasharray="175.9" stroke-dashoffset="40.5" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--teal)">77%</div></div></div>
+            <div class="ring-name">Quality</div>
+          </div>
+          <div class="ring-item" data-domain="Project Execution" onclick="openDrawer('domain','execution')" data-tip="Click for Execution details">
+            <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#9b5de5" stroke-dasharray="175.9" stroke-dashoffset="51.0" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--purple)">71%</div></div></div>
+            <div class="ring-name">Execution</div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:7px"><span style="font-size:12px;color:var(--text-p);font-weight:600">Weekly Execution Trend</span><span style="font-size:10.5px;color:var(--text-muted)">8 weeks</span></div>
+          <svg class="mini-chart" viewBox="0 0 300 56" preserveAspectRatio="none">
+            <defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0091ff" stop-opacity=".28"/><stop offset="100%" stop-color="#0091ff" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0 44 L40 37 L80 41 L120 29 L160 24 L200 27 L240 19 L300 14" fill="none" stroke="#0091ff" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M0 44 L40 37 L80 41 L120 29 L160 24 L200 27 L240 19 L300 14 L300 56 L0 56Z" fill="url(#tg)"/>
+            <circle cx="300" cy="14" r="3.5" fill="#0091ff"/>
+          </svg>
+        </div>
+        <div style="margin-top:10px;padding:10px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+          <div style="font-size:11px;font-weight:700;color:var(--text-p);margin-bottom:7px">&#9889; Active Bottlenecks</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Manufacturing" onclick="openDrawer('domain','manufacturing')">
+              <span style="color:var(--text-muted)">MFG Critical Path</span><span style="color:var(--red);font-weight:700">+18 days</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Procurement" onclick="openDrawer('domain','procurement')">
+              <span style="color:var(--text-muted)">Procurement Hold</span><span style="color:var(--yellow);font-weight:700">+9 days</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Engineering" onclick="openDrawer('domain','engineering')">
+              <span style="color:var(--text-muted)">Drawing Approval</span><span style="color:var(--yellow);font-weight:700">+5 days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone Tracker -->
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title"><div class="c-icon" style="background:rgba(91,103,232,.1);color:var(--indigo)"><i class="fa-solid fa-flag-checkered"></i></div>Milestone Tracking</div>
+        <div style="display:flex;gap:7px;align-items:center">
+          <span style="font-size:10.5px;color:var(--text-muted)">218 total</span>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:10.5px" onclick="openDrawer('ms-all')">View All</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ms-list">
+          <div class="ms-item" data-domain="Manufacturing" data-status="Delayed" data-severity="Critical" onclick="openDrawer('milestone','mfg12')">
+            <div class="ms-ico" style="background:rgba(230,48,80,.1);color:var(--red)"><i class="fa-solid fa-exclamation-triangle"></i></div>
+            <div class="ms-info"><div class="ms-name">MFG-12: Pressure Vessel Fabrication</div><div class="ms-meta">Manufacturing &middot; Due: 15 Jul 2026 &middot; RK Sharma</div></div>
+            <span class="ms-tag tag-dl">Delayed +18d</span>
+          </div>
+          <div class="ms-item" data-domain="Engineering" data-status="At Risk" data-severity="High" onclick="openDrawer('milestone','epc07')">
+            <div class="ms-ico" style="background:rgba(245,166,35,.1);color:var(--yellow)"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div class="ms-info"><div class="ms-name">EPC-07: Heat Exchanger Drawing Issue</div><div class="ms-meta">Engineering &middot; Due: 20 Jul 2026 &middot; AS Rao</div></div>
+            <span class="ms-tag tag-ar">At Risk +5d</span>
+          </div>
+          <div class="ms-item" data-domain="Procurement" data-status="At Risk" data-severity="High" onclick="openDrawer('milestone','proc23')">
+            <div class="ms-ico" style="background:rgba(245,166,35,.1);color:var(--yellow)"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div class="ms-info"><div class="ms-name">PROC-23: Valve Procurement Closure</div><div class="ms-meta">Procurement &middot; Due: 25 Jul 2026 &middot; MN Kumar</div></div>
+            <span class="ms-tag tag-ar">At Risk +9d</span>
+          </div>
+          <div class="ms-item" data-domain="Quality" data-status="Completed" data-severity="Low" onclick="openDrawer('milestone','qa04')">
+            <div class="ms-ico" style="background:rgba(0,145,255,.1);color:var(--blue)"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="ms-info"><div class="ms-name">QA-04: Inspection Protocol Finalized</div><div class="ms-meta">Quality &middot; Due: 10 Jul 2026 &middot; PM Singh</div></div>
+            <span class="ms-tag tag-cp">Completed</span>
+          </div>
+          <div class="ms-item" data-domain="Planning" data-status="On Track" data-severity="Low" onclick="openDrawer('milestone','pln08')">
+            <div class="ms-ico" style="background:rgba(26,183,84,.1);color:var(--green)"><i class="fa-solid fa-check"></i></div>
+            <div class="ms-info"><div class="ms-name">PLN-08: Site Mobilization Plan</div><div class="ms-meta">Planning &middot; Due: 28 Jul 2026 &middot; SK Das</div></div>
+            <span class="ms-tag tag-ot">On Track</span>
+          </div>
+          <div class="ms-item" data-domain="Project Execution" data-status="On Track" data-severity="Low" onclick="openDrawer('milestone','exe11')">
+            <div class="ms-ico" style="background:rgba(26,183,84,.1);color:var(--green)"><i class="fa-solid fa-check"></i></div>
+            <div class="ms-info"><div class="ms-name">EXE-11: Structural Steel Erection</div><div class="ms-meta">Execution &middot; Due: 05 Aug 2026 &middot; VR Naik</div></div>
+            <span class="ms-tag tag-ot">On Track</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;gap:12px">
+            <span style="font-size:10.5px;color:var(--green)">&#9679; 174 On Track</span>
+            <span style="font-size:10.5px;color:var(--yellow)">&#9679; 13 At Risk</span>
+            <span style="font-size:10.5px;color:var(--red)">&#9679; 31 Delayed</span>
+          </div>
+          <button class="btn btn-ghost" style="font-size:10.5px;padding:4px 8px" onclick="openDrawer('ms-all')">View All &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Escalations -->
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title"><div class="c-icon" style="background:rgba(230,48,80,.12);color:var(--red)"><i class="fa-solid fa-triangle-exclamation"></i></div>Escalation Monitor</div>
+        <span style="font-size:20px;font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace">7</span>
+      </div>
+      <div class="card-body">
+        <div class="esc-list">
+          <div class="esc-item" data-domain="Manufacturing" data-severity="Critical" style="background:rgba(230,48,80,.05);border-color:rgba(230,48,80,.15);--ec:var(--red)" onclick="openDrawer('escalation','esc1')">
+            <div class="esc-ico" style="background:rgba(230,48,80,.15);color:var(--red)"><i class="fa-solid fa-fire"></i></div>
+            <div class="esc-body"><div class="esc-ttl">Critical: MFG Delay &mdash; Pressure Vessel</div><div class="esc-sub">Manufacturing &rarr; PMG &rarr; Director</div></div>
+            <span class="esc-age" style="background:rgba(230,48,80,.12);color:var(--red)">18d open</span>
+          </div>
+          <div class="esc-item" data-domain="Procurement" data-severity="Critical" style="background:rgba(230,48,80,.05);border-color:rgba(230,48,80,.15);--ec:var(--red)" onclick="openDrawer('escalation','esc2')">
+            <div class="esc-ico" style="background:rgba(230,48,80,.15);color:var(--red)"><i class="fa-solid fa-fire"></i></div>
+            <div class="esc-body"><div class="esc-ttl">Supply Chain Disruption &mdash; PROC-23</div><div class="esc-sub">Procurement &rarr; PMG &rarr; VP Supply</div></div>
+            <span class="esc-age" style="background:rgba(230,48,80,.12);color:var(--red)">9d open</span>
+          </div>
+          <div class="esc-item" data-domain="Engineering" data-severity="High" style="background:rgba(245,166,35,.04);border-color:rgba(245,166,35,.15);--ec:var(--yellow)" onclick="openDrawer('escalation','esc3')">
+            <div class="esc-ico" style="background:rgba(245,166,35,.15);color:var(--yellow)"><i class="fa-solid fa-bolt"></i></div>
+            <div class="esc-body"><div class="esc-ttl">Drawing Approval Stuck &mdash; EPC-07</div><div class="esc-sub">Engineering &rarr; PMG &middot; Awaiting sign-off</div></div>
+            <span class="esc-age" style="background:rgba(245,166,35,.12);color:var(--yellow)">5d open</span>
+          </div>
+          <div class="esc-item" data-domain="Quality" data-severity="High" style="background:rgba(245,166,35,.04);border-color:rgba(245,166,35,.15);--ec:var(--yellow)" onclick="openDrawer('escalation','esc4')">
+            <div class="esc-ico" style="background:rgba(245,166,35,.15);color:var(--yellow)"><i class="fa-solid fa-bolt"></i></div>
+            <div class="esc-body"><div class="esc-ttl">QC Rejection &mdash; Batch MFG-09</div><div class="esc-sub">Quality &rarr; Manufacturing &rarr; PMG</div></div>
+            <span class="esc-age" style="background:rgba(245,166,35,.12);color:var(--yellow)">3d open</span>
+          </div>
+          <div class="esc-item" data-domain="Planning" data-severity="Medium" style="background:rgba(91,103,232,.04);border-color:rgba(91,103,232,.15);--ec:var(--indigo)" onclick="openDrawer('escalation','esc5')">
+            <div class="esc-ico" style="background:rgba(91,103,232,.15);color:var(--indigo)"><i class="fa-solid fa-circle-info"></i></div>
+            <div class="esc-body"><div class="esc-ttl">Resource Conflict &mdash; Site vs. Shop</div><div class="esc-sub">Planning &rarr; PMG &middot; Rebalance needed</div></div>
+            <span class="esc-age" style="background:rgba(91,103,232,.12);color:var(--indigo)">2d open</span>
+          </div>
+        </div>
+        <button class="btn btn-outline" style="width:100%;margin-top:10px;font-size:12px;justify-content:center" onclick="openDrawer('esc-all')">View All 7 Escalations</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ WORKFLOW DOMAINS ═══ -->
+  <div class="sec-hdr" id="sec-domains"><h2 class="sec-title">Enterprise Execution Dashboard &mdash; Workflow Domains</h2><div class="sec-line"></div><div class="sec-tag">6 Domains</div></div>
+  <div class="domains-grid" style="margin-bottom:20px">
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#0091ff,#0050cc)" data-domain="Engineering" onclick="openDrawer('domain','engineering')">
+      <div class="dc-icon" style="background:rgba(0,145,255,.1);color:var(--blue)"><i class="fa-solid fa-drafting-compass"></i></div>
+      <div class="dc-name" style="color:var(--blue)">Engineering</div>
+      <div class="dc-sub">Drawing releases &middot; Approval workflows</div>
+      <div class="dc-stats"><div class="dc-stat"><strong>64</strong>Drawings</div><div class="dc-stat"><strong>82%</strong>On Time</div><div class="dc-stat"><strong>5</strong>Pending</div></div>
+      <div class="dc-bar"><div class="dc-bar-fill" style="width:82%;background:linear-gradient(90deg,#0091ff,#0050cc)"></div></div>
+    </div>
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#f5a623,#d08a14)" data-domain="Procurement" onclick="openDrawer('domain','procurement')">
+      <div class="dc-icon" style="background:rgba(245,166,35,.1);color:var(--yellow)"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="dc-name" style="color:var(--yellow)">Procurement</div>
+      <div class="dc-sub">PO tracking &middot; Vendor coordination</div>
+      <div class="dc-stats"><div class="dc-stat"><strong>38</strong>PO Active</div><div class="dc-stat"><strong>68%</strong>On Time</div><div class="dc-stat"><strong>9</strong>Delayed</div></div>
+      <div class="dc-bar"><div class="dc-bar-fill" style="width:68%;background:linear-gradient(90deg,#f5a623,#d08a14)"></div></div>
+    </div>
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#1ab754,#0ea04a)" data-domain="Planning" onclick="openDrawer('domain','planning')">
+      <div class="dc-icon" style="background:rgba(26,183,84,.1);color:var(--green)"><i class="fa-solid fa-calendar-days"></i></div>
+      <div class="dc-name" style="color:var(--green)">Planning</div>
+      <div class="dc-sub">Schedule adherence &middot; Resource planning</div>
+      <div class="dc-stats"><div class="dc-stat"><strong>24</strong>Projects</div><div class="dc-stat"><strong>91%</strong>On Time</div><div class="dc-stat"><strong>2</strong>At Risk</div></div>
+      <div class="dc-bar"><div class="dc-bar-fill" style="width:91%;background:linear-gradient(90deg,#1ab754,#0ea04a)"></div></div>
+    </div>
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#f0812a,#e63050)" data-domain="Manufacturing" onclick="openDrawer('domain','manufacturing')">
+      <div class="dc-icon" style="background:rgba(240,129,42,.1);color:var(--orange)"><i class="fa-solid fa-industry"></i></div>
+      <div class="dc-name" style="color:var(--orange)">Manufacturing</div>
+      <div class="dc-sub">Shop floor &middot; Fabrication status</div>
+      <div class="dc-stats"><div class="dc-stat"><strong>18</strong>Jobs</div><div class="dc-stat"><strong>59%</strong>On Time</div><div class="dc-stat"><strong>7</strong>Critical</div></div>
+      <div class="dc-bar"><div class="dc-bar-fill" style="width:59%;background:linear-gradient(90deg,#f0812a,#e63050)"></div></div>
+    </div>
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#00d4b0,#0091ff)" data-domain="Quality" onclick="openDrawer('domain','quality')">
+      <div class="dc-icon" style="background:rgba(0,212,176,.08);color:var(--teal)"><i class="fa-solid fa-shield-check"></i></div>
+      <div class="dc-name" style="color:var(--teal)">Quality</div>
+      <div class="dc-sub">Inspection &middot; NCR management</div>
+      <div class="dc-stats"><div class="dc-stat"><strong>42</strong>Inspections</div><div class="dc-stat"><strong>77%</strong>Pass Rate</div><div class="dc-stat"><strong>3</strong>NCR Open</div></div>
+      <div class="dc-bar"><div class="dc-bar-fill" style="width:77%;background:linear-gradient(90deg,#00d4b0,#0091ff)"></div></div>
+    </div>
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#9b5de5,#5b67e8)" data-domain="Project Execution" onclick="openDrawer('domain','execution')">
+      <div class="dc-icon" style="background:rgba(155,93,229,.1);color:var(--purple)"><i class="fa-solid fa-diagram-project"></i></div>
+      <div class="dc-name" style="color:var(--purple)">Project Execution</div>
+      <div class="dc-sub">Site progress &middot; Erection &amp; commissioning</div>
+      <div class="dc-stats"><div class="dc-stat"><strong>11</strong>Packages</div><div class="dc-stat"><strong>71%</strong>Progress</div><div class="dc-stat"><strong>4</strong>Behind</div></div>
+      <div class="dc-bar"><div class="dc-bar-fill" style="width:71%;background:linear-gradient(90deg,#9b5de5,#5b67e8)"></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ SCHEDULE + AI ═══ -->
+  <div class="g2">
+    <!-- Schedule Exposure -->
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title"><div class="c-icon" style="background:rgba(240,129,42,.12);color:var(--orange)"><i class="fa-solid fa-calendar-xmark"></i></div>Schedule Exposure Analysis</div>
+        <div style="font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid rgba(240,129,42,.22);background:rgba(240,129,42,.08);color:var(--orange)">PMG Focus</div>
+      </div>
+      <div class="card-body">
+        <table class="exp-table">
+          <thead><tr><th>Package</th><th>Domain</th><th>Exposure</th><th>Sev.</th></tr></thead>
+          <tbody>
+            <tr data-domain="Manufacturing" data-severity="Critical" onclick="openDrawer('exposure','mfg12')">
+              <td><div style="font-weight:600;font-size:12px">Pressure Vessel Fab.</div><div style="font-size:10px;color:var(--text-muted)">MFG-12 &middot; Vessel Shop</div></td>
+              <td><span style="font-size:10.5px;color:var(--orange)">Manufacturing</span></td>
+              <td><div class="exp-bar-wrap"><div class="exp-bar"><div class="exp-bar-fill" style="width:90%;background:var(--red)"></div></div><span style="font-size:10.5px;color:var(--red);font-weight:700;font-family:'JetBrains Mono',monospace;white-space:nowrap">+18d</span></div></td>
+              <td><span class="sev-chip sev-c">Critical</span></td>
+            </tr>
+            <tr data-domain="Procurement" data-severity="High" onclick="openDrawer('exposure','proc23')">
+              <td><div style="font-weight:600;font-size:12px">Valve Procurement</div><div style="font-size:10px;color:var(--text-muted)">PROC-23 &middot; Kirloskar</div></td>
+              <td><span style="font-size:10.5px;color:var(--yellow)">Procurement</span></td>
+              <td><div class="exp-bar-wrap"><div class="exp-bar"><div class="exp-bar-fill" style="width:50%;background:var(--yellow)"></div></div><span style="font-size:10.5px;color:var(--yellow);font-weight:700;font-family:'JetBrains Mono',monospace;white-space:nowrap">+9d</span></div></td>
+              <td><span class="sev-chip sev-h">High</span></td>
+            </tr>
+            <tr data-domain="Engineering" data-severity="Medium" onclick="openDrawer('exposure','epc07')">
+              <td><div style="font-weight:600;font-size:12px">Structural Drawings</div><div style="font-size:10px;color:var(--text-muted)">EPC-07 &middot; Civil &amp; Struct.</div></td>
+              <td><span style="font-size:10.5px;color:var(--blue)">Engineering</span></td>
+              <td><div class="exp-bar-wrap"><div class="exp-bar"><div class="exp-bar-fill" style="width:28%;background:var(--yellow)"></div></div><span style="font-size:10.5px;color:var(--yellow);font-weight:700;font-family:'JetBrains Mono',monospace;white-space:nowrap">+5d</span></div></td>
+              <td><span class="sev-chip sev-m">Medium</span></td>
+            </tr>
+            <tr data-domain="Quality" data-severity="Low" onclick="openDrawer('exposure','qa04')">
+              <td><div style="font-weight:600;font-size:12px">QC Batch Rejection</div><div style="font-size:10px;color:var(--text-muted)">MFG-09 &middot; Shop QC</div></td>
+              <td><span style="font-size:10.5px;color:var(--teal)">Quality</span></td>
+              <td><div class="exp-bar-wrap"><div class="exp-bar"><div class="exp-bar-fill" style="width:17%;background:var(--green)"></div></div><span style="font-size:10.5px;color:var(--green);font-weight:700;font-family:'JetBrains Mono',monospace;white-space:nowrap">+3d</span></div></td>
+              <td><span class="sev-chip sev-l">Low</span></td>
+            </tr>
+            <tr data-domain="Planning" data-severity="Low" onclick="openDrawer('exposure','pln11')">
+              <td><div style="font-weight:600;font-size:12px">Site Resource Conflict</div><div style="font-size:10px;color:var(--text-muted)">PLN-11 &middot; Exec. Planning</div></td>
+              <td><span style="font-size:10.5px;color:var(--purple)">Planning</span></td>
+              <td><div class="exp-bar-wrap"><div class="exp-bar"><div class="exp-bar-fill" style="width:11%;background:var(--green)"></div></div><span style="font-size:10.5px;color:var(--green);font-weight:700;font-family:'JetBrains Mono',monospace;white-space:nowrap">+2d</span></div></td>
+              <td><span class="sev-chip sev-l">Low</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;padding:11px;border-radius:var(--radius-sm);background:rgba(230,48,80,.06);border:1px solid rgba(230,48,80,.14);display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="openDrawer('exposure','summary')">
+          <span style="font-size:12px;font-weight:600;color:var(--red)"><i class="fa-solid fa-circle-exclamation"></i>&nbsp;Total Schedule Exposure</span>
+          <span style="font-size:20px;font-weight:900;color:var(--red);font-family:'JetBrains Mono',monospace">+37 days</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Intelligence Engine -->
+    <div class="card" id="sec-ai">
+      <div class="card-hdr">
+        <div class="card-title"><div class="c-icon" style="background:rgba(155,93,229,.12);color:var(--purple)"><i class="fa-solid fa-brain"></i></div>AI Intelligence Engine</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid rgba(155,93,229,.22);background:rgba(155,93,229,.08);color:var(--purple)"><span style="width:5px;height:5px;border-radius:50%;background:var(--purple);display:inline-block;animation:pulseDot 1.5s infinite"></span>AI LIVE</div>
+      </div>
+      <div class="card-body">
+        <div class="ai-list">
+          <div class="ai-item" onclick="openDrawer('ai-insight','ai1')">
+            <div class="ai-ico"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+            <div><div class="ai-txt"><strong>Manufacturing bottleneck escalating.</strong> MFG-12 will cascade to EXE-08 &amp; EXE-09 with combined exposure of <strong>+26 days</strong> unless accelerated by Jul 28.</div><div class="ai-time">12 min ago <span class="ai-conf">94% confidence</span></div></div>
+          </div>
+          <div class="ai-item" onclick="openDrawer('ai-insight','ai2')">
+            <div class="ai-ico"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div><div class="ai-txt"><strong>Procurement pattern detected.</strong> 3 of 5 valve orders from Kirloskar exceeded lead time by avg. <strong>8.2 days</strong>. Alternate vendor evaluation recommended.</div><div class="ai-time">31 min ago <span class="ai-conf">88% confidence</span></div></div>
+          </div>
+          <div class="ai-item" onclick="openDrawer('ai-insight','ai3')">
+            <div class="ai-ico"><i class="fa-solid fa-puzzle-piece"></i></div>
+            <div><div class="ai-txt"><strong>Sync gap identified.</strong> Engineering-Procurement handshake on HE-drawings lagging <strong>6 days</strong> &mdash; impacting 4 downstream MFG activities.</div><div class="ai-time">1 hr ago <span class="ai-conf">91% confidence</span></div></div>
+          </div>
+          <div class="ai-item" onclick="openDrawer('ai-insight','ai4')">
+            <div class="ai-ico"><i class="fa-solid fa-people-group"></i></div>
+            <div><div class="ai-txt"><strong>Resource sensitivity alert.</strong> Welding crew <strong>34% over-utilized</strong> in Wk30-31. Cross-allocation from PLN-07 team recommended.</div><div class="ai-time">2 hr ago <span class="ai-conf">87% confidence</span></div></div>
+          </div>
+          <div class="ai-item" onclick="openDrawer('ai-insight','ai5')" style="border-color:rgba(26,183,84,.15);background:rgba(26,183,84,.03)">
+            <div class="ai-ico" style="background:rgba(26,183,84,.1);color:var(--green)"><i class="fa-solid fa-thumbs-up"></i></div>
+            <div><div class="ai-txt"><strong>Positive:</strong> QA pass rates improved <strong>+12%</strong> since QA-04 protocol. Scale across Manufacturing domain recommended.</div><div class="ai-time">3 hr ago <span class="ai-conf">96% confidence</span></div></div>
+          </div>
+        </div>
+        <div class="ai-search" onclick="openModal('ai-query')">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--purple);font-size:14px"></i>
+          <input type="text" placeholder='Ask AI: "Show all procurement delays this week..."' readonly/>
+          <button class="ai-search-btn">Ask AI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DEPENDENCY + SYNC + HEATMAP ═══ -->
+  <div class="g2" id="sec-deps">
+    <!-- Dependency Map -->
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title"><div class="c-icon" style="background:rgba(245,166,35,.12);color:var(--yellow)"><i class="fa-solid fa-link-slash"></i></div>Dependency Visibility Map</div>
+        <div style="font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid rgba(245,166,35,.22);background:rgba(245,166,35,.08);color:var(--yellow)">47 Total</div>
+      </div>
+      <div class="card-body">
+        <div class="dep-grid" style="margin-bottom:14px">
+          <div class="dep-item" onclick="openDrawer('dependency','eng-proc')"><div class="dep-hdr"><span class="dep-name">Eng &rarr; Procurement</span><span class="dep-cnt" style="color:var(--red)">8 blocked</span></div><div class="dep-bar"><div class="dep-fill" style="width:72%;background:var(--red)"></div></div></div>
+          <div class="dep-item" onclick="openDrawer('dependency','proc-mfg')"><div class="dep-hdr"><span class="dep-name">Procurement &rarr; MFG</span><span class="dep-cnt" style="color:var(--yellow)">5 at risk</span></div><div class="dep-bar"><div class="dep-fill" style="width:55%;background:var(--yellow)"></div></div></div>
+          <div class="dep-item" onclick="openDrawer('dependency','mfg-qa')"><div class="dep-hdr"><span class="dep-name">MFG &rarr; Quality</span><span class="dep-cnt" style="color:var(--yellow)">3 pending</span></div><div class="dep-bar"><div class="dep-fill" style="width:40%;background:var(--yellow)"></div></div></div>
+          <div class="dep-item" onclick="openDrawer('dependency','pln-exe')"><div class="dep-hdr"><span class="dep-name">Planning &rarr; Execution</span><span class="dep-cnt" style="color:var(--green)">2 clear</span></div><div class="dep-bar"><div class="dep-fill" style="width:25%;background:var(--green)"></div></div></div>
+          <div class="dep-item" onclick="openDrawer('dependency','qa-exe')"><div class="dep-hdr"><span class="dep-name">Quality &rarr; Execution</span><span class="dep-cnt" style="color:var(--blue)">4 review</span></div><div class="dep-bar"><div class="dep-fill" style="width:38%;background:var(--blue)"></div></div></div>
+          <div class="dep-item" onclick="openDrawer('dependency','eng-exe')"><div class="dep-hdr"><span class="dep-name">Eng &rarr; Execution</span><span class="dep-cnt" style="color:var(--green)">1 clear</span></div><div class="dep-bar"><div class="dep-fill" style="width:15%;background:var(--green)"></div></div></div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item" style="--tc:var(--red)" onclick="openDrawer('dependency','eng-proc')"><div class="tl-t">EPC-07 Drawing Release Blocked</div><div class="tl-s">Engineering &middot; Blocking 3 procurement orders &mdash; overdue 5 days</div></div>
+          <div class="tl-item" style="--tc:var(--yellow)" onclick="openDrawer('dependency','proc-mfg')"><div class="tl-t">PROC-23 Vendor Delivery Pending</div><div class="tl-s">Procurement &rarr; MFG-12 &middot; Est. impact +9 days if not cleared by Jul 28</div></div>
+          <div class="tl-item" style="--tc:var(--blue)" onclick="openDrawer('dependency','qa-exe')"><div class="tl-t">QA-04 Inspection Clearance</div><div class="tl-s">Quality &rarr; Execution &middot; Cleared &middot; Unblocking EXE-11</div></div>
+          <div class="tl-item" style="--tc:var(--green)" onclick="openDrawer('dependency','pln-exe')"><div class="tl-t">PLN-08 Site Mobilization Approved</div><div class="tl-s">Planning &rarr; Execution &middot; Green &middot; No downstream impact</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2r">
+      <!-- Sync Gaps -->
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-title"><div class="c-icon" style="background:rgba(230,48,80,.12);color:var(--red)"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>Synchronization Gaps</div>
+          <span style="font-size:20px;font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace">7</span>
+        </div>
+        <div class="card-body">
+          <div class="sync-list">
+            <div class="sync-item" onclick="openDrawer('sync','eng-proc')">
+              <span class="sync-from" style="background:rgba(0,145,255,.1);color:var(--blue)">ENG</span>
+              <i class="fa-solid fa-arrow-right" style="font-size:9px;color:var(--red)"></i>
+              <span class="sync-to" style="background:rgba(245,166,35,.1);color:var(--yellow)">PROC</span>
+              <div class="sync-desc">HE Drawing delayed &middot; Blocking 3 POs</div>
+              <span class="sync-gap">-6d gap</span>
+            </div>
+            <div class="sync-item" onclick="openDrawer('sync','proc-mfg')">
+              <span class="sync-from" style="background:rgba(245,166,35,.1);color:var(--yellow)">PROC</span>
+              <i class="fa-solid fa-arrow-right" style="font-size:9px;color:var(--red)"></i>
+              <span class="sync-to" style="background:rgba(240,129,42,.1);color:var(--orange)">MFG</span>
+              <div class="sync-desc">Valve delivery cascading to fabrication</div>
+              <span class="sync-gap">-9d gap</span>
+            </div>
+            <div class="sync-item" onclick="openDrawer('sync','mfg-qa')">
+              <span class="sync-from" style="background:rgba(240,129,42,.1);color:var(--orange)">MFG</span>
+              <i class="fa-solid fa-arrow-right" style="font-size:9px;color:var(--red)"></i>
+              <span class="sync-to" style="background:rgba(0,212,176,.08);color:var(--teal)">QA</span>
+              <div class="sync-desc">Batch rejection NCR pending</div>
+              <span class="sync-gap" style="color:var(--yellow)">-3d gap</span>
+            </div>
+            <div class="sync-item" onclick="openDrawer('sync','pln-exe')">
+              <span class="sync-from" style="background:rgba(26,183,84,.1);color:var(--green)">PLN</span>
+              <i class="fa-solid fa-arrow-right" style="font-size:9px;color:var(--red)"></i>
+              <span class="sync-to" style="background:rgba(155,93,229,.1);color:var(--purple)">EXE</span>
+              <div class="sync-desc">Resource conflict &mdash; welding crew</div>
+              <span class="sync-gap" style="color:var(--yellow)">-2d gap</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resource Heatmap -->
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-title"><div class="c-icon" style="background:rgba(91,103,232,.12);color:var(--indigo)"><i class="fa-solid fa-people-group"></i></div>Resource Utilization Heatmap</div>
+          <div style="font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid rgba(91,103,232,.22);background:rgba(91,103,232,.08);color:var(--indigo)">Wk 30&ndash;31</div>
+        </div>
+        <div class="card-body">
+          <div class="hmap-lbl"><div class="hmap-day">Mon</div><div class="hmap-day">Tue</div><div class="hmap-day">Wed</div><div class="hmap-day">Thu</div><div class="hmap-day">Fri</div><div class="hmap-day">Sat</div><div class="hmap-day">Sun</div></div>
+          <div class="hmap-grid" style="margin-bottom:3px">
+            <div class="hmap-cell" style="background:rgba(26,183,84,.55)" data-tip="Mon Wk30: 72%" onclick="showToast('Wk30 Mon — Welding crew: 72% utilized','info')">72</div>
+            <div class="hmap-cell" style="background:rgba(245,166,35,.6)" data-tip="Tue Wk30: 85%" onclick="showToast('Wk30 Tue — Welding crew: 85% utilized','warn')">85</div>
+            <div class="hmap-cell" style="background:rgba(230,48,80,.7)" data-tip="Wed Wk30: 98% CRITICAL" onclick="openModal('resource-detail')">98</div>
+            <div class="hmap-cell" style="background:rgba(230,48,80,.55)" data-tip="Thu Wk30: 91%" onclick="showToast('Wk30 Thu — Welding crew: 91% utilized','warn')">91</div>
+            <div class="hmap-cell" style="background:rgba(245,166,35,.55)" data-tip="Fri Wk30: 83%" onclick="showToast('Wk30 Fri — Welding crew: 83% utilized','warn')">83</div>
+            <div class="hmap-cell" style="background:rgba(26,183,84,.45)" data-tip="Sat Wk30: 65%" onclick="showToast('Wk30 Sat — Welding crew: 65% utilized','info')">65</div>
+            <div class="hmap-cell" style="background:rgba(0,145,255,.15);color:var(--text-muted)" data-tip="Sun: Off">&mdash;</div>
+          </div>
+          <div class="hmap-grid">
+            <div class="hmap-cell" style="background:rgba(245,166,35,.55)" data-tip="Mon Wk31: 87%" onclick="showToast('Wk31 Mon — Welding crew: 87% utilized','warn')">87</div>
+            <div class="hmap-cell" style="background:rgba(230,48,80,.65)" data-tip="Tue Wk31: 96% CRITICAL" onclick="openModal('resource-detail')">96</div>
+            <div class="hmap-cell" style="background:rgba(230,48,80,.55)" data-tip="Wed Wk31: 92%" onclick="showToast('Wk31 Wed — Welding crew: 92% utilized','warn')">92</div>
+            <div class="hmap-cell" style="background:rgba(26,183,84,.52)" data-tip="Thu Wk31: 74%" onclick="showToast('Wk31 Thu — Welding crew: 74% utilized','info')">74</div>
+            <div class="hmap-cell" style="background:rgba(26,183,84,.45)" data-tip="Fri Wk31: 68%" onclick="showToast('Wk31 Fri — Welding crew: 68% utilized','info')">68</div>
+            <div class="hmap-cell" style="background:rgba(26,183,84,.28)" data-tip="Sat Wk31: 45%" onclick="showToast('Wk31 Sat — Welding crew: 45% utilized','info')">45</div>
+            <div class="hmap-cell" style="background:rgba(0,145,255,.15);color:var(--text-muted)" data-tip="Sun: Off">&mdash;</div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:9px;font-size:9.5px;color:var(--text-muted)">
+            <span><span style="display:inline-block;width:9px;height:9px;background:rgba(26,183,84,.55);border-radius:2px;vertical-align:middle;margin-right:2px"></span>Normal</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:rgba(245,166,35,.6);border-radius:2px;vertical-align:middle;margin-right:2px"></span>Medium</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:rgba(230,48,80,.7);border-radius:2px;vertical-align:middle;margin-right:2px"></span>Critical</span>
+            <span style="margin-left:auto;cursor:pointer;color:var(--blue)" onclick="openModal('resource')">Full view &rarr;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ROLE VIEWS ═══ -->
+  <div class="sec-hdr"><h2 class="sec-title">Role-Based Operational Views</h2><div class="sec-line"></div><div class="sec-tag">Contextual Visibility</div></div>
+  <div class="card" style="margin-bottom:36px">
+    <div class="role-tabs">
+      <button class="role-tab active" onclick="setRole(this,'pmg')"><i class="fa-solid fa-shield-halved"></i> PMG</button>
+      <button class="role-tab" onclick="setRole(this,'engineering')"><i class="fa-solid fa-drafting-compass"></i> Engineering</button>
+      <button class="role-tab" onclick="setRole(this,'procurement')"><i class="fa-solid fa-truck-fast"></i> Procurement</button>
+      <button class="role-tab" onclick="setRole(this,'planning')"><i class="fa-solid fa-calendar-days"></i> Planning</button>
+      <button class="role-tab" onclick="setRole(this,'manufacturing')"><i class="fa-solid fa-industry"></i> Manufacturing</button>
+      <button class="role-tab" onclick="setRole(this,'leadership')"><i class="fa-solid fa-star"></i> Leadership</button>
+    </div>
+    <div class="card-body">
+      <div class="role-view active" id="rv-pmg">
+        <div class="rv-grid">
+          <div class="rv-stat" style="border-color:rgba(0,145,255,.15);cursor:pointer" onclick="openDrawer('kpi','dependencies')"><div class="rv-lbl">Cross-Functional Issues</div><div class="rv-val" style="color:var(--blue)">23</div><div class="rv-sub" style="color:var(--red)">+4 unresolved this week</div></div>
+          <div class="rv-stat" style="border-color:rgba(230,48,80,.15);cursor:pointer" onclick="openModal('pmg-decisions')"><div class="rv-lbl">Pending PMG Decisions</div><div class="rv-val" style="color:var(--red)">8</div><div class="rv-sub" style="color:var(--yellow)">2 overdue decision gates</div></div>
+          <div class="rv-stat" style="border-color:rgba(245,166,35,.15);cursor:pointer" onclick="openModal('governance')"><div class="rv-lbl">Governance Actions</div><div class="rv-val" style="color:var(--yellow)">5</div><div class="rv-sub">Risk mitigation plan required</div></div>
+          <div class="rv-stat" style="border-color:rgba(26,183,84,.15);cursor:pointer" onclick="openModal('meetings')"><div class="rv-lbl">Review Meetings</div><div class="rv-val" style="color:var(--green)">3</div><div class="rv-sub">Next: Mon 10:00 AM &middot; ORM</div></div>
+        </div>
+        <div class="rv-summary"><strong>PMG Summary:</strong> Manufacturing and Procurement are critical. MFG-12 escalation requires Director decision. Alternate vendor for PROC-23 pending VP approval. 7 cross-functional sync gaps require resolution before Jul 28.</div>
+      </div>
+      <div class="role-view" id="rv-engineering">
+        <div class="rv-grid">
+          <div class="rv-stat" style="border-color:rgba(0,145,255,.15);cursor:pointer" data-domain="Engineering" onclick="openDrawer('domain','engineering')"><div class="rv-lbl">Drawings in Workflow</div><div class="rv-val" style="color:var(--blue)">64</div><div class="rv-sub" style="color:var(--green)">82% released on time</div></div>
+          <div class="rv-stat" style="border-color:rgba(245,166,35,.15);cursor:pointer" onclick="openDrawer('milestone','epc07')"><div class="rv-lbl">Pending Approvals</div><div class="rv-val" style="color:var(--yellow)">5</div><div class="rv-sub" style="color:var(--red)">EPC-07 critical</div></div>
+          <div class="rv-stat" onclick="openModal('revisions')"><div class="rv-lbl">Revision Cycles</div><div class="rv-val" style="color:var(--red)">12</div><div class="rv-sub">Avg. 1.4 revisions each</div></div>
+          <div class="rv-stat" style="border-color:rgba(26,183,84,.15)"><div class="rv-lbl">IFC Packages</div><div class="rv-val" style="color:var(--green)">47</div><div class="rv-sub">Issued for construction</div></div>
+        </div>
+        <div class="rv-summary" style="border-color:rgba(0,145,255,.12)"><strong style="color:var(--blue)">Engineering Focus:</strong> EPC-07 HE drawing Rev.3 must clear by Jul 22 to avoid procurement cascade. Drawing register shows 5 packages pending sign-off.</div>
+      </div>
+      <div class="role-view" id="rv-procurement">
+        <div class="rv-grid">
+          <div class="rv-stat" style="border-color:rgba(245,166,35,.15);cursor:pointer" data-domain="Procurement" onclick="openDrawer('domain','procurement')"><div class="rv-lbl">Active Purchase Orders</div><div class="rv-val" style="color:var(--yellow)">38</div><div class="rv-sub">Across 14 vendors</div></div>
+          <div class="rv-stat" style="border-color:rgba(230,48,80,.15);cursor:pointer" onclick="openDrawer('milestone','proc23')"><div class="rv-lbl">Delayed POs</div><div class="rv-val" style="color:var(--red)">9</div><div class="rv-sub" style="color:var(--red)">PROC-23 critical</div></div>
+          <div class="rv-stat"><div class="rv-lbl">GRN Pending</div><div class="rv-val" style="color:var(--blue)">6</div><div class="rv-sub">Goods receipt pending</div></div>
+          <div class="rv-stat"><div class="rv-lbl">Expediting Alerts</div><div class="rv-val" style="color:var(--orange)">4</div><div class="rv-sub" style="color:var(--yellow)">3 require escalation</div></div>
+        </div>
+        <div class="rv-summary" style="border-color:rgba(245,166,35,.12)"><strong style="color:var(--yellow)">Procurement Focus:</strong> PROC-23 valve delivery is +9 days beyond committed date. Alternate vendor Audco quote received and under PMG review. Confirm delivery by Jul 26.</div>
+      </div>
+      <div class="role-view" id="rv-planning">
+        <div class="rv-grid">
+          <div class="rv-stat" style="border-color:rgba(26,183,84,.15)"><div class="rv-lbl">Schedule Health</div><div class="rv-val" style="color:var(--green)">91%</div><div class="rv-sub" style="color:var(--green)">On baseline</div></div>
+          <div class="rv-stat"><div class="rv-lbl">Float Consumed</div><div class="rv-val" style="color:var(--blue)">62%</div><div class="rv-sub" style="color:var(--yellow)">Buffer being consumed</div></div>
+          <div class="rv-stat" style="border-color:rgba(245,166,35,.15)"><div class="rv-lbl">At-Risk Packages</div><div class="rv-val" style="color:var(--yellow)">2</div><div class="rv-sub">Requires replanning</div></div>
+          <div class="rv-stat" style="border-color:rgba(230,48,80,.15)"><div class="rv-lbl">Resources Allocated</div><div class="rv-val" style="color:var(--purple)">142</div><div class="rv-sub" style="color:var(--red)">34% over in Wk30-31</div></div>
+        </div>
+        <div class="rv-summary" style="border-color:rgba(26,183,84,.12)"><strong style="color:var(--green)">Planning Focus:</strong> Overall health strong at 91%. Welding resource overutilization in Wk30-31 must be resolved. PLN-07 reallocation recommendation submitted to PMG.</div>
+      </div>
+      <div class="role-view" id="rv-manufacturing">
+        <div class="rv-grid">
+          <div class="rv-stat" style="border-color:rgba(230,48,80,.15);cursor:pointer" data-domain="Manufacturing" onclick="openDrawer('domain','manufacturing')"><div class="rv-lbl">Critical Jobs</div><div class="rv-val" style="color:var(--red)">7</div><div class="rv-sub" style="color:var(--red)">Immediate attention</div></div>
+          <div class="rv-stat" style="border-color:rgba(245,166,35,.15)"><div class="rv-lbl">WIP Progress</div><div class="rv-val" style="color:var(--yellow)">59%</div><div class="rv-sub" style="color:var(--red)">Below target (75%)</div></div>
+          <div class="rv-stat"><div class="rv-lbl">QC Hold Items</div><div class="rv-val" style="color:var(--blue)">3</div><div class="rv-sub">NCR resolution pending</div></div>
+          <div class="rv-stat" style="border-color:rgba(26,183,84,.15)"><div class="rv-lbl">Shop Throughput</div><div class="rv-val" style="color:var(--green)">72%</div><div class="rv-sub">Of planned capacity</div></div>
+        </div>
+        <div class="rv-summary" style="border-color:rgba(240,129,42,.12)"><strong style="color:var(--orange)">MFG Focus:</strong> MFG-12 Pressure Vessel is 18 days behind. Valve delivery from PROC is primary cause. Mandatory overtime approved for Vessel Bay. Recovery plan submitted to PMG.</div>
+      </div>
+      <div class="role-view" id="rv-leadership">
+        <div class="rv-grid">
+          <div class="rv-stat" style="border-color:rgba(0,145,255,.15);cursor:pointer" onclick="openDrawer('kpi','health')"><div class="rv-lbl">Portfolio Health</div><div class="rv-val" style="color:var(--blue)">73%</div><div class="rv-sub" style="color:var(--yellow)">Moderate risk zone</div></div>
+          <div class="rv-stat" style="border-color:rgba(230,48,80,.15);cursor:pointer" onclick="openDrawer('exposure','summary')"><div class="rv-lbl">Schedule Exposure</div><div class="rv-val" style="color:var(--red)">+37d</div><div class="rv-sub" style="color:var(--red)">Cumulative critical path</div></div>
+          <div class="rv-stat" style="border-color:rgba(155,93,229,.15);cursor:pointer" onclick="openDrawer('esc-all')"><div class="rv-lbl">Director Escalations</div><div class="rv-val" style="color:var(--purple)">2</div><div class="rv-sub" style="color:var(--red)">Awaiting decision</div></div>
+          <div class="rv-stat"><div class="rv-lbl">Active Projects</div><div class="rv-val" style="color:var(--yellow)">24</div><div class="rv-sub">6 domains monitored</div></div>
+        </div>
+        <div class="rv-summary" style="border-color:rgba(155,93,229,.12)"><strong style="color:var(--purple)">Leadership Focus:</strong> Portfolio health 73% with +37d cumulative exposure. Two items require Director decision: (1) Alternate vendor approval for PROC-23, (2) MFG-12 recovery budget. Revenue-at-risk assessment available in Analytics.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-lt">
+    <img src="lt-logo.png" alt="L&T Logo" style="height:44px;width:44px;border-radius:50%;background:#ffffff;object-fit:contain;padding:2px;box-shadow:0 2px 10px rgba(0,0,0,0.4);flex-shrink:0;"/>
+    <div class="footer-info">
+      <strong>Larsen &amp; Toubro Limited</strong>
+      <span>Projects &amp; Manufacturing Group (PMG)</span>
+    </div>
+    <div class="footer-div"></div>
+    <div class="footer-pmg">
+      <strong>PMG Operational Governance Platform</strong>
+      <span>Unified Operational Visibility Dashboard &middot; v3.2.1</span>
+    </div>
+  </div>
+  <div class="footer-center">
+    <div class="footer-addr">Addresses: 6.1 No Single Source of Truth &nbsp;&middot;&nbsp; 5.1 Execution Visibility &amp; Update Reliability</div>
+    <div class="footer-copy">&copy; 2026 Larsen &amp; Toubro Limited &middot; All rights reserved &middot; Confidential &amp; Proprietary</div>
+  </div>
+  <div class="footer-right">
+    <div class="powered-row">
+      <span class="powered-lbl">Powered by</span>
+      <div class="appl-logo">
+        <div class="appl-ico">A</div>
+        <div class="appl-name">Applautions</div>
+      </div>
+    </div>
+    <div class="footer-ai"><i class="fa-solid fa-brain"></i> AI Intelligence Engine &nbsp;&middot;&nbsp; v2.0</div>
+  </div>
+</footer>
+
+<script>
+/* ═══ THEME ═══ */
+function toggleTheme(){
+  var h=document.documentElement;
+  var t=h.getAttribute('data-theme')==='dark'?'light':'dark';
+  h.setAttribute('data-theme',t);
+  localStorage.setItem('lt-theme',t);
+  showToast(t==='light'?'Switched to Light Theme':'Switched to Dark Theme','info');
+}
+(function(){
+  var s=localStorage.getItem('lt-theme');
+  if(s) {
+    document.documentElement.setAttribute('data-theme',s);
+  } else {
+    document.documentElement.setAttribute('data-theme','light');
+  }
+})();
+
+/* ═══ CLOCK ═══ */
+function tick(){
+  var n=new Date();
+  document.getElementById('clock').textContent=
+    n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+
+    ' IST \u00b7 '+n.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+}
+tick(); setInterval(tick,1000);
+
+/* ═══ LAST UPDATE ═══ */
+var _sec=0;
+setInterval(function(){
+  _sec++;
+  var e=document.getElementById('lastUpdate');
+  if(_sec<60) e.textContent=_sec+'s ago';
+  else e.textContent=Math.floor(_sec/60)+'m ago';
+  if(_sec>=25){_sec=0;e.textContent='just now';}
+},1000);
+
+/* ═══ KPI COUNTER ═══ */
+window.addEventListener('load',function(){
+  document.querySelectorAll('.kpi-val[data-target]').forEach(function(el){
+    var t=parseInt(el.getAttribute('data-target'));
+    var sfx=el.getAttribute('data-suffix')||'';
+    var c=0,step=Math.max(1,Math.ceil(t/28));
+    var iv=setInterval(function(){c=Math.min(c+step,t);el.textContent=c+sfx;if(c>=t)clearInterval(iv);},32);
+  });
+});
+
+/* ═══ SIDEBAR ═══ */
+function sbClick(el,selector){
+  document.querySelectorAll('.sb-item').forEach(function(i){i.classList.remove('active');});
+  el.classList.add('active');
+  if(selector){
+    var target=document.querySelector(selector);
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+/* ═══ ROLE TABS ═══ */
+function setRole(btn,role){
+  document.querySelectorAll('.role-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  document.querySelectorAll('.role-view').forEach(function(v){v.classList.remove('active');});
+  var r=document.getElementById('rv-'+role);
+  if(r) r.classList.add('active');
+}
+
+/* ═══ TOAST ═══ */
+function showToast(msg,type,duration){
+  var d=duration||3200;
+  var icons={info:'&#xf05a;',warn:'&#xf071;',success:'&#xf058;',error:'&#xf057;'};
+  var cols={info:'var(--blue)',warn:'var(--yellow)',success:'var(--green)',error:'var(--red)'};
+  var t=type||'info';
+  var div=document.createElement('div');
+  div.className='toast';
+  div.innerHTML='<i class="fa-solid toast-ico" style="color:'+cols[t]+'">'+icons[t]+'</i><span>'+msg+'</span>';
+  var c=document.getElementById('toast-container');
+  c.appendChild(div);
+  setTimeout(function(){
+    div.classList.add('fadeout');
+    setTimeout(function(){if(div.parentNode)div.parentNode.removeChild(div);},320);
+  },d);
+}
+
+/* ═══ GLOBAL GOVERNANCE DATASETS ═══ */
+var domainData={
+  engineering:{name:'Engineering',color:'var(--blue)',icon:'fa-drafting-compass',bg:'rgba(0,145,255,.1)',
+    h:82,stats:{drawings:64,onTime:'82%',pending:5,revisions:12,ifc:47},
+    summary:'Drawing release KPI at 82%. EPC-07 is critical — Rev.3 must clear by Jul 22 to avoid procurement cascade.',
+    items:['EPC-07 HE Drawing Rev.3 — Pending approval (5d overdue)','EPC-12 Structural Frame — Released to PROC','EPC-15 P&ID Update — Under review']},
+  procurement:{name:'Procurement',color:'var(--yellow)',icon:'fa-truck-fast',bg:'rgba(245,166,35,.1)',
+    h:68,stats:{active:38,onTime:'68%',delayed:9,vendors:14,grn:6},
+    summary:'PROC-23 valve delivery is +9 days beyond committed date. Alternate vendor Audco quote is under PMG review.',
+    items:['PROC-23 Valve — Kirloskar delayed +9d','PROC-18 Pipe Fittings — On schedule','PROC-27 Flanges — GRN pending']},
+  planning:{name:'Planning',color:'var(--green)',icon:'fa-calendar-days',bg:'rgba(26,183,84,.1)',
+    h:91,stats:{projects:24,onTime:'91%',atRisk:2,float:'62%',resources:142},
+    summary:'Schedule health strong. Welding resource overutilization in Wk30-31 requires immediate rebalancing.',
+    items:['PLN-08 Site Mobilization — On track','PLN-11 Resource Planning — At risk (crew conflict)','PLN-07 Shutdown Prep — Clear']},
+  manufacturing:{name:'Manufacturing',color:'var(--orange)',icon:'fa-industry',bg:'rgba(240,129,42,.1)',
+    h:59,stats:{jobs:18,onTime:'59%',critical:7,throughput:'72%',wip:'59%'},
+    summary:'CRITICAL: MFG-12 is 18 days behind. Mandatory overtime approved. Recovery plan submitted to PMG.',
+    items:['MFG-12 Pressure Vessel — Delayed +18d (CRITICAL)','MFG-09 Batch B — QC rejection, NCR open','MFG-14 Skid Assembly — On schedule']},
+  quality:{name:'Quality',color:'var(--teal)',icon:'fa-shield-check',bg:'rgba(0,212,176,.08)',
+    h:77,stats:{inspections:42,passRate:'77%',ncr:3,hold:2,cleared:37},
+    summary:'Pass rates improved +12% since QA-04 protocol. 3 NCRs open. Scale QA-04 to Manufacturing recommended.',
+    items:['QA-04 Protocol — Active (pass rate +12%)','NCR-07 Batch B rejection — Pending resolution','QA-18 Weld inspection — Cleared']},
+  execution:{name:'Project Execution',color:'var(--purple)',icon:'fa-diagram-project',bg:'rgba(155,93,229,.1)',
+    h:71,stats:{packages:11,progress:'71%',behind:4,erection:'68%',comm:'12%'},
+    summary:'4 packages behind schedule. EXE-11 structural erection on track. Commissioning at 12% with no issues.',
+    items:['EXE-11 Structural Erection — On track','EXE-08 Equipment Setting — Behind +6d','EXE-09 Piping — Behind (awaiting MFG-12)']},
+};
+
+var milestoneData={
+  mfg12:{name:'MFG-12: Pressure Vessel Fabrication',domain:'Manufacturing',due:'15 Jul 2026',owner:'RK Sharma',status:'Delayed',delay:'+18 days',sev:'Critical',
+    cause:'Valve delivery from Kirloskar delayed PROC-23. Radiography testing sequence impacted.',
+    actions:['Mandatory overtime approved for Vessel Bay','Alternate RT inspection slot booked for Jul 24','Recovery plan submitted to PMG — awaiting approval']},
+  epc07:{name:'EPC-07: Heat Exchanger Drawing Issue',domain:'Engineering',due:'20 Jul 2026',owner:'AS Rao',status:'At Risk',delay:'+5 days',sev:'High',
+    cause:'Rev.3 drawing requires sign-off from Client — 3 review cycles completed.',
+    actions:['Client review meeting scheduled Jul 22','Expedited approval request sent','Alternate structural solution being evaluated']},
+  proc23:{name:'PROC-23: Valve Procurement Closure',domain:'Procurement',due:'25 Jul 2026',owner:'MN Kumar',status:'At Risk',delay:'+9 days',sev:'High',
+    cause:'Kirloskar valve delivery delayed due to raw material shortage.',
+    actions:['Alternate vendor Audco quote received','Expedite order placed for partial delivery','PMG review of alternate vendor — Jul 24']},
+  qa04:{name:'QA-04: Inspection Protocol Finalized',domain:'Quality',due:'10 Jul 2026',owner:'PM Singh',status:'Completed',delay:'None',sev:'Low',
+    cause:'Completed on time. New protocol increases pass rates.',
+    actions:['Protocol scaled to 3 shop areas','Training completed for 24 QC inspectors','Result: +12% improvement in pass rate']},
+  pln08:{name:'PLN-08: Site Mobilization Plan',domain:'Planning',due:'28 Jul 2026',owner:'SK Das',status:'On Track',delay:'None',sev:'Low',
+    cause:'All pre-mobilization clearances received.',
+    actions:['Crew deployment confirmed for Jul 28','Equipment staging complete','Safety induction scheduled']},
+  exe11:{name:'EXE-11: Structural Steel Erection',domain:'Execution',due:'05 Aug 2026',owner:'VR Naik',status:'On Track',delay:'None',sev:'Low',
+    cause:'Steel erection on baseline schedule. Float: 4 days.',
+    actions:['Erection crew deployed — 18 members','Crane positioning confirmed','ITP approved by QA']},
+};
+
+var kpiData={
+  milestones:{title:'Milestone Details',icon:'fa-flag-checkered',col:'var(--blue)',content:'218 total milestones across 6 domains.<br><br><b>Breakdown:</b><br>&bull; Engineering: 64 &bull; Procurement: 38 &bull; Planning: 52 &bull; Manufacturing: 32 &bull; Quality: 18 &bull; Execution: 14'},
+  ontrack:{title:'On-Track Milestones',icon:'fa-circle-check',col:'var(--green)',content:'174 milestones are on-track (79.8% of total).<br><br><b>Top Performers:</b><br>&bull; Planning: 91% on-time &bull; Engineering: 82% on-time<br><br><b>Watch List:</b><br>&bull; Manufacturing: Only 59% on-time'},
+  delayed:{title:'Delayed Milestones',icon:'fa-clock-rotate-left',col:'var(--red)',content:'31 milestones currently delayed.<br><br><b>By Domain:</b><br>&bull; Manufacturing: 12 (39%) &bull; Procurement: 9 (29%) &bull; Engineering: 5 (16%) &bull; Others: 5 (16%)<br><br><b>Critical: MFG-12 (+18d), PROC-23 (+9d)'},
+  dependencies:{title:'Dependency Status',icon:'fa-link-slash',col:'var(--yellow)',content:'47 active dependencies identified.<br><br><b>Status:</b><br>&bull; 14 Unresolved (30%) &bull; 8 Blocked &bull; 12 At Risk &bull; 13 Clear<br><br>Most critical: ENG&rarr;PROC chain (8 blocked)'},
+  health:{title:'Execution Health Score',icon:'fa-heart-pulse',col:'var(--teal)',content:'Overall execution health: <b>73%</b> (Moderate risk)<br><br><b>Domain Breakdown:</b><br>&bull; Planning: 91% &#9679; Engineering: 82%<br>&bull; Quality: 77% &#9679; Execution: 71%<br>&bull; Procurement: 68% &#9679; Manufacturing: 59%'},
+};
+
+var escData={
+  esc1:{title:'Critical: MFG Delay — Pressure Vessel',sev:'Critical',age:'18 days',from:'Manufacturing',to:'Director',owner:'PMG Lead',
+    desc:'Pressure Vessel MFG-12 fabrication is 18 days behind baseline schedule due to procurement dependency on valve delivery (PROC-23).',
+    resolution:'Director decision required on recovery budget and overtime authorization.'},
+  esc2:{title:'Supply Chain Disruption — PROC-23',sev:'Critical',age:'9 days',from:'Procurement',to:'VP Supply',owner:'PMG Lead',
+    desc:'Kirloskar valve delivery delayed due to raw material shortage. PROC-23 impacts downstream fabrication sequence.',
+    resolution:'Alternate vendor Audco evaluation complete. VP Supply decision required on re-sourcing.'},
+  esc3:{title:'Drawing Approval Stuck — EPC-07',sev:'High',age:'5 days',from:'Engineering',to:'PMG',owner:'AS Rao',
+    desc:'EPC-07 HE Structural drawing Rev.3 awaiting client sign-off. 3 review cycles completed. Blocking 3 procurement orders.',
+    resolution:'PMG to escalate to client project manager for expedited approval by Jul 22.'},
+  esc4:{title:'QC Rejection — Batch MFG-09',sev:'High',age:'3 days',from:'Quality',to:'PMG',owner:'PM Singh',
+    desc:'Quality control inspection rejected Batch MFG-09 — weld quality non-conformance. NCR-07 raised.',
+    resolution:'Repair and re-inspection scheduled for Jul 25. MFG team to implement corrective action protocol.'},
+  esc5:{title:'Resource Conflict — Site vs. Shop',sev:'Medium',age:'2 days',from:'Planning',to:'PMG',owner:'SK Das',
+    desc:'Welding crew allocation conflict between site erection (EXE-11) and shop fabrication (MFG-12). 34% over-utilization in Wk30-31.',
+    resolution:'PLN-07 resource rebalancing proposal submitted. PMG to approve reallocation of 4 welders from Site to Shop for Wk30.'},
+};
+
+/* ═══ DRAWER ═══ */
+function openDrawer(type,id){
+  var title='Details';
+  var iconHTML='<i class="fa-solid fa-info"></i>';
+  var iconStyle='background:rgba(0,145,255,.1);color:var(--blue)';
+  var body='';
+  var footer='<button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+
+  if(type==='domain' && domainData[id]){
+    var d=domainData[id];
+    title=d.name+' Domain';
+    iconHTML='<i class="fa-solid '+d.icon+'"></i>';
+    iconStyle='background:'+d.bg+';color:'+d.color;
+    body='<div class="drawer-section">';
+    body+='<div class="drawer-section-title">Health Score</div>';
+    body+='<div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">';
+    body+='<div style="position:relative;width:80px;height:80px;flex-shrink:0"><svg style="transform:rotate(-90deg);width:80px;height:80px" viewBox="0 0 80 80"><circle style="fill:none;stroke:var(--ring-track);stroke-width:6" cx="40" cy="40" r="32"/>';
+    var circum=201.1,off=circum*(1-d.h/100);
+    body+='<circle style="fill:none;stroke:'+d.color+';stroke-width:6;stroke-linecap:round;stroke-dasharray:'+circum+';stroke-dashoffset:'+off+'" cx="40" cy="40" r="32"/></svg>';
+    body+='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;font-family:JetBrains Mono,monospace;color:'+d.color+'">'+d.h+'%</div></div>';
+    body+='<div><div style="font-size:12.5px;color:var(--text-p);line-height:1.6">'+d.summary+'</div></div></div>';
+    body+='</div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Key Metrics</div><div class="dstat-row">';
+    var stats=d.stats;
+    Object.keys(stats).forEach(function(k){
+      body+='<div class="dstat"><div class="dstat-lbl">'+k.replace(/([A-Z])/g,' $1').replace(/^./,function(s){return s.toUpperCase();})+'</div><div class="dstat-val">'+stats[k]+'</div></div>';
+    });
+    body+='</div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Active Items</div>';
+    d.items.forEach(function(item){
+      body+='<div class="dinfo-row"><span class="dinfo-lbl" style="max-width:100%">'+item+'</span></div>';
+    });
+    body+='</div>';
+    footer='<button class="btn btn-primary" onclick="exportDomainReport(\''+id+'\')"><i class="fa-solid fa-download"></i> Download Full Report (CSV)</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='milestone' && milestoneData[id]){
+    var m=milestoneData[id];
+    var sc={Delayed:'var(--red)','At Risk':'var(--yellow)','On Track':'var(--green)',Completed:'var(--blue)'};
+    var col=sc[m.status]||'var(--blue)';
+    title=m.name;
+    iconHTML='<i class="fa-solid fa-flag-checkered"></i>';
+    iconStyle='background:rgba(0,145,255,.1);color:'+col;
+    body='<div class="drawer-section"><div class="drawer-section-title">Overview</div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Domain</span><span class="dinfo-val">'+m.domain+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Due Date</span><span class="dinfo-val">'+m.due+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Owner</span><span class="dinfo-val">'+m.owner+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Status</span><span class="dinfo-val" style="color:'+col+'">'+m.status+(m.delay!=='None'?' ('+m.delay+')':'')+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Severity</span><span class="dinfo-val">'+m.sev+'</span></div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Root Cause</div><div style="font-size:12.5px;color:var(--text-p);line-height:1.65;padding:10px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">'+m.cause+'</div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Action Items</div>';
+    m.actions.forEach(function(a,i){
+      body+='<div class="dinfo-row"><span class="dinfo-lbl" style="color:var(--text-muted)">'+String.fromCharCode(9312+i)+'</span><span class="dinfo-lbl" style="flex:1;text-align:left;max-width:100%">'+a+'</span></div>';
+    });
+    body+='</div>';
+    footer='<button class="btn btn-primary" onclick="showToast(\"Action logged for '+m.name+'\",\"success\");closeDrawer()"><i class="fa-solid fa-check"></i> Log Action</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='ms-all'){
+    title='All Milestones (218)';
+    iconHTML='<i class="fa-solid fa-flag-checkered"></i>';
+    body='<div class="drawer-section"><div class="drawer-section-title">Summary</div><div class="dstat-row"><div class="dstat"><div class="dstat-lbl">On Track</div><div class="dstat-val" style="color:var(--green)">174</div></div><div class="dstat"><div class="dstat-lbl">At Risk</div><div class="dstat-val" style="color:var(--yellow)">13</div></div><div class="dstat"><div class="dstat-lbl">Delayed</div><div class="dstat-val" style="color:var(--red)">31</div></div></div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">By Domain</div>';
+    var domains=[['Engineering',64,'82%','var(--blue)'],['Procurement',38,'68%','var(--yellow)'],['Planning',52,'91%','var(--green)'],['Manufacturing',32,'59%','var(--red)'],['Quality',18,'77%','var(--teal)'],['Execution',14,'71%','var(--purple)']];
+    domains.forEach(function(d){
+      body+='<div class="dp-row"><span class="dp-lbl">'+d[0]+'</span><div class="dp-bar"><div class="dp-fill" style="width:'+d[2]+';background:'+d[3]+'"></div></div><span class="dp-val" style="color:'+d[3]+'">'+d[2]+'</span></div>';
+    });
+    body+='</div>';
+    footer='<button class="btn btn-primary" onclick="exportMilestoneReport()"><i class="fa-solid fa-download"></i> Export CSV</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='escalation' && escData[id]){
+    var e=escData[id];
+    var sc={Critical:'var(--red)',High:'var(--yellow)',Medium:'var(--indigo)'};
+    var col2=sc[e.sev]||'var(--blue)';
+    title=e.title;
+    iconHTML='<i class="fa-solid fa-triangle-exclamation"></i>';
+    iconStyle='background:rgba(230,48,80,.12);color:'+col2;
+    body='<div class="drawer-section"><div class="drawer-section-title">Escalation Details</div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Severity</span><span class="dinfo-val" style="color:'+col2+'">'+e.sev+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Open Since</span><span class="dinfo-val">'+e.age+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Escalated From</span><span class="dinfo-val">'+e.from+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Decision Required By</span><span class="dinfo-val">'+e.to+'</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Owner</span><span class="dinfo-val">'+e.owner+'</span></div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Description</div><div style="font-size:12.5px;color:var(--text-p);line-height:1.65;padding:10px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">'+e.desc+'</div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Resolution Path</div><div style="font-size:12.5px;color:var(--text-p);line-height:1.65;padding:10px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">'+e.resolution+'</div></div>';
+    footer='<button class="btn btn-primary" onclick="showToast(\"Escalation '+e.sev+' — Decision logged\",\"success\");closeDrawer()"><i class="fa-solid fa-check"></i> Resolve</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='esc-all'){
+    title='All Escalations (7 Open)';
+    iconHTML='<i class="fa-solid fa-triangle-exclamation"></i>';
+    iconStyle='background:rgba(230,48,80,.12);color:var(--red)';
+    var escs=[['Critical','MFG Delay — Pressure Vessel','Manufacturing','18d','var(--red)'],['Critical','Supply Chain Disruption — PROC-23','Procurement','9d','var(--red)'],['High','Drawing Approval Stuck — EPC-07','Engineering','5d','var(--yellow)'],['High','QC Rejection — Batch MFG-09','Quality','3d','var(--yellow)'],['Medium','Resource Conflict — Site vs. Shop','Planning','2d','var(--indigo)'],['Low','Vendor Performance — Kirloskar','Procurement','1d','var(--green)'],['Low','Safety Observation — Erection Area','Execution','1d','var(--green)']];
+    body='<div class="drawer-section"><div class="drawer-section-title">Summary</div><div class="dstat-row"><div class="dstat"><div class="dstat-lbl">Critical</div><div class="dstat-val" style="color:var(--red)">2</div></div><div class="dstat"><div class="dstat-lbl">High</div><div class="dstat-val" style="color:var(--yellow)">2</div></div><div class="dstat"><div class="dstat-lbl">Medium</div><div class="dstat-val" style="color:var(--indigo)">1</div></div><div class="dstat"><div class="dstat-lbl">Low</div><div class="dstat-val" style="color:var(--green)">2</div></div></div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">All Escalations</div>';
+    escs.forEach(function(esc,i){
+      body+='<div class="dinfo-row" style="cursor:pointer" onclick="showToast(\"Escalation '+i+' details\",\"info\")"><span class="chip" style="background:rgba(230,48,80,.1);color:'+esc[4]+'">'+esc[0]+'</span><span class="dinfo-lbl" style="flex:1;margin-left:8px">'+esc[1]+'</span><span style="font-size:10.5px;color:var(--text-muted)">'+(esc[4].includes('red')?'&#128308; ':'&#128992; ')+''+esc[3]+'</span></div>';
+    });
+    body+='</div>';
+    footer='<button class="btn btn-primary" onclick="exportEscalationReport()"><i class="fa-solid fa-download"></i> Export Escalation CSV</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='kpi' && kpiData[id]){
+    var k=kpiData[id];
+    title=k.title;
+    iconHTML='<i class="fa-solid '+k.icon+'"></i>';
+    iconStyle='background:rgba(0,145,255,.1);color:'+k.col;
+    body='<div class="drawer-section"><div style="font-size:13px;color:var(--text-p);line-height:1.7;padding:12px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">'+k.content+'</div></div>';
+    footer='<button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='exposure'){
+    var expMap={
+      mfg12:{title:'MFG-12 Schedule Exposure',desc:'Pressure Vessel fabrication is 18 days behind. This directly impacts EXE-08 and EXE-09 erection activities. Total cascade exposure: +26 days if not mitigated.',action:'Recovery plan approved — mandatory overtime + expedited procurement'},
+      proc23:{title:'PROC-23 Schedule Exposure',desc:'Valve procurement from Kirloskar is +9 days behind. Direct impact on MFG-12 fabrication sequence. Alternate vendor evaluation complete.',action:'PMG to approve Audco re-source by Jul 24'},
+      epc07:{title:'EPC-07 Schedule Exposure',desc:'Structural drawing approval delayed +5 days. Blocking 3 downstream procurement orders (PROC-15, 18, 23).',action:'Client escalation meeting scheduled Jul 22'},
+      qa04:{title:'QA Batch Rejection Exposure',desc:'QC rejection of MFG-09 causing +3 day hold. NCR-07 raised. Repair and re-inspection planned.',action:'Re-inspection scheduled Jul 25'},
+      pln11:{title:'PLN-11 Resource Conflict',desc:'Minor resource conflict causing +2 day exposure in execution planning. Welding crew reallocation pending.',action:'PMG decision on crew reallocation — Jul 23'},
+      summary:{title:'Total Schedule Exposure Summary',desc:'Cumulative exposure across all critical path activities is <b>+37 days</b>. Manufacturing is the highest-risk domain. Immediate PMG intervention required on MFG-12 and PROC-23 to contain further slippage.',action:'PMG Steering Review — Jul 24, 10:00 AM'},
+    };
+    var ex=expMap[id]||expMap.summary;
+    title=ex.title;
+    iconHTML='<i class="fa-solid fa-calendar-xmark"></i>';
+    iconStyle='background:rgba(240,129,42,.12);color:var(--orange)';
+    body='<div class="drawer-section"><div class="drawer-section-title">Exposure Analysis</div><div style="font-size:13px;color:var(--text-p);line-height:1.7;padding:12px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">'+ex.desc+'</div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Recommended Action</div><div style="font-size:13px;color:var(--text-p);line-height:1.7;padding:12px;background:rgba(26,183,84,.04);border-radius:var(--radius-sm);border:1px solid rgba(26,183,84,.15)">'+ex.action+'</div></div>';
+    footer='<button class="btn btn-primary" onclick="showToast(\"Action logged\",\"success\");closeDrawer()"><i class="fa-solid fa-check"></i> Log Action</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='dependency'||type==='sync'){
+    var lbl=type==='dependency'?'Dependency':'Sync Gap';
+    var depMap={'eng-proc':'Engineering \u2192 Procurement: 8 dependencies blocked. Root cause: EPC-07 drawing approval pending. Action: Expedite client approval by Jul 22.','proc-mfg':'Procurement \u2192 Manufacturing: 5 dependencies at risk. Valve delivery from Kirloskar delayed. Action: Audco alternate vendor approved.','mfg-qa':'Manufacturing \u2192 Quality: 3 dependencies pending NCR resolution. Batch MFG-09 repair underway.','pln-exe':'Planning \u2192 Execution: 2 dependencies cleared. PLN-08 mobilization green. Float: 4 days.','qa-exe':'Quality \u2192 Execution: 4 under review. QA-04 clearance issued. NCR-07 pending.','eng-exe':'Engineering \u2192 Execution: 1 dependency clear. IFC package delivered.'};
+    title=lbl+' — '+(id||'').replace('-',' \u2192 ').toUpperCase();
+    iconHTML='<i class="fa-solid fa-link-slash"></i>';
+    iconStyle='background:rgba(245,166,35,.12);color:var(--yellow)';
+    body='<div class="drawer-section"><div style="font-size:13px;color:var(--text-p);line-height:1.7;padding:12px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">'+(depMap[id]||'Dependency details not available for this item.')+'</div></div>';
+    footer='<button class="btn btn-primary" onclick="showToast(\"Dependency status updated\",\"success\");closeDrawer()"><i class="fa-solid fa-rotate"></i> Update Status</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='ai-insight'){
+    var aiMap={
+      ai1:{title:'AI: Manufacturing Bottleneck Analysis',icon:'fa-magnifying-glass-chart',conf:'94%',content:'MFG-12 delay analysis shows cascade risk to EXE-08 and EXE-09. Combined exposure: +26 days. AI recommends accelerating fabrication via: (1) Mandatory overtime approval, (2) Expedited valve procurement, (3) Pre-assembly of accessible components.',action:'Set accelerated schedule by Jul 26'},
+      ai2:{title:'AI: Procurement Pattern Alert',icon:'fa-arrow-trend-up',conf:'88%',content:'Historical analysis: 3 of 5 recent Kirloskar orders exceeded committed lead time by avg. 8.2 days. Vendor performance score: 62/100. AI recommends: (1) Alternate vendor evaluation for PROC-25+, (2) Update approved vendor list, (3) Penalty clause activation.',action:'Evaluate Audco as primary vendor'},
+      ai3:{title:'AI: Sync Gap Root Cause',icon:'fa-puzzle-piece',conf:'91%',content:'Engineering-Procurement handshake lag of 6 days identified across HE drawing package. 4 downstream MFG activities impacted. AI flags this as systemic — 3 similar gaps in last 6 months. Recommend: Automated drawing release triggers in PLM system.',action:'Implement PLM auto-trigger by Aug 1'},
+      ai4:{title:'AI: Resource Sensitivity Alert',icon:'fa-people-group',conf:'87%',content:'Welding crew utilization peaks at 98% on Wk30-Wed and 96% on Wk31-Tue. AI predicts fatigue-related quality risk (+23% NCR probability) if overutilization continues beyond 2 weeks. Recommend immediate rebalancing from PLN-07 team.',action:'Reallocate 4 welders from PLN-07'},
+      ai5:{title:'AI: Quality Improvement Signal',icon:'fa-thumbs-up',conf:'96%',content:'QA-04 protocol rollout shows +12% improvement in structural inspection pass rates. AI analysis confirms statistically significant improvement (p < 0.01). Scaling to Manufacturing domain projected to reduce NCR incidents by 18%.',action:'Scale QA-04 protocol to MFG domain'},
+    };
+    var ai=aiMap[id]||{title:'AI Insight',icon:'fa-brain',conf:'N/A',content:'Details not available.',action:''};
+    title=ai.title;
+    iconHTML='<i class="fa-solid '+ai.icon+'"></i>';
+    iconStyle='background:rgba(155,93,229,.12);color:var(--purple)';
+    body='<div class="drawer-section"><div style="display:flex;align-items:center;gap:6px;margin-bottom:10px"><span style="font-size:11px;color:var(--text-muted)">AI Confidence:</span><span class="ai-conf">'+ai.conf+'</span></div><div style="font-size:13px;color:var(--text-p);line-height:1.7;padding:12px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">'+ai.content+'</div></div>';
+    body+='<div class="drawer-section"><div class="drawer-section-title">Recommended Action</div><div style="font-size:13px;color:var(--text-p);line-height:1.7;padding:12px;background:rgba(155,93,229,.05);border-radius:var(--radius-sm);border:1px solid rgba(155,93,229,.15)">'+ai.action+'</div></div>';
+    footer='<button class="btn btn-primary" onclick="showToast(\"AI recommendation accepted\",\"success\");closeDrawer()"><i class="fa-solid fa-check"></i> Accept Recommendation</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='user'){
+    title='PMG Lead — User Profile';
+    iconHTML='<i class="fa-solid fa-user"></i>';
+    body='<div class="drawer-section"><div class="drawer-section-title">User Information</div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Name</span><span class="dinfo-val">Project Manager</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Role</span><span class="dinfo-val">PMG Lead</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Department</span><span class="dinfo-val">PMG Governance</span></div>';
+    body+='<div class="dinfo-row"><span class="dinfo-lbl">Last Login</span><span class="dinfo-val">Today, 09:15 IST</span></div>';
+    body+='</div><div class="drawer-section"><div class="drawer-section-title">Active Permissions</div>';
+    ['Cross-Domain View','Escalation Management','PMG Dashboard','AI Intelligence','Report Generation'].forEach(function(p){
+      body+='<div class="dinfo-row"><i class="fa-solid fa-check" style="color:var(--green);font-size:11px"></i><span class="dinfo-lbl" style="flex:1;margin-left:8px">'+p+'</span></div>';
+    });
+    body+='</div>';
+    footer='<button class="btn btn-outline" onclick="showToast(\"Logged out\",\"info\");closeDrawer()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button><button class="btn btn-ghost" onclick="closeDrawer()">Close</button>';
+  }
+  else{
+    body='<div style="padding:20px;text-align:center;color:var(--text-muted)"><i class="fa-solid fa-info-circle" style="font-size:32px;margin-bottom:10px;display:block"></i>Details panel for this section.</div>';
+  }
+
+  document.getElementById('drawerIcon').style.cssText=iconStyle;
+  document.getElementById('drawerIcon').innerHTML=iconHTML;
+  document.getElementById('drawerTitle').textContent=title;
+  document.getElementById('drawerBody').innerHTML=body;
+  document.getElementById('drawerFooter').innerHTML=footer;
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+
+/* ═══ FILTERING LOGIC ═══ */
+var activeFilters = { domain: 'All Domains', status: 'All Status', severity: 'All' };
+
+function applyFilters(){
+  var dEl = document.getElementById('filterDomain');
+  var sEl = document.getElementById('filterStatus');
+  var vEl = document.getElementById('filterSeverity');
+
+  activeFilters = {
+    domain: dEl ? dEl.value : 'All Domains',
+    status: sEl ? sEl.value : 'All Status',
+    severity: vEl ? vEl.value : 'All'
+  };
+
+  executeFiltering();
+  closeModal();
+}
+
+function clearFilters(){
+  activeFilters = { domain: 'All Domains', status: 'All Status', severity: 'All' };
+  executeFiltering();
+  showToast('Filters reset to default','info');
+}
+
+function executeFiltering(){
+  var d = activeFilters.domain;
+  var s = activeFilters.status;
+  var v = activeFilters.severity;
+
+  var isFiltered = (d !== 'All Domains' || s !== 'All Status' || v !== 'All');
+
+  // Update Badge
+  var badge = document.getElementById('activeFilterBadge');
+  var text = document.getElementById('filterBadgeText');
+  var btn = document.getElementById('filterBtn');
+
+  if(isFiltered){
+    var parts = [];
+    if(d !== 'All Domains') parts.push(d);
+    if(s !== 'All Status') parts.push(s);
+    if(v !== 'All') parts.push(v);
+    text.textContent = parts.join(' | ');
+    badge.style.display = 'inline-flex';
+    btn.classList.add('btn-primary');
+    btn.classList.remove('btn-outline');
+  } else {
+    badge.style.display = 'none';
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-outline');
+  }
+
+  var matchCount = 0;
+
+  // Filter Milestones
+  document.querySelectorAll('.ms-item[data-domain]').forEach(function(el){
+    var mDom = el.getAttribute('data-domain');
+    var mStat = el.getAttribute('data-status');
+    var mSev = el.getAttribute('data-severity');
+
+    var dMatch = (d === 'All Domains' || mDom === d);
+    var sMatch = (s === 'All Status' || mStat === s);
+    var vMatch = (v === 'All' || mSev === v);
+
+    if(dMatch && sMatch && vMatch){
+      el.style.display = 'flex';
+      matchCount++;
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  // Filter Escalations
+  document.querySelectorAll('.esc-item[data-domain]').forEach(function(el){
+    var eDom = el.getAttribute('data-domain');
+    var eSev = el.getAttribute('data-severity');
+
+    var dMatch = (d === 'All Domains' || eDom === d);
+    var vMatch = (v === 'All' || eSev === v);
+
+    if(dMatch && vMatch){
+      el.style.display = 'flex';
+      matchCount++;
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  // Filter Schedule Exposure table rows
+  document.querySelectorAll('.exp-table tbody tr[data-domain]').forEach(function(el){
+    var rDom = el.getAttribute('data-domain');
+    var rSev = el.getAttribute('data-severity');
+
+    var dMatch = (d === 'All Domains' || rDom === d);
+    var vMatch = (v === 'All' || rSev === v);
+
+    if(dMatch && vMatch){
+      el.style.display = '';
+      matchCount++;
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  // Filter Domain Cards
+  document.querySelectorAll('.domain-card[data-domain]').forEach(function(el){
+    var dcDom = el.getAttribute('data-domain');
+    if(d === 'All Domains' || dcDom === d){
+      el.style.opacity = '1';
+      el.style.filter = 'none';
+      if(d !== 'All Domains'){
+        el.style.boxShadow = '0 0 20px var(--blue)';
+        el.style.borderColor = 'var(--blue)';
+      } else {
+        el.style.boxShadow = '';
+        el.style.borderColor = '';
+      }
+    } else {
+      el.style.opacity = '0.3';
+      el.style.filter = 'grayscale(0.6)';
+      el.style.boxShadow = '';
+      el.style.borderColor = '';
+    }
+  });
+
+  // Filter Ring Items
+  document.querySelectorAll('.ring-item').forEach(function(el){
+    var rName = el.querySelector('.ring-name') ? el.querySelector('.ring-name').textContent.trim() : '';
+    if(d === 'All Domains' || rName === d || (d === 'Project Execution' && rName === 'Execution')){
+      el.style.opacity = '1';
+    } else {
+      el.style.opacity = '0.35';
+    }
+  });
+
+  if(isFiltered){
+    showToast('Filters applied! Showing matching operational items', 'success');
+  }
+}
+
+
+/* ═══ MODAL ═══ */
+function openModal(type){
+  var title='',body='',footer='<button class="btn btn-outline" onclick="closeModal()">Close</button>';
+
+  var modals={
+    filters:{
+  title:'Filter Dashboard',
+  get body(){
+    var d = activeFilters.domain;
+    var s = activeFilters.status;
+    var v = activeFilters.severity;
+    return '<div class="dinfo-row"><span class="dinfo-lbl">Domain</span><select id="filterDomain" style="background:var(--bg-input);border:1px solid var(--border-main);border-radius:6px;padding:6px 12px;color:var(--text-h);font-family:Inter,sans-serif;font-size:12.5px;outline:none;cursor:pointer"><option '+(d==='All Domains'?'selected':'')+'>All Domains</option><option '+(d==='Engineering'?'selected':'')+'>Engineering</option><option '+(d==='Procurement'?'selected':'')+'>Procurement</option><option '+(d==='Planning'?'selected':'')+'>Planning</option><option '+(d==='Manufacturing'?'selected':'')+'>Manufacturing</option><option '+(d==='Quality'?'selected':'')+'>Quality</option><option '+(d==='Project Execution'?'selected':'')+'>Project Execution</option></select></div>'+
+    '<div class="dinfo-row"><span class="dinfo-lbl">Status</span><select id="filterStatus" style="background:var(--bg-input);border:1px solid var(--border-main);border-radius:6px;padding:6px 12px;color:var(--text-h);font-family:Inter,sans-serif;font-size:12.5px;outline:none;cursor:pointer"><option '+(s==='All Status'?'selected':'')+'>All Status</option><option '+(s==='On Track'?'selected':'')+'>On Track</option><option '+(s==='At Risk'?'selected':'')+'>At Risk</option><option '+(s==='Delayed'?'selected':'')+'>Delayed</option><option '+(s==='Completed'?'selected':'')+'>Completed</option></select></div>'+
+    '<div class="dinfo-row"><span class="dinfo-lbl">Severity</span><select id="filterSeverity" style="background:var(--bg-input);border:1px solid var(--border-main);border-radius:6px;padding:6px 12px;color:var(--text-h);font-family:Inter,sans-serif;font-size:12.5px;outline:none;cursor:pointer"><option '+(v==='All'?'selected':'')+'>All</option><option '+(v==='Critical'?'selected':'')+'>Critical</option><option '+(v==='High'?'selected':'')+'>High</option><option '+(v==='Medium'?'selected':'')+'>Medium</option><option '+(v==='Low'?'selected':'')+'>Low</option></select></div>';
+  },
+  footer:'<button class="btn btn-primary" onclick="applyFilters()"><i class="fa-solid fa-check"></i> Apply Filters</button><button class="btn btn-outline" onclick="clearFilters();closeModal()"><i class="fa-solid fa-rotate-left"></i> Reset</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+},
+    export:{title:'Export Dashboard',body:'<div style="display:flex;flex-direction:column;gap:10px"><div class="ms-item" onclick="exportDashboardData(\'pdf\')"><div class="ms-ico" style="background:rgba(230,48,80,.1);color:var(--red)"><i class="fa-solid fa-file-pdf"></i></div><div class="ms-info"><div class="ms-name">Export as PDF</div><div class="ms-meta">Printable dashboard snapshot with charts and tables</div></div></div><div class="ms-item" onclick="exportDashboardData(\'excel\')"><div class="ms-ico" style="background:rgba(26,183,84,.1);color:var(--green)"><i class="fa-solid fa-file-excel"></i></div><div class="ms-info"><div class="ms-name">Export as Excel / CSV</div><div class="ms-meta">Raw data for all domains, exposure analysis, & milestones</div></div></div><div class="ms-item" onclick="exportDashboardData(\'powerpoint\')"><div class="ms-ico" style="background:rgba(240,129,42,.1);color:var(--orange)"><i class="fa-solid fa-file-powerpoint"></i></div><div class="ms-info"><div class="ms-name">Export as PowerPoint Deck</div><div class="ms-meta">Executive summary briefing deck</div></div></div></div>',footer:'<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'},
+    'ai-query':{title:'AI Natural Language Query',body:'<div style="margin-bottom:14px;font-size:12.5px;color:var(--text-p)">Ask the AI engine any operational question in plain English.</div><div style="background:var(--bg-input);border:1px solid var(--border-main);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px"><textarea id="aiQueryInput" style="width:100%;background:none;border:none;outline:none;font-family:Inter,sans-serif;font-size:13px;color:var(--text-h);resize:vertical;min-height:80px" placeholder="e.g. Show all procurement delays affecting manufacturing this week..."></textarea></div><div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Suggested queries:</div><div style="display:flex;flex-wrap:wrap;gap:6px">'+['Manufacturing delays','Escalations by severity','Schedule exposure summary','Resource conflicts Wk30','AI bottleneck analysis'].map(function(q){return '<span class="chip" style="cursor:pointer" onclick="document.getElementById(\'aiQueryInput\').value=\''+q+'\'">'+ q +'</span>';}).join('')+'</div>',footer:'<button class="btn btn-primary" onclick="showToast(\"AI processing your query...\",\"info\",2000);setTimeout(function(){showToast(\"Results ready — 5 matching insights found\",\"success\");closeModal();},2200)"><i class="fa-solid fa-wand-magic-sparkles"></i> Ask AI</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button>'},
+    risk:{title:'Risk Registry',body:'<div class="drawer-section"><div class="drawer-section-title">Active Risks</div>'+[['R-001','MFG-12 Fabrication Delay','Critical','Manufacturing'],['R-002','Vendor Single-Source Dependency','High','Procurement'],['R-003','Resource Overutilization','High','Planning'],['R-004','Drawing Approval Cycle Time','Medium','Engineering'],['R-005','NCR Escalation Risk','Medium','Quality']].map(function(r){return '<div class="dinfo-row"><span class="chip chip-r">'+r[2]+'</span><span class="dinfo-lbl" style="flex:1;margin-left:8px">'+r[1]+'</span><span style="font-size:10px;color:var(--text-muted)">'+r[3]+'</span></div>';}).join('')+'</div>',footer:'<button class="btn btn-primary" onclick="exportRiskRegistry()"><i class="fa-solid fa-download"></i> Export Risk CSV</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    resource:{title:'Resource Management',body:'<div class="drawer-section"><div class="drawer-section-title">Overutilized Resources</div>'+[['Welding Crew A','98%','var(--red)','Vessel Bay'],['Welding Crew B','92%','var(--red)','Site Erection'],['QC Inspectors','85%','var(--yellow)','Shop Floor'],['Riggers','83%','var(--yellow)','Site'],['Fitters','72%','var(--green)','Shop Floor']].map(function(r){return '<div class="dp-row"><span class="dp-lbl">'+r[0]+'</span><div class="dp-bar"><div class="dp-fill" style="width:'+r[1]+';background:'+r[2]+'"></div></div><span class="dp-val" style="color:'+r[2]+'">'+r[1]+'</span></div>';}).join('')+'</div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Reallocation plan submitted\",\"success\");closeModal()"><i class="fa-solid fa-people-arrows"></i> Submit Reallocation</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    analytics:{title:'Analytics Module',body:'<div style="text-align:center;padding:30px"><div style="width:64px;height:64px;background:var(--g-purple);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;margin:0 auto 16px"><i class="fa-solid fa-chart-bar"></i></div><div style="font-size:15px;font-weight:700;color:var(--text-h);margin-bottom:8px">Advanced Analytics</div><div style="font-size:12.5px;color:var(--text-muted)">Full analytics dashboard with trend analysis, predictive modeling, and custom report builder is available in the Analytics module.</div><div style="margin-top:20px;display:flex;gap:10px;justify-content:center"><span class="chip chip-p"><i class="fa-solid fa-chart-line"></i> Trend Analysis</span><span class="chip chip-b"><i class="fa-solid fa-calculator"></i> Predictive</span><span class="chip chip-g"><i class="fa-solid fa-file-lines"></i> Custom Reports</span></div></div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Opening Analytics module...\",\"info\");closeModal()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Analytics</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    reports:{title:'Reports',body:'<div style="display:flex;flex-direction:column;gap:9px">'+[['Weekly Execution Report','Generated Jul 23, 2026','PDF','exportDashboardData(\'pdf\')'],['PMG Governance Summary','Generated Jul 22, 2026','CSV','exportDashboardData(\'excel\')'],['Schedule Exposure Analysis','Generated Jul 21, 2026','XLSX','exportDashboardData(\'excel\')']].map(function(r){return '<div class="ms-item" onclick="'+r[3]+'"><div class="ms-ico" style="background:rgba(0,145,255,.1);color:var(--blue)"><i class="fa-solid fa-file-lines"></i></div><div class="ms-info"><div class="ms-name">'+r[0]+'</div><div class="ms-meta">'+r[1]+' &middot; '+r[2]+'</div></div><span class="chip chip-b"><i class="fa-solid fa-download"></i></span></div>';}).join('')+'</div>',footer:'<button class="btn btn-primary" onclick="exportDashboardData(\'excel\')"><i class="fa-solid fa-download"></i> Download Report Package (CSV)</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    notifications:{title:'Notifications (4 New)',body:'<div style="display:flex;flex-direction:column;gap:8px">'+[['Critical escalation: MFG-12 delay requires Director action','2 min ago','var(--red)','fa-fire'],['AI Alert: Procurement pattern detected — Kirloskar vendor','15 min ago','var(--purple)','fa-brain'],['Milestone at risk: PROC-23 due in 5 days','1 hr ago','var(--yellow)','fa-triangle-exclamation'],['Report ready: Weekly Execution Summary','2 hr ago','var(--blue)','fa-file-lines'],['System: Data sync completed — all domains updated','3 hr ago','var(--green)','fa-rotate']].map(function(n){return '<div class="ms-item"><div class="ms-ico" style="background:rgba(0,0,0,.05);color:'+n[2]+'"><i class="fa-solid '+n[3]+'"></i></div><div class="ms-info"><div class="ms-name" style="white-space:normal;font-size:12px">'+n[0]+'</div><div class="ms-meta">'+n[1]+'</div></div></div>';}).join('')+'</div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Mark All Read</button>'},
+    'system-health':{title:'System Health Status',body:'<div class="drawer-section"><div class="drawer-section-title">Service Status</div>'+[['API Gateway','Operational','var(--green)'],['Data Sync Engine','Partial (Engineering offline)','var(--yellow)'],['AI Intelligence Engine','Active','var(--green)'],['Report Generator','Operational','var(--green)'],['Notification Service','Operational','var(--green)'],['Database','Operational','var(--green)']].map(function(s){return '<div class="dinfo-row"><span class="dinfo-lbl">'+s[0]+'</span><span class="dinfo-val" style="color:'+s[2]+'">'+s[1]+'</span></div>';}).join('')+'</div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'data-sync':{title:'Data Synchronization',body:'<div class="drawer-section"><div class="drawer-section-title">Domain Sync Status</div>'+[['Engineering','Offline — last sync 45 min ago','var(--red)'],['Procurement','Live','var(--green)'],['Planning','Live','var(--green)'],['Manufacturing','Live','var(--green)'],['Quality','Live','var(--green)'],['Project Execution','Live','var(--green)']].map(function(s){return '<div class="dinfo-row"><span class="dinfo-lbl">'+s[0]+'</span><span class="dinfo-val" style="color:'+s[2]+'">'+s[1]+'</span></div>';}).join('')+'</div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Manual sync triggered\",\"success\");closeModal()"><i class="fa-solid fa-rotate"></i> Force Sync</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'active-projects':{title:'Active Projects (24)',body:'<div class="drawer-section"><div class="drawer-section-title">By Status</div><div class="dstat-row"><div class="dstat"><div class="dstat-lbl">On Track</div><div class="dstat-val" style="color:var(--green)">18</div></div><div class="dstat"><div class="dstat-lbl">At Risk</div><div class="dstat-val" style="color:var(--yellow)">4</div></div><div class="dstat"><div class="dstat-lbl">Critical</div><div class="dstat-val" style="color:var(--red)">2</div></div><div class="dstat"><div class="dstat-lbl">Completed</div><div class="dstat-val" style="color:var(--blue)">0</div></div></div></div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'ai-engine':{title:'AI Intelligence Engine',body:'<div class="drawer-section"><div class="drawer-section-title">Engine Status</div><div class="dinfo-row"><span class="dinfo-lbl">Status</span><span class="dinfo-val" style="color:var(--green)">Active &mdash; All models running</span></div><div class="dinfo-row"><span class="dinfo-lbl">Model Version</span><span class="dinfo-val">v2.0 (GPT-based)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Last Training</span><span class="dinfo-val">Jul 20, 2026</span></div><div class="dinfo-row"><span class="dinfo-lbl">Insights Generated Today</span><span class="dinfo-val">47</span></div><div class="dinfo-row"><span class="dinfo-lbl">Avg. Confidence</span><span class="dinfo-val">91.2%</span></div></div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'resource-detail':{title:'Critical Resource Alert',body:'<div style="padding:14px;background:rgba(230,48,80,.06);border:1px solid rgba(230,48,80,.15);border-radius:var(--radius-sm);margin-bottom:14px"><div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-triangle-exclamation"></i> Welding Crew — Critical Overutilization</div><div style="font-size:12.5px;color:var(--text-p);line-height:1.65">Utilization at 98% (Wk30-Wed) and 96% (Wk31-Tue). Sustained overutilization increases NCR risk by 23%. Immediate reallocation required.</div></div><div class="dinfo-row"><span class="dinfo-lbl">Affected Crew</span><span class="dinfo-val">Welding Crew A &amp; B (22 members)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Peak Utilization</span><span class="dinfo-val" style="color:var(--red)">98%</span></div><div class="dinfo-row"><span class="dinfo-lbl">Recommendation</span><span class="dinfo-val">Reallocate 4 welders from PLN-07</span></div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Reallocation request submitted to PMG\",\"success\");closeModal()"><i class="fa-solid fa-check"></i> Submit Reallocation</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'alert-crit':{title:'Critical Alert Details',body:'<div style="padding:14px;background:rgba(230,48,80,.06);border:1px solid rgba(230,48,80,.15);border-radius:var(--radius-sm)"><div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px">3 Milestones Delayed Beyond Threshold</div><div style="display:flex;flex-direction:column;gap:8px"><div class="dinfo-row"><span class="chip chip-r">Critical</span><span class="dinfo-lbl" style="flex:1;margin-left:8px">MFG-12 Pressure Vessel &mdash; +18 days</span></div><div class="dinfo-row"><span class="chip chip-y">High</span><span class="dinfo-lbl" style="flex:1;margin-left:8px">PROC-23 Valve Procurement &mdash; +9 days</span></div><div class="dinfo-row"><span class="chip chip-y">High</span><span class="dinfo-lbl" style="flex:1;margin-left:8px">EPC-07 Drawing Approval &mdash; +5 days</span></div></div></div><div style="margin-top:12px;font-size:12px;color:var(--text-p);line-height:1.65">Manufacturing schedule exposure has increased by +12 days this week. Director-level intervention required for MFG-12 and PROC-23. PMG steering review scheduled for Jul 24.</div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Escalating to Director...\",\"success\");closeModal()"><i class="fa-solid fa-triangle-exclamation"></i> Escalate to Director</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'alert-warn':{title:'Warning Alert Details',body:'<div style="padding:14px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.15);border-radius:var(--radius-sm)"><div style="font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:8px">Procurement Dependency Gap Detected</div><div style="font-size:12.5px;color:var(--text-p);line-height:1.65">EPC-07 drawing delay is cascading into procurement dependency for MFG-12. 7 cross-functional synchronization gaps identified across Engineering&rarr;Procurement&rarr;Manufacturing chain.</div></div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Resolution plan assigned to team\",\"success\");closeModal()"><i class="fa-solid fa-check"></i> Assign Resolution</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'pmg-decisions':{title:'Pending PMG Decisions (8)',body:'<div style="display:flex;flex-direction:column;gap:8px">'+[['Approve MFG-12 recovery plan budget','Critical','2d overdue'],['Alternate vendor approval PROC-23 (Audco)','High','1d overdue'],['Welding crew reallocation PLN-07','Medium','Due today'],['QA protocol scale-up to MFG domain','Medium','Due Jul 26'],['Engineering-Client escalation EPC-07','Medium','Due Jul 22'],['NCR-07 repair authorization','Low','Due Jul 25'],['Wk31 overtime schedule approval','Low','Due Jul 25'],['Risk registry review Q3','Low','Due Aug 1']].map(function(d){return '<div class="ms-item" onclick="showToast(\'Decision logged: \'+this.querySelector(\'.ms-name\').textContent,\'success\')"><div class="ms-info"><div class="ms-name">'+d[0]+'</div><div class="ms-meta">Severity: '+d[1]+' &middot; '+d[2]+'</div></div><button class="btn btn-primary" style="padding:4px 10px;font-size:10.5px" onclick="event.stopPropagation();showToast(\'Decision approved\',\'success\')">Approve</button></div>';}).join('')+'</div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    governance:{title:'Governance Actions',body:'<div style="font-size:13px;color:var(--text-p);line-height:1.7">5 governance actions requiring PMG attention:<br><br>1. Risk mitigation plan for MFG-12<br>2. Vendor performance review — Kirloskar<br>3. Cross-domain sync protocol update<br>4. Q3 schedule exposure report<br>5. AI recommendation review session</div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    meetings:{title:'Review Meetings This Week',body:'<div style="display:flex;flex-direction:column;gap:9px">'+[['Operational Review Meeting (ORM)','Mon Jul 28, 10:00 AM','PMG Lead + All Domain Heads','Conference Room 3A'],['MFG-12 Recovery Plan Review','Tue Jul 29, 2:00 PM','PMG + Manufacturing + Director','Video Call'],['Vendor Evaluation — PROC-23','Wed Jul 30, 11:00 AM','PMG + Procurement + VP Supply','Conference Room 1B']].map(function(m){return '<div class="ms-item"><div class="ms-ico" style="background:rgba(0,145,255,.1);color:var(--blue)"><i class="fa-solid fa-calendar"></i></div><div class="ms-info"><div class="ms-name">'+m[0]+'</div><div class="ms-meta">'+m[1]+' &middot; '+m[2]+'<br>'+m[3]+'</div></div></div>';}).join('')+'</div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Meeting reminders set\",\"success\");closeModal()"><i class="fa-solid fa-bell"></i> Set Reminders</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+  };
+
+  var m=modals[type];
+  if(!m){title='Info';body='<div style="padding:20px;text-align:center;color:var(--text-muted)">Module available in full version.</div>';}
+  else{title=m.title;body=m.body;if(m.footer)footer=m.footer;}
+
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalBody').innerHTML=body;
+  document.getElementById('modalFooter').innerHTML=footer;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function showNotifications(){ openModal('notifications'); }
+
+function handleRefresh(){
+  showToast('Refreshing all domains...','info',1500);
+  setTimeout(function(){showToast('Dashboard updated — all 6 domains synced','success');},1700);
+}
+
+/* ═══ EXPORT ENGINE FUNCTIONS ═══ */
+function downloadFile(filename, content, mimeType) {
+  mimeType = mimeType || 'text/csv;charset=utf-8;';
+  var blob = new Blob([content], { type: mimeType });
+  var link = document.createElement('a');
+  var url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function exportDashboardData(type) {
+  closeModal();
+  var dateStr = new Date().toISOString().split('T')[0];
+  
+  if (type === 'pdf') {
+    showToast('Opening PDF print preview...', 'info', 2000);
+    setTimeout(function() {
+      window.print();
+    }, 500);
+  } else if (type === 'excel' || type === 'csv') {
+    var csv = [];
+    csv.push(['L&T UNIFIED OPERATIONAL VISIBILITY DASHBOARD REPORT']);
+    csv.push(['Generated Date', new Date().toLocaleString()]);
+    csv.push(['Platform', 'PMG Governance Platform v3.2.1']);
+    csv.push([]);
+    
+    csv.push(['--- EXECUTIVE KPI OVERVIEW ---']);
+    csv.push(['Metric', 'Value', 'Status / Detail']);
+    csv.push(['Total Milestones', '218', '12 added this week']);
+    csv.push(['On Track', '174', '79.8% completion rate']);
+    csv.push(['Delayed Milestones', '31', '+5 since last week']);
+    csv.push(['Active Dependencies', '47', '14 unresolved']);
+    csv.push(['Escalations Open', '7', '2 critical escalations']);
+    csv.push(['Executive Health Index', '73%', 'Moderate Risk level']);
+    csv.push([]);
+
+    csv.push(['--- DOMAIN EXECUTION METRICS ---']);
+    csv.push(['Domain', 'Workload / Count', 'Completion / Rate', 'Risk Status']);
+    csv.push(['Engineering', '64 Drawings', '82% On Time', '5 Pending']);
+    csv.push(['Procurement', '38 PO Active', '68% On Time', '9 Delayed']);
+    csv.push(['Planning', '24 Projects', '91% On Time', '2 At Risk']);
+    csv.push(['Manufacturing', '18 Jobs', '59% On Time', '7 Critical']);
+    csv.push(['Quality', '42 Inspections', '77% Pass Rate', '3 NCR Open']);
+    csv.push(['Project Execution', '11 Packages', '71% Progress', '4 Behind']);
+    csv.push([]);
+
+    csv.push(['--- SCHEDULE EXPOSURE ANALYSIS ---']);
+    csv.push(['Package', 'Domain', 'Exposure (Days)', 'Severity']);
+    csv.push(['MFG-12 Pressure Vessel Fab.', 'Manufacturing', '+18d', 'Critical']);
+    csv.push(['PROC-23 Valve Procurement', 'Procurement', '+9d', 'High']);
+    csv.push(['EPC-07 Structural Drawings', 'Engineering', '+5d', 'Medium']);
+    csv.push(['MFG-09 Shop QC Inspection', 'Quality', '+3d', 'Low']);
+    csv.push(['PLN-11 Site Mobilization Plan', 'Planning', '+2d', 'Low']);
+    csv.push([]);
+
+    csv.push(['--- ACTIVE ESCALATIONS ---']);
+    csv.push(['ID', 'Title', 'Domain', 'Age', 'Severity']);
+    csv.push(['ESC-001', 'Critical MFG Delay — Pressure Vessel', 'Manufacturing', '18d', 'Critical']);
+    csv.push(['ESC-002', 'Supply Chain Disruption — PROC-23', 'Procurement', '9d', 'Critical']);
+    csv.push(['ESC-003', 'Drawing Approval Stuck — EPC-07', 'Engineering', '5d', 'High']);
+    csv.push(['ESC-004', 'QC Rejection — Batch MFG-09', 'Quality', '3d', 'High']);
+    csv.push(['ESC-005', 'Resource Conflict — Site vs Shop', 'Planning', '2d', 'Medium']);
+    csv.push(['ESC-006', 'Vendor Performance — Kirloskar', 'Procurement', '1d', 'Low']);
+    csv.push(['ESC-007', 'Safety Observation — Erection Area', 'Project Execution', '1d', 'Low']);
+    csv.push([]);
+
+    csv.push(['--- ACTIVE RISK REGISTRY ---']);
+    csv.push(['Risk ID', 'Title', 'Severity', 'Domain']);
+    csv.push(['R-001', 'MFG-12 Fabrication Delay', 'Critical', 'Manufacturing']);
+    csv.push(['R-002', 'Vendor Single-Source Dependency', 'High', 'Procurement']);
+    csv.push(['R-003', 'Resource Overutilization', 'High', 'Planning']);
+    csv.push(['R-004', 'Drawing Approval Cycle Time', 'Medium', 'Engineering']);
+    csv.push(['R-005', 'NCR Escalation Risk', 'Medium', 'Quality']);
+
+    var csvString = csv.map(function(row) {
+      return row.map(function(cell) {
+        return '"' + (cell + '').replace(/"/g, '""') + '"';
+      }).join(',');
+    }).join('\n');
+
+    downloadFile('L_and_T_Operational_Visibility_Report_' + dateStr + '.csv', csvString);
+    showToast('Excel/CSV data report downloaded successfully!', 'success');
+  } else if (type === 'powerpoint' || type === 'ppt') {
+    var pptContent = '<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>L&T PMG Executive Briefing Deck</title>\n  <style>\n    body { font-family: "Segoe UI", Arial, sans-serif; background: #071126; color: #fff; padding: 40px; }\n    .slide { background: #0c1a36; border: 1px solid #0091ff; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }\n    h1 { color: #00c8f0; font-size: 28px; margin-top: 0; border-bottom: 2px solid #0091ff; padding-bottom: 12px; }\n    h2 { color: #f5a623; font-size: 20px; }\n    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }\n    .card { background: #132448; border-radius: 10px; padding: 20px; text-align: center; }\n    .num { font-size: 36px; font-weight: bold; color: #00d4b0; }\n    ul { line-height: 1.8; color: #cbd5e1; }\n  </style>\n</head>\n<body>\n  <div class="slide">\n    <h1>Larsen & Toubro &mdash; PMG Executive Briefing</h1>\n    <h2>Unified Operational Governance & Visibility Report</h2>\n    <p>Date: ' + new Date().toLocaleDateString() + ' | Confidential</p>\n    <div class="grid">\n      <div class="card"><div class="num">218</div>Milestones Tracked</div>\n      <div class="card"><div class="num">73%</div>Execution Health Index</div>\n      <div class="card"><div class="num">+37d</div>Total Schedule Exposure</div>\n    </div>\n  </div>\n\n  <div class="slide">\n    <h1>Critical Focus Areas & Risk Interventions</h1>\n    <ul>\n      <li><strong>MFG-12 Pressure Vessel Fabrication:</strong> +18 days delay. Requires immediate Director level intervention for vendor capacity allocation.</li>\n      <li><strong>PROC-23 Valve Procurement:</strong> +9 days delay. Alternate vendor sourcing recommended for Audco valves.</li>\n      <li><strong>Resource Bottleneck:</strong> Welding crew overutilization at 98% capacity in Shop Floor Bay 3. Reallocation approved from PLN-07.</li>\n    </ul>\n  </div>\n</body>\n</html>';
+    downloadFile('L_and_T_Executive_Briefing_Deck_' + dateStr + '.html', pptContent, 'text/html;charset=utf-8;');
+    showToast('Executive Presentation Deck downloaded!', 'success');
+  }
+}
+
+function exportMilestoneReport() {
+  closeDrawer();
+  var dateStr = new Date().toISOString().split('T')[0];
+  var csv = [
+    ['L&T MILESTONE GOVERNANCE REPORT'],
+    ['Generated Date', new Date().toLocaleString()],
+    [],
+    ['Domain', 'Total Milestones', 'On Track Rate', 'Status'],
+    ['Engineering', '64', '82%', 'On Track'],
+    ['Procurement', '38', '68%', 'At Risk'],
+    ['Planning', '52', '91%', 'On Track'],
+    ['Manufacturing', '32', '59%', 'Delayed'],
+    ['Quality', '18', '77%', 'On Track'],
+    ['Project Execution', '14', '71%', 'At Risk'],
+    [],
+    ['Key Critical Milestones'],
+    ['MFG-12', 'Pressure Vessel Fabrication', 'Manufacturing', 'Delayed (+18d)', 'RK Sharma'],
+    ['PROC-23', 'Valve Procurement Closure', 'Procurement', 'At Risk (+9d)', 'MN Kumar'],
+    ['EPC-07', 'Heat Exchanger Drawings', 'Engineering', 'At Risk (+5d)', 'AS Rao'],
+    ['QA-04', 'Inspection Protocol Finalization', 'Quality', 'Completed', 'PM Singh']
+  ];
+  var csvStr = csv.map(function(row) { return row.map(function(c) { return '"' + (c+'').replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+  downloadFile('L_and_T_Milestone_Report_' + dateStr + '.csv', csvStr);
+  showToast('Milestone report exported successfully!', 'success');
+}
+
+function exportEscalationReport() {
+  closeDrawer();
+  var dateStr = new Date().toISOString().split('T')[0];
+  var csv = [
+    ['L&T ESCALATION GOVERNANCE REPORT'],
+    ['Generated Date', new Date().toLocaleString()],
+    [],
+    ['Severity', 'Title', 'Domain', 'Age', 'Owner', 'Status'],
+    ['Critical', 'MFG Delay — Pressure Vessel Fabrication', 'Manufacturing', '18d', 'RK Sharma', 'Pending Director Approval'],
+    ['Critical', 'Supply Chain Disruption — PROC-23', 'Procurement', '9d', 'VP Supply', 'Alternate Vendor Review'],
+    ['High', 'Drawing Approval Stuck — EPC-07', 'Engineering', '5d', 'AS Rao', 'Awaiting Client Sign-off'],
+    ['High', 'QC Rejection — Batch MFG-09', 'Quality', '3d', 'PMG Quality', 'NCR Investigation'],
+    ['Medium', 'Resource Conflict — Site vs. Shop', 'Planning', '2d', 'SK Das', 'Reallocation Proposed'],
+    ['Low', 'Vendor Performance — Kirloskar', 'Procurement', '1d', 'Procurement Lead', 'Review Scheduled'],
+    ['Low', 'Safety Observation — Erection Area', 'Project Execution', '1d', 'Site Engineer', 'Corrective Action Taken']
+  ];
+  var csvStr = csv.map(function(row) { return row.map(function(c) { return '"' + (c+'').replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+  downloadFile('L_and_T_Escalation_Report_' + dateStr + '.csv', csvStr);
+  showToast('Escalation report exported successfully!', 'success');
+}
+
+function exportRiskRegistry() {
+  closeModal();
+  var dateStr = new Date().toISOString().split('T')[0];
+  var csv = [
+    ['L&T RISK REGISTRY GOVERNANCE REPORT'],
+    ['Generated Date', new Date().toLocaleString()],
+    [],
+    ['Risk ID', 'Risk Description', 'Severity', 'Domain', 'Mitigation Strategy'],
+    ['R-001', 'MFG-12 Fabrication Delay', 'Critical', 'Manufacturing', 'Shift workload to Subcontractor Bay B and fast-track QA inspections'],
+    ['R-002', 'Vendor Single-Source Dependency', 'High', 'Procurement', 'Onboard Audco Valves as secondary qualified vendor'],
+    ['R-003', 'Resource Overutilization', 'High', 'Planning', 'Reallocate 4 welders from PLN-07 to MFG-12'],
+    ['R-004', 'Drawing Approval Cycle Time', 'Medium', 'Engineering', 'Schedule joint weekly technical review with client engineering team'],
+    ['R-005', 'NCR Escalation Risk', 'Medium', 'Quality', 'Implement mandatory pre-inspection verification checklists']
+  ];
+  var csvStr = csv.map(function(row) { return row.map(function(c) { return '"' + (c+'').replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+  downloadFile('L_and_T_Risk_Registry_' + dateStr + '.csv', csvStr);
+  showToast('Risk registry exported successfully!', 'success');
+}
+
+function exportDomainReport(domainKeyOrName) {
+  closeDrawer();
+  var dateStr = new Date().toISOString().split('T')[0];
+  var dData = null;
+  
+  if (typeof domainData !== 'undefined' && domainData[domainKeyOrName]) {
+    dData = domainData[domainKeyOrName];
+  } else if (typeof domainData !== 'undefined') {
+    Object.keys(domainData).forEach(function(k) {
+      if (domainData[k].name.toLowerCase() === (domainKeyOrName + '').toLowerCase()) {
+        dData = domainData[k];
+      }
+    });
+  }
+  
+  if (!dData) {
+    dData = { name: domainKeyOrName || 'Domain', h: 80, summary: 'Domain metrics under PMG monitoring', stats: {}, items: [] };
+  }
+  
+  var csv = [];
+  csv.push(['L&T DOMAIN GOVERNANCE FULL REPORT — ' + (dData.name || 'DOMAIN').toUpperCase()]);
+  csv.push(['Generated Date', new Date().toLocaleString()]);
+  csv.push(['Domain Name', dData.name]);
+  csv.push(['Execution Health Score', (dData.h || 80) + '%']);
+  csv.push(['Governance Status', 'Active Monitoring']);
+  csv.push([]);
+  
+  csv.push(['--- DOMAIN EXECUTIVE SUMMARY ---']);
+  csv.push([dData.summary || 'Operational metrics monitored under PMG governance.']);
+  csv.push([]);
+  
+  csv.push(['--- KEY DOMAIN METRICS ---']);
+  csv.push(['Metric Name', 'Value']);
+  if (dData.stats) {
+    Object.keys(dData.stats).forEach(function(k) {
+      var label = k.replace(/([A-Z])/g, ' $1').replace(/^./, function(s){ return s.toUpperCase(); });
+      csv.push([label, dData.stats[k]]);
+    });
+  }
+  csv.push([]);
+  
+  csv.push(['--- ACTIVE WORK ITEMS & MILESTONES ---']);
+  csv.push(['Item Description']);
+  if (dData.items && dData.items.length) {
+    dData.items.forEach(function(item) {
+      csv.push([item]);
+    });
+  }
+  csv.push([]);
+  
+  csv.push(['--- RECOMMENDED GOVERNANCE ACTIONS ---']);
+  csv.push(['1. Review schedule baseline against critical path targets.']);
+  csv.push(['2. Fast-track pending vendor technical approvals and client sign-offs.']);
+  csv.push(['3. Synchronize cross-functional dependencies with PMG Governance Steering Committee.']);
+  
+  var csvStr = csv.map(function(row) {
+    return row.map(function(c) { return '"' + (c + '').replace(/"/g, '""') + '"'; }).join(',');
+  }).join('\n');
+  
+  downloadFile('L_and_T_' + dData.name.replace(/\s+/g, '_') + '_Full_Report_' + dateStr + '.csv', csvStr);
+  showToast(dData.name + ' full governance report downloaded successfully!', 'success');
+}
+
+/* ═══ KEYBOARD SHORTCUTS ═══ */
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){closeDrawer();closeModal();}
+});
+</script>
+</body>
+</html>
