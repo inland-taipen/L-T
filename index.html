@@ -943,36 +943,82 @@ function verifyPasscode(){
 
   <!-- ═══ PRIORITY 2: RESOURCE RISK HEATMAP ═══ -->
   <div class="sec-hdr" id="sec-heatmap">
-    <h2 class="sec-title"><span style="color:var(--orange);font-weight:900;">P2</span> &middot; Resource Risk Heatmap</h2>
+    <h2 class="sec-title"><span style="color:var(--orange);font-weight:900;">P2</span> &middot; Resource Risk Exposure</h2>
     <div class="sec-line"></div>
-    <div class="sec-tag" style="background:rgba(240,129,42,.1);color:var(--orange);border-color:rgba(240,129,42,.3);font-weight:700;">CAPACITY &amp; RISK CONCENTRATION</div>
+    <div class="sec-tag" style="background:rgba(240,129,42,.1);color:var(--orange);border-color:rgba(240,129,42,.3);font-weight:700;">EXECUTIVE BIRD'S EYE VIEW</div>
   </div>
-  <div class="card" style="margin-bottom:24px;overflow-x:auto">
-    <div class="card-hdr">
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-hdr" style="display:flex;justify-content:space-between;align-items:center;">
       <div class="card-title">
         <div class="c-icon" style="background:rgba(230,48,80,.1);color:var(--red)"><i class="fa-solid fa-fire-flame-curved"></i></div>
-        Resource Exposure Matrix (Ranked from Highest to Lowest Risk)
+        Resource Exposure (Bird's Eye Overview)
       </div>
-      <div style="font-size:10.5px;color:var(--text-muted)">Click any cell for immediate risk breakdown</div>
+      <div style="display:flex;gap:4px;background:var(--table-stripe);padding:3px;border-radius:8px;border:1px solid var(--border-subtle);">
+        <button id="btnSummaryView" class="btn btn-ghost" style="padding:4px 10px;font-size:11px;border-radius:6px;background:var(--bg-card-solid);color:var(--text-h);font-weight:700;" onclick="toggleHeatmapView('summary')"><i class="fa-solid fa-chart-pie"></i> Executive Summary</button>
+        <button id="btnGridView" class="btn btn-ghost" style="padding:4px 10px;font-size:11px;border-radius:6px;color:var(--text-muted);" onclick="toggleHeatmapView('grid')"><i class="fa-solid fa-table-cells"></i> Full Matrix Grid</button>
+      </div>
     </div>
-    <div class="card-body" style="padding-bottom:12px">
-      <table class="heatmap-table" style="min-width:620px">
-        <thead>
-          <tr>
-            <th class="row-header">Resource Category</th>
-            <th>Schedule Risk</th>
-            <th>Overload Risk</th>
-            <th>Material Risk</th>
-            <th>Quality Risk</th>
-          </tr>
-        </thead>
-        <tbody id="hmBody"></tbody>
-      </table>
-      <div class="hm-legend">
-        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(26,183,84,.4)"></div><span>Low (0–39)</span></div>
-        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(245,166,35,.5)"></div><span>Medium (40–59)</span></div>
-        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(240,129,42,.5)"></div><span>High (60–79)</span></div>
-        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(230,48,80,.5)"></div><span>Critical (80–100)</span></div>
+    <div class="card-body">
+      <!-- BIRD'S EYE EXECUTIVE SUMMARY (DEFAULT) -->
+      <div id="hmSummaryView" style="display:block;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;">
+          <!-- Top Risk 1 -->
+          <div style="padding:14px;background:rgba(230,48,80,.05);border:1px solid rgba(230,48,80,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="showToast('Welding Crew — Critical Overload Risk (90%)','error')">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:12.5px;font-weight:800;color:var(--text-h);">1. Welding Crew</span>
+              <span style="font-size:10px;font-weight:800;color:var(--red);background:rgba(230,48,80,.15);padding:2px 7px;border-radius:4px;">90% OVERLOAD</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;line-height:1.4;">Critical capacity overload in Bay 1 &amp; Bay 2 during Wk30-31 vessel welding.</div>
+            <div style="font-size:10px;color:var(--text-p);margin-bottom:4px;display:flex;justify-content:space-between;"><span>Schedule Risk: 85%</span><span>Quality Risk: 65%</span></div>
+            <div style="height:6px;background:var(--ring-track);border-radius:3px;overflow:hidden;"><div style="height:100%;width:90%;background:linear-gradient(90deg,#e63050,#b8002a);border-radius:3px;"></div></div>
+          </div>
+          <!-- Top Risk 2 -->
+          <div style="padding:14px;background:rgba(240,129,42,.05);border:1px solid rgba(240,129,42,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="showToast('Procurement Officers — Critical Material Risk (88%)','error')">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:12.5px;font-weight:800;color:var(--text-h);">2. Procurement Officers</span>
+              <span style="font-size:10px;font-weight:800;color:var(--orange);background:rgba(240,129,42,.15);padding:2px 7px;border-radius:4px;">88% MATERIAL</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;line-height:1.4;">Vendor PO-23 valve delay cascading to MFG-12 pressure vessel assembly.</div>
+            <div style="font-size:10px;color:var(--text-p);margin-bottom:4px;display:flex;justify-content:space-between;"><span>Schedule Risk: 72%</span><span>Overload Risk: 60%</span></div>
+            <div style="height:6px;background:var(--ring-track);border-radius:3px;overflow:hidden;"><div style="height:100%;width:88%;background:linear-gradient(90deg,#f0812a,#e63050);border-radius:3px;"></div></div>
+          </div>
+          <!-- Top Risk 3 -->
+          <div style="padding:14px;background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="showToast('QC Inspectors — Critical Quality Risk (82%)','warn')">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:12.5px;font-weight:800;color:var(--text-h);">3. QC Inspectors</span>
+              <span style="font-size:10px;font-weight:800;color:var(--yellow);background:rgba(245,166,35,.15);padding:2px 7px;border-radius:4px;">82% QUALITY</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;line-height:1.4;">Re-qualification backlog following NCR-07 dimensional non-conformance.</div>
+            <div style="font-size:10px;color:var(--text-p);margin-bottom:4px;display:flex;justify-content:space-between;"><span>Overload Risk: 78%</span><span>Schedule Risk: 62%</span></div>
+            <div style="height:6px;background:var(--ring-track);border-radius:3px;overflow:hidden;"><div style="height:100%;width:82%;background:linear-gradient(90deg,#f5a623,#d08a14);border-radius:3px;"></div></div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);background:var(--table-stripe);padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;">
+          <span>💡 <strong>Bird's Eye Takeaway:</strong> 3 out of 8 resource categories require active management. The remaining 5 (Piping, Electrical, Design, Planning, Civil) are operating within normal risk limits.</span>
+          <button class="btn btn-ghost" style="font-size:10.5px;padding:3px 8px;" onclick="toggleHeatmapView('grid')">View Full 32-Cell Grid &rarr;</button>
+        </div>
+      </div>
+
+      <!-- DETAILED MATRIX GRID (COLLAPSED BY DEFAULT) -->
+      <div id="hmGridView" style="display:none;overflow-x:auto;">
+        <table class="heatmap-table" style="min-width:620px">
+          <thead>
+            <tr>
+              <th class="row-header">Resource Category</th>
+              <th>Schedule Risk</th>
+              <th>Overload Risk</th>
+              <th>Material Risk</th>
+              <th>Quality Risk</th>
+            </tr>
+          </thead>
+          <tbody id="hmBody"></tbody>
+        </table>
+        <div class="hm-legend">
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(26,183,84,.4)"></div><span>Low (0–39)</span></div>
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(245,166,35,.5)"></div><span>Medium (40–59)</span></div>
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(240,129,42,.5)"></div><span>High (60–79)</span></div>
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(230,48,80,.5)"></div><span>Critical (80–100)</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1583,6 +1629,24 @@ function goTo(page){
 }
 
 /* ═══ HEATMAP ═══ */
+function toggleHeatmapView(mode){
+  var s=document.getElementById('hmSummaryView');
+  var g=document.getElementById('hmGridView');
+  var bs=document.getElementById('btnSummaryView');
+  var bg=document.getElementById('btnGridView');
+  if(!s || !g)return;
+  if(mode==='grid'){
+    s.style.display='none';
+    g.style.display='block';
+    if(bs){bs.style.background='transparent';bs.style.color='var(--text-muted)';bs.style.fontWeight='normal';}
+    if(bg){bg.style.background='var(--bg-card-solid)';bg.style.color='var(--text-h)';bg.style.fontWeight='700';}
+  } else {
+    s.style.display='block';
+    g.style.display='none';
+    if(bs){bs.style.background='var(--bg-card-solid)';bs.style.color='var(--text-h)';bs.style.fontWeight='700';}
+    if(bg){bg.style.background='transparent';bg.style.color='var(--text-muted)';bg.style.fontWeight='normal';}
+  }
+}
 var hmData=[
   {res:'Welding Crew',      sched:85,overload:90,material:70,quality:65},
   {res:'Procurement Officers',sched:72,overload:60,material:88,quality:45},
