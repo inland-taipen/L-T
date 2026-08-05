@@ -1735,7 +1735,63 @@ var milestoneData={
     cause:'Steel erection on baseline schedule. Float: 4 days.',
     actions:['Erection crew deployed — 18 members','Crane positioning confirmed','ITP approved by QA']},
 };
+var delayedMilestonesList = [
+  {id:'mfg12', code:'MFG-12', name:'Pressure Vessel Fabrication', domain:'Manufacturing', due:'15 Jul 2026', owner:'RK Sharma', delay:'+18d', sev:'Critical', desc:'Valve delivery delay from Kirloskar holding assembly in Vessel Bay'},
+  {id:'proc18', code:'PROC-18', name:'Heavy Alloy Steel Plate Expediting', domain:'Procurement', due:'18 Jul 2026', owner:'MN Kumar', delay:'+12d', sev:'Critical', desc:'Import clearance stuck at port terminal'},
+  {id:'mfg21', code:'MFG-21', name:'Nozzle Welding & Hydrostatic Test', domain:'Manufacturing', due:'30 Jul 2026', owner:'RK Sharma', delay:'+10d', sev:'Critical', desc:'Welding crew capacity overload in Vessel Bay 1'},
+  {id:'proc23', code:'PROC-23', name:'Kirloskar Control Valve Delivery', domain:'Procurement', due:'25 Jul 2026', owner:'MN Kumar', delay:'+9d', sev:'High', desc:'Raw material shortage at vendor foundry'},
+  {id:'proc31', code:'PROC-31', name:'High-Pressure Flange Delivery', domain:'Procurement', due:'19 Jul 2026', owner:'MN Kumar', delay:'+8d', sev:'High', desc:'Custom machining delay at vendor site'},
+  {id:'mfg33', code:'MFG-33', name:'Heat Exchanger Tube Sheet Drilling', domain:'Manufacturing', due:'07 Aug 2026', owner:'RK Sharma', delay:'+8d', sev:'High', desc:'CNC machine tool calibration delay'},
+  {id:'mfg09', code:'MFG-09', name:'Batch Welding & Pressure Testing', domain:'Manufacturing', due:'22 Jul 2026', owner:'PM Singh', delay:'+7d', sev:'High', desc:'NCR-07 dimensional defect rework underway'},
+  {id:'proc42', code:'PROC-42', name:'Transformer Busbar Procurement', domain:'Procurement', due:'21 Jul 2026', owner:'MN Kumar', delay:'+7d', sev:'High', desc:'Copper raw material price review hold'},
+  {id:'exe08', code:'EXE-08', name:'Heavy Vessel Foundation Rigging', domain:'Execution', due:'28 Jul 2026', owner:'VR Naik', delay:'+6d', sev:'High', desc:'Crane mobilization awaiting site civil clearance'},
+  {id:'mfg28', code:'MFG-28', name:'Condenser Shell Assembly', domain:'Manufacturing', due:'03 Aug 2026', owner:'RK Sharma', delay:'+6d', sev:'High', desc:'Fit-up alignment adjustment'},
+  {id:'epc07', code:'EPC-07', name:'Heat Exchanger Rev.3 Structural Sign-off', domain:'Engineering', due:'20 Jul 2026', owner:'AS Rao', delay:'+5d', sev:'High', desc:'Awaiting client PMG final signature'},
+  {id:'mfg15', code:'MFG-15', name:'Boiler Tube Bending & Fitting', domain:'Manufacturing', due:'26 Jul 2026', owner:'RK Sharma', delay:'+5d', sev:'Medium', desc:'Tube bending machine maintenance'},
+  {id:'proc55', code:'PROC-55', name:'Instrumentation Sensor Package', domain:'Procurement', due:'04 Aug 2026', owner:'MN Kumar', delay:'+5d', sev:'Medium', desc:'Custom calibration certificate pending'},
+  {id:'mfg40', code:'MFG-40', name:'Pressure Vessel Painting & Coating', domain:'Manufacturing', due:'11 Aug 2026', owner:'RK Sharma', delay:'+5d', sev:'Medium', desc:'Humidity conditions outside spec'},
+  {id:'epc14', code:'EPC-14', name:'Electrical One-Line Diagram Rev.2', domain:'Engineering', due:'24 Jul 2026', owner:'AS Rao', delay:'+4d', sev:'Medium', desc:'Load calculation revision under PMG review'},
+  {id:'exe14', code:'EXE-14', name:'Turbine Hall Cable Tray Erection', domain:'Execution', due:'02 Aug 2026', owner:'VR Naik', delay:'+4d', sev:'Medium', desc:'Scaffold erection queue'},
+  {id:'exe19', code:'EXE-19', name:'High Voltage Switchgear Testing', domain:'Execution', due:'06 Aug 2026', owner:'VR Naik', delay:'+4d', sev:'Medium', desc:'Testing team availability conflict'},
+  {id:'qa15', code:'QA-15', name:'Radiographic Weld Inspection', domain:'Quality', due:'09 Aug 2026', owner:'PM Singh', delay:'+4d', sev:'Medium', desc:'Source camera calibration'},
+  {id:'proc70', code:'PROC-70', name:'Control Panel Cabinet Shipping', domain:'Procurement', due:'12 Aug 2026', owner:'MN Kumar', delay:'+4d', sev:'Medium', desc:'Transit logistics clearance'},
+  {id:'mfg47', code:'MFG-47', name:'Secondary Heat Exchanger Assembly', domain:'Manufacturing', due:'16 Aug 2026', owner:'RK Sharma', delay:'+4d', sev:'Medium', desc:'Sub-assembly fitment queue'},
+  {id:'qa07', code:'QA-07', name:'Ultrasonic Weld NDT Inspection', domain:'Quality', due:'27 Jul 2026', owner:'PM Singh', delay:'+3d', sev:'Medium', desc:'Inspector re-qualification delay'},
+  {id:'epc22', code:'EPC-22', name:'Civil Structural Load Analysis', domain:'Engineering', due:'31 Jul 2026', owner:'AS Rao', delay:'+3d', sev:'Low', desc:'Finite element model re-run'},
+  {id:'qa11', code:'QA-11', name:'Dye-Penetrant Surface Inspection', domain:'Quality', due:'01 Aug 2026', owner:'PM Singh', delay:'+3d', sev:'Medium', desc:'Chemical penetrant batch approval'},
+  {id:'epc29', code:'EPC-29', name:'Piping P&ID Revision 4', domain:'Engineering', due:'05 Aug 2026', owner:'AS Rao', delay:'+3d', sev:'Low', desc:'Drafting revision back-check'},
+  {id:'proc61', code:'PROC-61', name:'Fastener & Gasket Batch Supply', domain:'Procurement', due:'08 Aug 2026', owner:'MN Kumar', delay:'+3d', sev:'Low', desc:'Packaging check'},
+  {id:'exe25', code:'EXE-25', name:'Main Boiler Erection Scaffold', domain:'Execution', due:'14 Aug 2026', owner:'VR Naik', delay:'+3d', sev:'Low', desc:'Safety net installation'},
+  {id:'qa19', code:'QA-19', name:'Final Hydrostatic Pressure Clearance', domain:'Quality', due:'15 Aug 2026', owner:'PM Singh', delay:'+3d', sev:'Medium', desc:'Gauge calibration certificate'},
+  {id:'proc82', code:'PROC-82', name:'Fire Suppression System Valves', domain:'Procurement', due:'17 Aug 2026', owner:'MN Kumar', delay:'+3d', sev:'Low', desc:'Vendor dispatch confirmation'},
+  {id:'pln09', code:'PLN-09', name:'Shift-Wise Labor Allocation Baseline', domain:'Planning', due:'29 Jul 2026', owner:'SK Das', delay:'+2d', sev:'Low', desc:'Subcontractor headcount reconciliation'},
+  {id:'epc35', code:'EPC-35', name:'Cable Routing Schedule Sign-off', domain:'Engineering', due:'13 Aug 2026', owner:'AS Rao', delay:'+2d', sev:'Low', desc:'Routing review with electrical lead'},
+  {id:'pln14', code:'PLN-14', name:'Subcontractor Cranage Allocation', domain:'Planning', due:'10 Aug 2026', owner:'SK Das', delay:'+2d', sev:'Low', desc:'Heavy lift scheduling alignment'}
+];
 
+function filterDelayedList(domain, btn){
+  document.querySelectorAll('.d-flt-btn').forEach(function(b){b.style.background='transparent';b.style.color='var(--text-muted)';b.classList.remove('active');});
+  if(btn){btn.style.background='var(--bg-card-solid)';btn.style.color='var(--text-h)';btn.classList.add('active');}
+  document.querySelectorAll('.delayed-item-row').forEach(function(row){
+    if(domain==='All' || row.getAttribute('data-domain')===domain){
+      row.style.display='block';
+    } else {
+      row.style.display='none';
+    }
+  });
+}
+
+function searchDelayedList(){
+  var q = (document.getElementById('delayedSearchInput').value || '').toLowerCase().trim();
+  document.querySelectorAll('.delayed-item-row').forEach(function(row){
+    var s = row.getAttribute('data-search') || '';
+    if(!q || s.includes(q)){
+      row.style.display='block';
+    } else {
+      row.style.display='none';
+    }
+  });
+}
 var kpiData={
   milestones:{title:'Milestone Details',icon:'fa-flag-checkered',col:'var(--blue)',content:'218 total milestones across 6 domains.<br><br><b>Breakdown:</b><br>&bull; Engineering: 64 &bull; Procurement: 38 &bull; Planning: 52 &bull; Manufacturing: 32 &bull; Quality: 18 &bull; Execution: 14'},
   ontrack:{title:'On-Track Milestones',icon:'fa-circle-check',col:'var(--green)',content:'174 milestones are on-track (79.8% of total).<br><br><b>Top Performers:</b><br>&bull; Planning: 91% on-time &bull; Engineering: 82% on-time<br><br><b>Watch List:</b><br>&bull; Manufacturing: Only 59% on-time'},
@@ -1859,6 +1915,50 @@ function openDrawer(type,id){
     });
     body+='</div>';
     footer='<button class="btn btn-primary" onclick="exportEscalationReport()"><i class="fa-solid fa-download"></i> Export Escalation CSV</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
+  }
+  else if(type==='kpi' && id==='delayed'){
+    title='Delayed Milestones Registry (31 Items)';
+    iconHTML='<i class="fa-solid fa-clock-rotate-left"></i>';
+    iconStyle='background:rgba(230,48,80,.12);color:var(--red)';
+    body='<div class="drawer-section" style="margin-bottom:12px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'+
+        '<span style="font-size:12px;font-weight:700;color:var(--text-h)">31 Milestones Behind Baseline Target Date</span>'+
+        '<span style="font-size:10.5px;color:var(--red);font-weight:700">+5 added this week</span>'+
+      '</div>'+
+      '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">'+
+        '<button class="btn btn-ghost d-flt-btn active" onclick="filterDelayedList(\'All\',this)" style="padding:2px 8px;font-size:10.5px;border-radius:4px;background:var(--bg-card-solid);color:var(--text-h)">All (31)</button>'+
+        '<button class="btn btn-ghost d-flt-btn" onclick="filterDelayedList(\'Manufacturing\',this)" style="padding:2px 8px;font-size:10.5px;border-radius:4px;color:var(--red)">MFG (12)</button>'+
+        '<button class="btn btn-ghost d-flt-btn" onclick="filterDelayedList(\'Procurement\',this)" style="padding:2px 8px;font-size:10.5px;border-radius:4px;color:var(--orange)">Procurement (9)</button>'+
+        '<button class="btn btn-ghost d-flt-btn" onclick="filterDelayedList(\'Engineering\',this)" style="padding:2px 8px;font-size:10.5px;border-radius:4px;color:var(--blue)">Engineering (5)</button>'+
+        '<button class="btn btn-ghost d-flt-btn" onclick="filterDelayedList(\'Execution\',this)" style="padding:2px 8px;font-size:10.5px;border-radius:4px;color:var(--purple)">Execution (3)</button>'+
+        '<button class="btn btn-ghost d-flt-btn" onclick="filterDelayedList(\'Quality\',this)" style="padding:2px 8px;font-size:10.5px;border-radius:4px;color:var(--teal)">Quality (3)</button>'+
+        '<button class="btn btn-ghost d-flt-btn" onclick="filterDelayedList(\'Planning\',this)" style="padding:2px 8px;font-size:10.5px;border-radius:4px;color:var(--green)">Planning (2)</button>'+
+      '</div>'+
+      '<div style="position:relative;margin-bottom:10px">'+
+        '<input type="text" id="delayedSearchInput" onkeyup="searchDelayedList()" placeholder="🔍 Search by code, title, owner, or root cause..." style="width:100%;padding:6px 10px;font-size:11.5px;background:var(--bg-input);border:1px solid var(--border-main);border-radius:6px;color:var(--text-h);outline:none;">'+
+      '</div>'+
+    '</div>'+
+    '<div class="drawer-section" style="max-height:460px;overflow-y:auto;padding-right:4px;" id="delayedListContainer">';
+
+    delayedMilestonesList.forEach(function(m){
+      var badgeBg = m.sev==='Critical'?'rgba(230,48,80,.15)':m.sev==='High'?'rgba(240,129,42,.15)':'rgba(245,166,35,.15)';
+      var badgeCol = m.sev==='Critical'?'var(--red)':m.sev==='High'?'var(--orange)':'var(--yellow)';
+      body+='<div class="delayed-item-row" data-domain="'+m.domain+'" data-search="'+(m.code+' '+m.name+' '+m.owner+' '+m.desc).toLowerCase()+'" style="padding:10px;margin-bottom:8px;background:var(--table-stripe);border:1px solid var(--border-subtle);border-radius:6px;cursor:pointer;" onclick="openDrawer(\'milestone\',\''+(milestoneData[m.id]?m.id:'mfg12')+'\')">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;">'+
+          '<div style="font-size:12px;font-weight:800;color:var(--text-h);">'+m.code+': '+m.name+'</div>'+
+          '<span style="font-size:10.5px;font-weight:900;background:'+badgeBg+';color:'+badgeCol+';padding:2px 7px;border-radius:4px;font-family:\'JetBrains Mono\',monospace;">'+m.delay+'</span>'+
+        '</div>'+
+        '<div style="font-size:10.5px;color:var(--text-muted);margin-bottom:4px;display:flex;gap:10px;">'+
+          '<span><strong>Domain:</strong> '+m.domain+'</span>'+
+          '<span><strong>Due:</strong> '+m.due+'</span>'+
+          '<span><strong>Lead:</strong> '+m.owner+'</span>'+
+        '</div>'+
+        '<div style="font-size:10.5px;color:var(--text-p);line-height:1.35;background:rgba(0,0,0,.03);padding:5px 8px;border-radius:4px;">'+m.desc+'</div>'+
+      '</div>';
+    });
+
+    body+='</div>';
+    footer='<button class="btn btn-primary" onclick="exportMilestoneReport()"><i class="fa-solid fa-download"></i> Export Delayed CSV</button><button class="btn btn-outline" onclick="closeDrawer()">Close</button>';
   }
   else if(type==='kpi' && kpiData[id]){
     var k=kpiData[id];
