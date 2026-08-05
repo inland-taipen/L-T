@@ -797,66 +797,59 @@ function verifyPasscode(){
     <div class="ss-item ss-sync" style="border-right:none;margin-left:auto"><i class="fa-solid fa-rotate fa-spin"></i>Live &middot; <span id="lastUpdate">just now</span></div>
   </div>
 
-  <!-- GLOSSARY & MANAGER QUICK GUIDE -->
-  <div class="glossary-card" style="margin-top:14px;margin-bottom:18px;">
-    <div class="glossary-hdr">
-      <i class="fa-solid fa-book-open glossary-hdr-icon"></i>
-      <span class="glossary-hdr-title">Manager's Quick Guide &amp; Term Glossary</span>
-      <span class="glossary-hdr-hint">— hover over any underlined term across the dashboard for instant explanations &bull; click any card for full details</span>
-    </div>
-    <div class="glossary-grid">
-      <div class="gterm"><span class="gterm-abbr">Escalation</span><span class="gterm-sep">—</span><span class="gterm-def">Operational blocker raised to PMG/Director for formal decision &amp; resource approval</span></div>
-      <div class="gterm"><span class="gterm-abbr">Critical Path</span><span class="gterm-sep">—</span><span class="gterm-def">Sequence of dependent tasks — any delay directly pushes back final completion</span></div>
-      <div class="gterm"><span class="gterm-abbr">Schedule Exposure</span><span class="gterm-sep">—</span><span class="gterm-def">Total cumulative days of delay across critical activities (+37d current exposure)</span></div>
-      <div class="gterm"><span class="gterm-abbr">Overload Risk</span><span class="gterm-sep">—</span><span class="gterm-def">% above planned crew capacity — >80% increases defect rates &amp; fatigue</span></div>
-      <div class="gterm"><span class="gterm-abbr">Material Risk</span><span class="gterm-sep">—</span><span class="gterm-def">Risk of shop floor fabrication stoppage due to vendor delivery delays</span></div>
-      <div class="gterm"><span class="gterm-abbr">Quality Risk</span><span class="gterm-sep">—</span><span class="gterm-def">Inspection backlog or non-conformance rate threatening final handover clearance</span></div>
-      <div class="gterm"><span class="gterm-abbr">PMG</span><span class="gterm-sep">—</span><span class="gterm-def">Project Management Group (central governance authority across all 6 domains)</span></div>
-    </div>
-  </div>
-
   <!-- KPI GRID (Ordered by Executive Priority: Action Needed → Risk → Overview) -->
   <div class="kpi-grid">
     <!-- P1: Active Escalations -->
-    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#e63050,#b8002a);--kibg:rgba(230,48,80,.12);--kicol:var(--red);--khover:rgba(230,48,80,.3)" onclick="openDrawer('esc-all')" data-tip="P1 Priority: Active escalations requiring executive intervention">
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#e63050,#b8002a);--kibg:rgba(230,48,80,.12);--kicol:var(--red);--khover:rgba(230,48,80,.3)" onclick="openDrawer('esc-all')" data-tip="Active escalations raised to PMG/Director for formal decision">
       <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
       <div class="kpi-val" data-target="7" style="color:var(--red)">0</div>
       <div class="kpi-lbl">Active Escalations</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:2px;margin-bottom:4px;">Blockers needing Director sign-off</div>
       <div class="kpi-delta dn"><i class="fa-solid fa-fire"></i> 2 Critical &bull; Action Needed</div>
     </div>
+
     <!-- P1: Delayed Milestones -->
-    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#f0812a,#e63050);--kibg:rgba(240,129,42,.12);--kicol:var(--orange);--khover:rgba(240,129,42,.3)" onclick="openDrawer('kpi','delayed')" data-tip="P1 Priority: Milestones currently behind baseline schedule">
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#f0812a,#e63050);--kibg:rgba(240,129,42,.12);--kicol:var(--orange);--khover:rgba(240,129,42,.3)" onclick="openDrawer('kpi','delayed')" data-tip="Milestones currently behind baseline schedule target">
       <div class="kpi-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
       <div class="kpi-val" data-target="31" style="color:var(--orange)">0</div>
       <div class="kpi-lbl">Delayed Milestones</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:2px;margin-bottom:4px;">Tasks past baseline target date</div>
       <div class="kpi-delta dn"><i class="fa-solid fa-arrow-up"></i> +5 since last week</div>
     </div>
+
     <!-- P2: Unresolved Dependencies -->
-    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#f5a623,#d08a14);--kibg:rgba(245,166,35,.12);--kicol:var(--yellow);--khover:rgba(245,166,35,.3)" onclick="openDrawer('kpi','dependencies')" data-tip="P2 Priority: Inter-domain dependencies currently blocking progress">
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#f5a623,#d08a14);--kibg:rgba(245,166,35,.12);--kicol:var(--yellow);--khover:rgba(245,166,35,.3)" onclick="openDrawer('kpi','dependencies')" data-tip="Inter-domain handover blockers currently slowing progress">
       <div class="kpi-icon"><i class="fa-solid fa-link-slash"></i></div>
       <div class="kpi-val" data-target="47" style="color:var(--yellow)">0</div>
       <div class="kpi-lbl">Dependencies</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:2px;margin-bottom:4px;">Cross-domain handover gaps</div>
       <div class="kpi-delta warn"><i class="fa-solid fa-triangle-exclamation"></i> 14 unresolved gaps</div>
     </div>
+
     <!-- P2: Exec Health Score -->
-    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#00d4b0,#0091ff);--kibg:rgba(0,212,176,.08);--kicol:var(--teal);--khover:rgba(0,212,176,.25)" onclick="openDrawer('kpi','health')" data-tip="P2 Priority: Aggregate execution health score across all 6 domains">
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#00d4b0,#0091ff);--kibg:rgba(0,212,176,.08);--kicol:var(--teal);--khover:rgba(0,212,176,.25)" onclick="openDrawer('kpi','health')" data-tip="Aggregate execution health score across all 6 functional domains">
       <div class="kpi-icon"><i class="fa-solid fa-heart-pulse"></i></div>
       <div class="kpi-val" data-target="73" data-suffix="%" style="color:var(--teal)">0%</div>
       <div class="kpi-lbl">Exec. Health</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:2px;margin-bottom:4px;">Aggregate score across 6 domains</div>
       <div class="kpi-delta warn"><i class="fa-solid fa-minus"></i> Moderate Risk (73%)</div>
     </div>
+
     <!-- P3: On Track -->
-    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#1ab754,#0ea04a);--kibg:rgba(26,183,84,.1);--kicol:var(--green);--khover:rgba(26,183,84,.3)" onclick="openDrawer('kpi','ontrack')" data-tip="P3 Status: Milestones progressing within schedule baseline">
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#1ab754,#0ea04a);--kibg:rgba(26,183,84,.1);--kicol:var(--green);--khover:rgba(26,183,84,.3)" onclick="openDrawer('kpi','ontrack')" data-tip="Milestones progressing on schedule without delay">
       <div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
       <div class="kpi-val" data-target="174" style="color:var(--green)">0</div>
       <div class="kpi-lbl">On-Track Milestones</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:2px;margin-bottom:4px;">Tasks progressing within baseline</div>
       <div class="kpi-delta up"><i class="fa-solid fa-arrow-up"></i> 79.8% completion</div>
     </div>
+
     <!-- P3: Total Volume -->
-    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#0091ff,#0050cc);--kibg:rgba(0,145,255,.1);--kicol:var(--blue)" onclick="openDrawer('kpi','milestones')" data-tip="P3 Overview: Total active milestones across all 24 projects">
+    <div class="kpi-card" style="--kbar:linear-gradient(90deg,#0091ff,#0050cc);--kibg:rgba(0,145,255,.1);--kicol:var(--blue)" onclick="openDrawer('kpi','milestones')" data-tip="Total active milestones across all 24 projects in portfolio">
       <div class="kpi-icon"><i class="fa-solid fa-flag-checkered"></i></div>
       <div class="kpi-val" data-target="218">0</div>
       <div class="kpi-lbl">Total Milestones</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:2px;margin-bottom:4px;">Total active milestones in portfolio</div>
       <div class="kpi-delta up"><i class="fa-solid fa-arrow-up"></i> 12 added this week</div>
     </div>
   </div>
@@ -1058,63 +1051,63 @@ function verifyPasscode(){
     <div class="card-body">
       <div class="rings-grid" style="margin-bottom:16px;">
         <!-- 1. Manufacturing (59% - Critical Red) -->
-        <div class="ring-item" data-domain="Manufacturing" onclick="goTo('manufacturing.html')" data-tip="Rank 1 Risk: Manufacturing at 59% (CRITICAL) — Click to open page" style="cursor:pointer">
+        <div class="ring-item" data-domain="Manufacturing" onclick="goTo('manufacturing.html')" data-tip="Rank 1 Risk: Manufacturing at 59% — Delayed by PROC valve delivery (+18d)" style="cursor:pointer">
           <div class="ring-wrap">
             <svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#e63050" stroke-dasharray="175.9" stroke-dashoffset="72.1" cx="35" cy="35" r="28"/></svg>
             <div class="ring-center"><div class="ring-pct" style="color:var(--red)">59%</div></div>
           </div>
           <div class="ring-name" style="color:var(--red);font-weight:800;">1. Manufacturing</div>
-          <div style="font-size:9.5px;color:var(--red);font-weight:700;margin-top:2px;">CRITICAL RISK</div>
+          <div style="font-size:9.5px;color:var(--red);font-weight:700;margin-top:2px;">CRITICAL &bull; MFG-12 +18d</div>
         </div>
 
         <!-- 2. Procurement (68% - High Yellow) -->
-        <div class="ring-item" data-domain="Procurement" onclick="goTo('procurement.html')" data-tip="Rank 2 Risk: Procurement at 68% (HIGH RISK) — Click to open page" style="cursor:pointer">
+        <div class="ring-item" data-domain="Procurement" onclick="goTo('procurement.html')" data-tip="Rank 2 Risk: Procurement at 68% — Kirloskar PO delayed (+9d)" style="cursor:pointer">
           <div class="ring-wrap">
             <svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#f5a623" stroke-dasharray="175.9" stroke-dashoffset="56.3" cx="35" cy="35" r="28"/></svg>
             <div class="ring-center"><div class="ring-pct" style="color:var(--yellow)">68%</div></div>
           </div>
           <div class="ring-name" style="color:var(--yellow);font-weight:800;">2. Procurement</div>
-          <div style="font-size:9.5px;color:var(--yellow);font-weight:700;margin-top:2px;">HIGH RISK</div>
+          <div style="font-size:9.5px;color:var(--yellow);font-weight:700;margin-top:2px;">HIGH RISK &bull; PROC-23 +9d</div>
         </div>
 
         <!-- 3. Project Execution (71% - Purple) -->
-        <div class="ring-item" data-domain="Project Execution" onclick="goTo('execution.html')" data-tip="Rank 3 Risk: Execution at 71% — Click to open page" style="cursor:pointer">
+        <div class="ring-item" data-domain="Project Execution" onclick="goTo('execution.html')" data-tip="Rank 3 Risk: Execution at 71% — Civil-to-Erection handover gap (+4d)" style="cursor:pointer">
           <div class="ring-wrap">
             <svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#9b5de5" stroke-dasharray="175.9" stroke-dashoffset="51.0" cx="35" cy="35" r="28"/></svg>
             <div class="ring-center"><div class="ring-pct" style="color:var(--purple)">71%</div></div>
           </div>
           <div class="ring-name" style="color:var(--purple);font-weight:700;">3. Execution</div>
-          <div style="font-size:9.5px;color:var(--text-muted);margin-top:2px;">MODERATE</div>
+          <div style="font-size:9.5px;color:var(--text-muted);margin-top:2px;">MODERATE &bull; Erection +4d</div>
         </div>
 
         <!-- 4. Quality (77% - Teal) -->
-        <div class="ring-item" data-domain="Quality" onclick="goTo('quality.html')" data-tip="Rank 4 Risk: Quality at 77% — Click to open page" style="cursor:pointer">
+        <div class="ring-item" data-domain="Quality" onclick="goTo('quality.html')" data-tip="Rank 4 Risk: Quality at 77% — NCR-07 re-inspection queue backlog" style="cursor:pointer">
           <div class="ring-wrap">
             <svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#00d4b0" stroke-dasharray="175.9" stroke-dashoffset="40.5" cx="35" cy="35" r="28"/></svg>
             <div class="ring-center"><div class="ring-pct" style="color:var(--teal)">77%</div></div>
           </div>
           <div class="ring-name" style="color:var(--teal);font-weight:700;">4. Quality</div>
-          <div style="font-size:9.5px;color:var(--text-muted);margin-top:2px;">STABLE</div>
+          <div style="font-size:9.5px;color:var(--text-muted);margin-top:2px;">STABLE &bull; NCR-07 queue</div>
         </div>
 
         <!-- 5. Engineering (82% - Blue) -->
-        <div class="ring-item" data-domain="Engineering" onclick="goTo('engineering.html')" data-tip="Rank 5 Risk: Engineering at 82% — Click to open page" style="cursor:pointer">
+        <div class="ring-item" data-domain="Engineering" onclick="goTo('engineering.html')" data-tip="Rank 5 Risk: Engineering at 82% — EPC-07 Rev.3 client approval pending (+5d)" style="cursor:pointer">
           <div class="ring-wrap">
             <svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#0091ff" stroke-dasharray="175.9" stroke-dashoffset="31.7" cx="35" cy="35" r="28"/></svg>
             <div class="ring-center"><div class="ring-pct" style="color:var(--blue)">82%</div></div>
           </div>
           <div class="ring-name" style="color:var(--blue);font-weight:700;">5. Engineering</div>
-          <div style="font-size:9.5px;color:var(--text-muted);margin-top:2px;">HEALTHY</div>
+          <div style="font-size:9.5px;color:var(--text-muted);margin-top:2px;">HEALTHY &bull; EPC-07 pending</div>
         </div>
 
         <!-- 6. Planning (91% - Green) -->
-        <div class="ring-item" data-domain="Planning" onclick="goTo('planning.html')" data-tip="Rank 6 Risk: Planning at 91% — Click to open page" style="cursor:pointer">
+        <div class="ring-item" data-domain="Planning" onclick="goTo('planning.html')" data-tip="Rank 6 Risk: Planning at 91% — Baseline schedule on track" style="cursor:pointer">
           <div class="ring-wrap">
             <svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#1ab754" stroke-dasharray="175.9" stroke-dashoffset="15.8" cx="35" cy="35" r="28"/></svg>
             <div class="ring-center"><div class="ring-pct" style="color:var(--green)">91%</div></div>
           </div>
           <div class="ring-name" style="color:var(--green);font-weight:700;">6. Planning</div>
-          <div style="font-size:9.5px;color:var(--green);font-weight:700;margin-top:2px;">OPTIMAL</div>
+          <div style="font-size:9.5px;color:var(--green);font-weight:700;margin-top:2px;">OPTIMAL &bull; Baseline aligned</div>
         </div>
       </div>
 
@@ -1122,20 +1115,20 @@ function verifyPasscode(){
       <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;padding-top:14px;border-top:1px solid var(--border-subtle);">
         <div>
           <div style="display:flex;justify-content:space-between;margin-bottom:7px">
-            <span style="font-size:12px;color:var(--text-p);font-weight:600">Weekly Execution Trend</span>
-            <span style="font-size:10.5px;color:var(--text-muted)">8 weeks history</span>
+            <span style="font-size:12px;color:var(--text-p);font-weight:600">Weekly Execution Trend (8-Week Trajectory)</span>
+            <span style="font-size:10.5px;color:var(--text-muted)">Click chart for details</span>
           </div>
-          <svg class="mini-chart" viewBox="0 0 300 56" preserveAspectRatio="none" style="height:48px;">
+          <svg class="mini-chart" viewBox="0 0 300 56" preserveAspectRatio="none" style="height:48px;cursor:pointer;" onclick="showToast('Trend Peak: 82% in Wk26 → Dropped to 73% in Wk30 due to shop floor welding overload and valve shortages','warn')">
             <defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0091ff" stop-opacity=".28"/><stop offset="100%" stop-color="#0091ff" stop-opacity="0"/></linearGradient></defs>
             <path d="M0 44 L40 37 L80 41 L120 29 L160 24 L200 27 L240 19 L300 14" fill="none" stroke="#0091ff" stroke-width="1.8" stroke-linecap="round"/>
             <path d="M0 44 L40 37 L80 41 L120 29 L160 24 L200 27 L240 19 L300 14 L300 56 L0 56Z" fill="url(#tg)"/>
             <circle cx="300" cy="14" r="3.5" fill="#0091ff"/>
           </svg>
+          <div style="font-size:10.5px;color:var(--text-muted);margin-top:4px;">📉 <strong>Trend Analysis:</strong> Overall health dropped from 82% (Wk26) to 73% (Wk30) due to shop floor welding bottlenecks.</div>
         </div>
         <div style="padding:10px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle);display:flex;flex-direction:column;justify-content:center;">
           <div style="font-size:11px;font-weight:700;color:var(--text-p);margin-bottom:4px;">Domain Health Summary</div>
           <div style="font-size:11px;color:var(--text-muted);line-height:1.4;">2 domains in alert state (MFG 59%, PROC 68%). 4 domains operating within normal baseline boundaries.</div>
-        </div>
       </div>
     </div>
   </div>
