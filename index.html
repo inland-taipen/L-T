@@ -601,6 +601,23 @@ body {
   .card, .glass-card { background: #fff !important; border: 1px solid #ccc !important; box-shadow: none !important; color: #000 !important; page-break-inside: avoid; }
   .text-p, .text-muted, .rv-lbl, .dinfo-lbl { color: #333 !important; }
 }
+
+/* ═══ HEATMAP STYLES ═══ */
+.heatmap-table{width:100%;border-collapse:separate;border-spacing:4px;}
+.heatmap-table th{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;padding:6px 8px;text-align:center;}
+.heatmap-table th.row-header{text-align:left;width:160px;}
+.hm-cell{padding:10px 8px;border-radius:8px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.hm-cell:hover{transform:scale(1.07);z-index:5;box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.hm-cell .hm-score{font-size:15px;font-weight:900;font-family:'JetBrains Mono',monospace;display:block;margin-bottom:2px;}
+.hm-cell .hm-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.85;}
+.hm-low{background:rgba(26,183,84,.14);color:#1a9e48;border:1px solid rgba(26,183,84,.22);}
+.hm-med{background:rgba(245,166,35,.15);color:#b8800a;border:1px solid rgba(245,166,35,.25);}
+.hm-high{background:rgba(240,129,42,.18);color:#c05e10;border:1px solid rgba(240,129,42,.28);}
+.hm-crit{background:rgba(230,48,80,.18);color:#e63050;border:1px solid rgba(230,48,80,.28);}
+.hm-row-label{font-size:12px;font-weight:600;color:var(--text-p);padding:8px 6px;white-space:nowrap;}
+.hm-legend{display:flex;gap:16px;align-items:center;margin-top:12px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--border-subtle);}
+.hm-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);}
+.hm-leg-dot{width:10px;height:10px;border-radius:3px;}
 </style>
 </head>
 <body>
@@ -723,12 +740,12 @@ function verifyPasscode(){
   <div class="sb-item" onclick="sbClick(this,'#sec-exec')"><i class="fa-solid fa-chart-line"></i> Execution Monitor</div>
   <div class="sb-item" onclick="sbClick(this,'#sec-exec');openDrawer('ms-all')"><i class="fa-solid fa-flag-checkered"></i> Milestone Tracker <span class="sb-badge">3</span></div>
   <div class="sb-label">Domains</div>
-  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','engineering')"><i class="fa-solid fa-drafting-compass"></i> Engineering</div>
-  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','procurement')"><i class="fa-solid fa-truck-fast"></i> Procurement</div>
-  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','planning')"><i class="fa-solid fa-calendar-days"></i> Planning</div>
-  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','manufacturing')"><i class="fa-solid fa-industry"></i> Manufacturing</div>
-  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','quality')"><i class="fa-solid fa-shield-check"></i> Quality</div>
-  <div class="sb-item" onclick="sbClick(this,'#sec-domains');openDrawer('domain','execution')"><i class="fa-solid fa-diagram-project"></i> Project Execution</div>
+  <div class="sb-item" onclick="goTo('engineering.html')"><i class="fa-solid fa-drafting-compass"></i> Engineering</div>
+  <div class="sb-item" onclick="goTo('procurement.html')"><i class="fa-solid fa-truck-fast"></i> Procurement</div>
+  <div class="sb-item" onclick="goTo('planning.html')"><i class="fa-solid fa-calendar-days"></i> Planning</div>
+  <div class="sb-item" onclick="goTo('manufacturing.html')"><i class="fa-solid fa-industry"></i> Manufacturing</div>
+  <div class="sb-item" onclick="goTo('quality.html')"><i class="fa-solid fa-shield-check"></i> Quality</div>
+  <div class="sb-item" onclick="goTo('execution.html')"><i class="fa-solid fa-diagram-project"></i> Project Execution</div>
   <div class="sb-label">Governance</div>
   <div class="sb-item" onclick="sbClick(this,'#sec-exec');openDrawer('esc-all')"><i class="fa-solid fa-triangle-exclamation"></i> Escalations <span class="sb-badge">7</span></div>
   <div class="sb-item" onclick="sbClick(this,'#sec-deps')"><i class="fa-solid fa-link-slash"></i> Dependency Map <span class="sb-badge yellow">14</span></div>
@@ -834,27 +851,27 @@ function verifyPasscode(){
       </div>
       <div class="card-body">
         <div class="rings-grid">
-          <div class="ring-item" data-domain="Engineering" onclick="openDrawer('domain','engineering')" data-tip="Click for Engineering details">
+          <div class="ring-item" data-domain="Engineering" onclick="goTo('engineering.html')" data-tip="Click for Engineering details" style="cursor:pointer">
             <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#0091ff" stroke-dasharray="175.9" stroke-dashoffset="31.7" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--blue)">82%</div></div></div>
             <div class="ring-name">Engineering</div>
           </div>
-          <div class="ring-item" data-domain="Procurement" onclick="openDrawer('domain','procurement')" data-tip="Click for Procurement details">
+          <div class="ring-item" data-domain="Procurement" onclick="goTo('procurement.html')" data-tip="Click for Procurement details" style="cursor:pointer">
             <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#f5a623" stroke-dasharray="175.9" stroke-dashoffset="56.3" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--yellow)">68%</div></div></div>
             <div class="ring-name">Procurement</div>
           </div>
-          <div class="ring-item" data-domain="Planning" onclick="openDrawer('domain','planning')" data-tip="Click for Planning details">
+          <div class="ring-item" data-domain="Planning" onclick="goTo('planning.html')" data-tip="Click for Planning details" style="cursor:pointer">
             <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#1ab754" stroke-dasharray="175.9" stroke-dashoffset="15.8" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--green)">91%</div></div></div>
             <div class="ring-name">Planning</div>
           </div>
-          <div class="ring-item" data-domain="Manufacturing" onclick="openDrawer('domain','manufacturing')" data-tip="Critical — Click for details">
+          <div class="ring-item" data-domain="Manufacturing" onclick="goTo('manufacturing.html')" data-tip="Critical — Click for details" style="cursor:pointer">
             <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#e63050" stroke-dasharray="175.9" stroke-dashoffset="72.1" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--red)">59%</div></div></div>
             <div class="ring-name">Manufacturing</div>
           </div>
-          <div class="ring-item" data-domain="Quality" onclick="openDrawer('domain','quality')" data-tip="Click for Quality details">
+          <div class="ring-item" data-domain="Quality" onclick="goTo('quality.html')" data-tip="Click for Quality details" style="cursor:pointer">
             <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#00d4b0" stroke-dasharray="175.9" stroke-dashoffset="40.5" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--teal)">77%</div></div></div>
             <div class="ring-name">Quality</div>
           </div>
-          <div class="ring-item" data-domain="Project Execution" onclick="openDrawer('domain','execution')" data-tip="Click for Execution details">
+          <div class="ring-item" data-domain="Project Execution" onclick="goTo('execution.html')" data-tip="Click for Execution details" style="cursor:pointer">
             <div class="ring-wrap"><svg viewBox="0 0 70 70"><circle class="ring-track" cx="35" cy="35" r="28"/><circle stroke="#9b5de5" stroke-dasharray="175.9" stroke-dashoffset="51.0" cx="35" cy="35" r="28"/></svg><div class="ring-center"><div class="ring-pct" style="color:var(--purple)">71%</div></div></div>
             <div class="ring-name">Execution</div>
           </div>
@@ -871,13 +888,13 @@ function verifyPasscode(){
         <div style="margin-top:10px;padding:10px;background:var(--table-stripe);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
           <div style="font-size:11px;font-weight:700;color:var(--text-p);margin-bottom:7px">&#9889; Active Bottlenecks</div>
           <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Manufacturing" onclick="openDrawer('domain','manufacturing')">
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Manufacturing" onclick="goTo('manufacturing.html')">
               <span style="color:var(--text-muted)">MFG Critical Path</span><span style="color:var(--red);font-weight:700">+18 days</span>
             </div>
-            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Procurement" onclick="openDrawer('domain','procurement')">
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Procurement" onclick="goTo('procurement.html')">
               <span style="color:var(--text-muted)">Procurement Hold</span><span style="color:var(--yellow);font-weight:700">+9 days</span>
             </div>
-            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Engineering" onclick="openDrawer('domain','engineering')">
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;cursor:pointer;padding:3px 0" data-domain="Engineering" onclick="goTo('engineering.html')">
               <span style="color:var(--text-muted)">Drawing Approval</span><span style="color:var(--yellow);font-weight:700">+5 days</span>
             </div>
           </div>
@@ -977,45 +994,74 @@ function verifyPasscode(){
     </div>
   </div>
 
+  <!-- ═══ RESOURCE RISK HEATMAP ═══ -->
+  <div class="sec-hdr" id="sec-heatmap"><h2 class="sec-title">Resource Risk Heatmap</h2><div class="sec-line"></div><div class="sec-tag">By Resource Type</div></div>
+  <div class="card" style="margin-bottom:20px;overflow-x:auto">
+    <div class="card-hdr">
+      <div class="card-title"><div class="c-icon" style="background:rgba(230,48,80,.1);color:var(--red)"><i class="fa-solid fa-fire-flame-curved"></i></div>Risk Concentration by Resource Category</div>
+      <div style="font-size:10.5px;color:var(--text-muted)">Click any cell for details</div>
+    </div>
+    <div class="card-body" style="padding-bottom:4px">
+      <table class="heatmap-table" style="min-width:620px">
+        <thead>
+          <tr>
+            <th class="row-header">Resource Type</th>
+            <th>Schedule Risk</th>
+            <th>Overload Risk</th>
+            <th>Material Risk</th>
+            <th>Quality Risk</th>
+          </tr>
+        </thead>
+        <tbody id="hmBody"></tbody>
+      </table>
+      <div class="hm-legend">
+        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(26,183,84,.4)"></div><span>Low (0–39)</span></div>
+        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(245,166,35,.5)"></div><span>Medium (40–59)</span></div>
+        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(240,129,42,.5)"></div><span>High (60–79)</span></div>
+        <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(230,48,80,.5)"></div><span>Critical (80–100)</span></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ WORKFLOW DOMAINS ═══ -->
   <div class="sec-hdr" id="sec-domains"><h2 class="sec-title">Enterprise Execution Dashboard &mdash; Workflow Domains</h2><div class="sec-line"></div><div class="sec-tag">6 Domains</div></div>
   <div class="domains-grid" style="margin-bottom:20px">
-    <div class="domain-card" style="--dc:linear-gradient(90deg,#0091ff,#0050cc)" data-domain="Engineering" onclick="openDrawer('domain','engineering')">
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#0091ff,#0050cc)" data-domain="Engineering" onclick="goTo('engineering.html')">
       <div class="dc-icon" style="background:rgba(0,145,255,.1);color:var(--blue)"><i class="fa-solid fa-drafting-compass"></i></div>
       <div class="dc-name" style="color:var(--blue)">Engineering</div>
       <div class="dc-sub">Drawing releases &middot; Approval workflows</div>
       <div class="dc-stats"><div class="dc-stat"><strong>64</strong>Drawings</div><div class="dc-stat"><strong>82%</strong>On Time</div><div class="dc-stat"><strong>5</strong>Pending</div></div>
       <div class="dc-bar"><div class="dc-bar-fill" style="width:82%;background:linear-gradient(90deg,#0091ff,#0050cc)"></div></div>
     </div>
-    <div class="domain-card" style="--dc:linear-gradient(90deg,#f5a623,#d08a14)" data-domain="Procurement" onclick="openDrawer('domain','procurement')">
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#f5a623,#d08a14)" data-domain="Procurement" onclick="goTo('procurement.html')">
       <div class="dc-icon" style="background:rgba(245,166,35,.1);color:var(--yellow)"><i class="fa-solid fa-truck-fast"></i></div>
       <div class="dc-name" style="color:var(--yellow)">Procurement</div>
       <div class="dc-sub">PO tracking &middot; Vendor coordination</div>
-      <div class="dc-stats"><div class="dc-stat"><strong>38</strong>PO Active</div><div class="dc-stat"><strong>68%</strong>On Time</div><div class="dc-stat"><strong>9</strong>Delayed</div></div>
+      <div class="dc-stats"><div class="dc-stat"><strong>38</strong>POs</div><div class="dc-stat"><strong>68%</strong>On Time</div><div class="dc-stat"><strong>9</strong>Delayed</div></div>
       <div class="dc-bar"><div class="dc-bar-fill" style="width:68%;background:linear-gradient(90deg,#f5a623,#d08a14)"></div></div>
     </div>
-    <div class="domain-card" style="--dc:linear-gradient(90deg,#1ab754,#0ea04a)" data-domain="Planning" onclick="openDrawer('domain','planning')">
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#1ab754,#0ea04a)" data-domain="Planning" onclick="goTo('planning.html')">
       <div class="dc-icon" style="background:rgba(26,183,84,.1);color:var(--green)"><i class="fa-solid fa-calendar-days"></i></div>
       <div class="dc-name" style="color:var(--green)">Planning</div>
       <div class="dc-sub">Schedule adherence &middot; Resource planning</div>
       <div class="dc-stats"><div class="dc-stat"><strong>24</strong>Projects</div><div class="dc-stat"><strong>91%</strong>On Time</div><div class="dc-stat"><strong>2</strong>At Risk</div></div>
       <div class="dc-bar"><div class="dc-bar-fill" style="width:91%;background:linear-gradient(90deg,#1ab754,#0ea04a)"></div></div>
     </div>
-    <div class="domain-card" style="--dc:linear-gradient(90deg,#f0812a,#e63050)" data-domain="Manufacturing" onclick="openDrawer('domain','manufacturing')">
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#f0812a,#e63050)" data-domain="Manufacturing" onclick="goTo('manufacturing.html')">
       <div class="dc-icon" style="background:rgba(240,129,42,.1);color:var(--orange)"><i class="fa-solid fa-industry"></i></div>
       <div class="dc-name" style="color:var(--orange)">Manufacturing</div>
       <div class="dc-sub">Shop floor &middot; Fabrication status</div>
       <div class="dc-stats"><div class="dc-stat"><strong>18</strong>Jobs</div><div class="dc-stat"><strong>59%</strong>On Time</div><div class="dc-stat"><strong>7</strong>Critical</div></div>
       <div class="dc-bar"><div class="dc-bar-fill" style="width:59%;background:linear-gradient(90deg,#f0812a,#e63050)"></div></div>
     </div>
-    <div class="domain-card" style="--dc:linear-gradient(90deg,#00d4b0,#0091ff)" data-domain="Quality" onclick="openDrawer('domain','quality')">
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#00d4b0,#0091ff)" data-domain="Quality" onclick="goTo('quality.html')">
       <div class="dc-icon" style="background:rgba(0,212,176,.08);color:var(--teal)"><i class="fa-solid fa-shield-check"></i></div>
       <div class="dc-name" style="color:var(--teal)">Quality</div>
       <div class="dc-sub">Inspection &middot; NCR management</div>
       <div class="dc-stats"><div class="dc-stat"><strong>42</strong>Inspections</div><div class="dc-stat"><strong>77%</strong>Pass Rate</div><div class="dc-stat"><strong>3</strong>NCR Open</div></div>
       <div class="dc-bar"><div class="dc-bar-fill" style="width:77%;background:linear-gradient(90deg,#00d4b0,#0091ff)"></div></div>
     </div>
-    <div class="domain-card" style="--dc:linear-gradient(90deg,#9b5de5,#5b67e8)" data-domain="Project Execution" onclick="openDrawer('domain','execution')">
+    <div class="domain-card" style="--dc:linear-gradient(90deg,#9b5de5,#5b67e8)" data-domain="Project Execution" onclick="goTo('execution.html')">
       <div class="dc-icon" style="background:rgba(155,93,229,.1);color:var(--purple)"><i class="fa-solid fa-diagram-project"></i></div>
       <div class="dc-name" style="color:var(--purple)">Project Execution</div>
       <div class="dc-sub">Site progress &middot; Erection &amp; commissioning</div>
@@ -1401,6 +1447,41 @@ function showToast(msg,type,duration){
     setTimeout(function(){if(div.parentNode)div.parentNode.removeChild(div);},320);
   },d);
 }
+
+/* ═══ PAGE NAVIGATION ═══ */
+function goTo(page){
+  window.location.href=page;
+}
+
+/* ═══ HEATMAP ═══ */
+var hmData=[
+  {res:'Design Engineers',  sched:45,overload:62,material:20,quality:30},
+  {res:'Welding Crew',      sched:85,overload:90,material:70,quality:65},
+  {res:'Piping / Fitting',  sched:68,overload:72,material:55,quality:42},
+  {res:'Civil / Structural',sched:35,overload:48,material:28,quality:25},
+  {res:'Electrical',        sched:52,overload:55,material:65,quality:35},
+  {res:'QC Inspectors',     sched:62,overload:78,material:22,quality:82},
+  {res:'Planning Engineers',sched:38,overload:50,material:18,quality:28},
+  {res:'Procurement Officers',sched:72,overload:60,material:88,quality:45},
+];
+function hmClass(v){return v>=80?'hm-crit':v>=60?'hm-high':v>=40?'hm-med':'hm-low';}
+function hmLabel(v){return v>=80?'Critical':v>=60?'High':v>=40?'Medium':'Low';}
+function buildHeatmap(){
+  var tb=document.getElementById('hmBody');
+  if(!tb)return;
+  tb.innerHTML='';
+  hmData.forEach(function(row){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="hm-row-label">'+row.res+'</td>'+
+      ['sched','overload','material','quality'].map(function(k){
+        var v=row[k];
+        var cls=hmClass(v);
+        return '<td><div class="hm-cell '+cls+'" onclick="showToast(\''+row.res+' — '+hmLabel(v)+' risk ('+v+')\',\''+(v>=80?'error':v>=60?'warn':v>=40?'warn':'info')+'\')"><span class="hm-score">'+v+'</span><span class="hm-lbl">'+hmLabel(v)+'</span></div></td>';
+      }).join('');
+    tb.appendChild(tr);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){buildHeatmap();});
 
 /* ═══ GLOBAL GOVERNANCE DATASETS ═══ */
 var domainData={

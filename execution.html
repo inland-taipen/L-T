@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Project Execution Domain | L&T PMG Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.topbar-logo-txt{display:flex;flex-direction:column;}
+.exe-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.package-card{background:var(--bg-card-solid);border:1px solid var(--border-subtle);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-card);transition:all .2s;}
+.package-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.12);}
+.package-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px;}
+@media(max-width:900px){.exe-kpi-row{grid-template-columns:repeat(2,1fr);}.package-grid{grid-template-columns:1fr;}}
+.pkg-name{font-size:14px;font-weight:700;color:var(--text-h);margin-bottom:4px;}
+.pkg-sub{font-size:11px;color:var(--text-muted);margin-bottom:12px;}
+.pkg-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.pkg-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-muted);}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar-logo" href="index.html">
+    <img src="lt-logo.png" alt="L&T"/>
+    <div class="topbar-logo-txt"><div class="topbar-title">L&T PMG</div><div class="topbar-sub">Operational Dashboard</div></div>
+  </a>
+  <div class="topbar-divider"></div>
+  <div style="font-size:12px;color:var(--text-muted);font-weight:500;"><i class="fa-solid fa-diagram-project" style="color:var(--purple);margin-right:5px"></i>Project Execution Domain</div>
+  <div class="topbar-actions">
+    <div class="theme-toggle-wrap">
+      <i class="fa-solid fa-moon theme-icon"></i>
+      <div class="theme-toggle" onclick="toggleTheme()" role="button" aria-label="Toggle theme"></div>
+      <i class="fa-solid fa-sun theme-icon"></i>
+    </div>
+    <button class="btn btn-back" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary" onclick="exportCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+  </div>
+</header>
+
+<div class="domain-page">
+  <div class="domain-page-hdr">
+    <div class="domain-icon-big" style="background:rgba(155,93,229,.1);color:var(--purple);">
+      <i class="fa-solid fa-diagram-project"></i>
+    </div>
+    <div class="domain-page-hdr-left">
+      <div class="domain-breadcrumb">
+        <a href="index.html"><i class="fa-solid fa-house"></i> PMG Dashboard</a>
+        <i class="fa-solid fa-chevron-right"></i><span>Project Execution</span>
+      </div>
+      <div class="domain-page-title">Project Execution Domain</div>
+      <div class="domain-page-sub">Package-wise progress &middot; Site execution &middot; Erection &amp; commissioning &middot; Milestone tracking</div>
+    </div>
+    <div class="domain-page-hdr-right">
+      <div style="text-align:center;padding:10px 16px;background:rgba(155,93,229,.08);border:1px solid rgba(155,93,229,.2);border-radius:12px;">
+        <div style="font-size:28px;font-weight:900;color:var(--purple);font-family:'JetBrains Mono',monospace;">71%</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;">Health Score</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="domain-content">
+
+    <!-- SUMMARY KPI ROW -->
+    <div class="sec-hdr"><h2 class="sec-title">Execution Summary</h2><div class="sec-line"></div><div class="sec-tag">Live</div></div>
+    <div class="exe-kpi-row">
+      <div class="bucket-card">
+        <div class="bc-icon" style="background:rgba(155,93,229,.1);color:var(--purple);"><i class="fa-solid fa-cubes"></i></div>
+        <div class="bc-val" style="color:var(--text-h);">11</div>
+        <div class="bc-lbl">Total Packages</div>
+        <div class="bc-sub">Active execution packages</div>
+      </div>
+      <div class="bucket-card good-bucket">
+        <div class="bc-icon" style="background:rgba(26,183,84,.1);color:var(--green);"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="bc-val" style="color:var(--green);">6</div>
+        <div class="bc-lbl">On Track</div>
+        <div class="bc-sub">Within baseline schedule</div>
+      </div>
+      <div class="bucket-card warn-bucket">
+        <div class="bc-icon" style="background:rgba(245,166,35,.12);color:var(--yellow);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="bc-val" style="color:var(--yellow);">1</div>
+        <div class="bc-lbl">At Risk</div>
+        <div class="bc-sub">Needs immediate attention</div>
+      </div>
+      <div class="bucket-card alert-bucket">
+        <div class="bc-icon" style="background:rgba(230,48,80,.12);color:var(--red);"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div class="bc-val" style="color:var(--red);">4</div>
+        <div class="bc-lbl">Behind Schedule</div>
+        <div class="bc-sub">Exceeding baseline delay</div>
+      </div>
+    </div>
+
+    <!-- PACKAGE PROGRESS BARS -->
+    <div class="sec-hdr"><h2 class="sec-title">Package Progress Overview</h2><div class="sec-line"></div><div class="sec-tag">11 packages</div></div>
+    <div class="chart-card" style="margin-bottom:20px;">
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label bar-label-left">Structural Steel</div><div class="bar-track"><div class="bar-fill" style="width:78%;background:linear-gradient(90deg,#1ab754,#0ea04a)"><span class="bar-val">78%</span></div></div><div class="bar-val-out"><span class="chip chip-g">On Track</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Civil &amp; Foundation</div><div class="bar-track"><div class="bar-fill" style="width:92%;background:linear-gradient(90deg,#1ab754,#0ea04a)"><span class="bar-val">92%</span></div></div><div class="bar-val-out"><span class="chip chip-g">On Track</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Equipment Setting</div><div class="bar-track"><div class="bar-fill" style="width:64%;background:linear-gradient(90deg,#f5a623,#d08a14)"><span class="bar-val">64%</span></div></div><div class="bar-val-out"><span class="chip chip-r">-6d</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Piping (Above Ground)</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:linear-gradient(90deg,#e63050,#b8002a)"><span class="bar-val">55%</span></div></div><div class="bar-val-out"><span class="chip chip-r">-11d</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Electrical (HT/LT)</div><div class="bar-track"><div class="bar-fill" style="width:54%;background:linear-gradient(90deg,#e63050,#b8002a)"><span class="bar-val">54%</span></div></div><div class="bar-val-out"><span class="chip chip-r">-8d</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Instrumentation</div><div class="bar-track"><div class="bar-fill" style="width:81%;background:linear-gradient(90deg,#1ab754,#0ea04a)"><span class="bar-val">81%</span></div></div><div class="bar-val-out"><span class="chip chip-g">On Track</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Painting &amp; Insulation</div><div class="bar-track"><div class="bar-fill" style="width:72%;background:linear-gradient(90deg,#0091ff,#0050cc)"><span class="bar-val">72%</span></div></div><div class="bar-val-out"><span class="chip chip-g">On Track</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Pre-commissioning</div><div class="bar-track"><div class="bar-fill" style="width:38%;background:linear-gradient(90deg,#f5a623,#d08a14)"><span class="bar-val">38%</span></div></div><div class="bar-val-out"><span class="chip chip-y">At Risk</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Commissioning</div><div class="bar-track"><div class="bar-fill" style="width:12%;background:linear-gradient(90deg,#9b5de5,#5b67e8)"><span class="bar-val">12%</span></div></div><div class="bar-val-out"><span class="chip chip-b">Early</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Safety Systems</div><div class="bar-track"><div class="bar-fill" style="width:85%;background:linear-gradient(90deg,#1ab754,#0ea04a)"><span class="bar-val">85%</span></div></div><div class="bar-val-out"><span class="chip chip-g">On Track</span></div></div>
+        <div class="bar-row"><div class="bar-label bar-label-left">Utilities &amp; Services</div><div class="bar-track"><div class="bar-fill" style="width:69%;background:linear-gradient(90deg,#0091ff,#0050cc)"><span class="bar-val">69%</span></div></div><div class="bar-val-out"><span class="chip chip-g">On Track</span></div></div>
+      </div>
+    </div>
+
+    <!-- PACKAGE DETAIL CARDS -->
+    <div class="sec-hdr"><h2 class="sec-title">Packages Behind Schedule</h2><div class="sec-line"></div><div class="sec-tag" style="background:rgba(230,48,80,.08);color:var(--red);border-color:rgba(230,48,80,.2);">4 packages</div></div>
+    <div class="package-grid">
+      <div class="package-card" style="border-color:rgba(230,48,80,.2);background:rgba(230,48,80,.02);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="pkg-name">Piping (Above Ground)</div>
+          <span class="chip chip-r"><i class="fa-solid fa-clock-rotate-left"></i> -11 days</span>
+        </div>
+        <div class="pkg-sub">L&T Site — Bay A & B piping network. Awaiting MFG-12 pressure vessel for tie-in.</div>
+        <div class="prog-label"><span class="prog-name">Progress</span><span class="prog-pct" style="color:var(--red)">55%</span></div>
+        <div class="prog" style="height:10px;"><div class="prog-fill" style="width:55%;background:linear-gradient(90deg,#e63050,#b8002a)"></div></div>
+        <div class="pkg-meta">
+          <span class="pkg-tag">Owner: VS Patil</span>
+          <span class="pkg-tag">Crew: 24 men</span>
+          <span class="pkg-tag" style="color:var(--red);border-color:rgba(230,48,80,.25);background:rgba(230,48,80,.06);">Blocked: MFG-12</span>
+          <span class="pkg-tag">Issues: 2</span>
+        </div>
+      </div>
+      <div class="package-card" style="border-color:rgba(230,48,80,.2);background:rgba(230,48,80,.02);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="pkg-name">Electrical (HT/LT)</div>
+          <span class="chip chip-r"><i class="fa-solid fa-clock-rotate-left"></i> -8 days</span>
+        </div>
+        <div class="pkg-sub">MCC room & field cabling. Civil handover delayed by 6 days, cascading to electrical start.</div>
+        <div class="prog-label"><span class="prog-name">Progress</span><span class="prog-pct" style="color:var(--red)">54%</span></div>
+        <div class="prog" style="height:10px;"><div class="prog-fill" style="width:54%;background:linear-gradient(90deg,#e63050,#b8002a)"></div></div>
+        <div class="pkg-meta">
+          <span class="pkg-tag">Owner: VR Naik</span>
+          <span class="pkg-tag">Crew: 18 men</span>
+          <span class="pkg-tag" style="color:var(--yellow);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.06);">Civil dependency</span>
+          <span class="pkg-tag">Issues: 3</span>
+        </div>
+      </div>
+      <div class="package-card" style="border-color:rgba(245,166,35,.2);background:rgba(245,166,35,.02);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="pkg-name">Equipment Setting</div>
+          <span class="chip chip-y"><i class="fa-solid fa-clock-rotate-left"></i> -6 days</span>
+        </div>
+        <div class="pkg-sub">Main equipment installation and alignment. Crane positioning delayed — rigging study under review.</div>
+        <div class="prog-label"><span class="prog-name">Progress</span><span class="prog-pct" style="color:var(--yellow)">64%</span></div>
+        <div class="prog" style="height:10px;"><div class="prog-fill" style="width:64%;background:linear-gradient(90deg,#f5a623,#d08a14)"></div></div>
+        <div class="pkg-meta">
+          <span class="pkg-tag">Owner: AM Desai</span>
+          <span class="pkg-tag">Crew: 12 men</span>
+          <span class="pkg-tag" style="color:var(--yellow);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.06);">Rigging review</span>
+          <span class="pkg-tag">Issues: 1</span>
+        </div>
+      </div>
+      <div class="package-card" style="border-color:rgba(245,166,35,.2);background:rgba(245,166,35,.02);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="pkg-name">Pre-commissioning</div>
+          <span class="chip chip-y"><i class="fa-solid fa-triangle-exclamation"></i> At Risk</span>
+        </div>
+        <div class="pkg-sub">Functional checks and loop tests. Currently at 38% — depends on Piping and Electrical completion.</div>
+        <div class="prog-label"><span class="prog-name">Progress</span><span class="prog-pct" style="color:var(--yellow)">38%</span></div>
+        <div class="prog" style="height:10px;"><div class="prog-fill" style="width:38%;background:linear-gradient(90deg,#f5a623,#d08a14)"></div></div>
+        <div class="pkg-meta">
+          <span class="pkg-tag">Owner: RD Kulkarni</span>
+          <span class="pkg-tag">Crew: 8 men</span>
+          <span class="pkg-tag" style="color:var(--yellow);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.06);">Cascade dependency</span>
+          <span class="pkg-tag">Issues: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PACKAGE TABLE (all) -->
+    <div class="sec-hdr"><h2 class="sec-title">All Packages — Summary</h2><div class="sec-line"></div><div class="sec-tag">11 packages</div></div>
+    <div class="chart-card" style="margin-bottom:24px;">
+      <table class="domain-table">
+        <thead>
+          <tr><th>Package</th><th>Progress</th><th>Planned</th><th>Variance</th><th>Owner</th><th>Issues</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Structural Steel</strong></td><td>78%</td><td>80%</td><td>-2%</td><td>EJ Raut</td><td>0</td><td><span class="chip chip-g">On Track</span></td></tr>
+          <tr><td><strong>Civil &amp; Foundation</strong></td><td>92%</td><td>90%</td><td>+2%</td><td>KP Agarwal</td><td>0</td><td><span class="chip chip-g">Ahead</span></td></tr>
+          <tr><td><strong>Equipment Setting</strong></td><td>64%</td><td>72%</td><td>-8%</td><td>AM Desai</td><td>1</td><td><span class="chip chip-y">At Risk</span></td></tr>
+          <tr><td><strong>Piping (Above Ground)</strong></td><td>55%</td><td>70%</td><td>-15%</td><td>VS Patil</td><td>2</td><td><span class="chip chip-r">Delayed</span></td></tr>
+          <tr><td><strong>Electrical (HT/LT)</strong></td><td>54%</td><td>68%</td><td>-14%</td><td>VR Naik</td><td>3</td><td><span class="chip chip-r">Delayed</span></td></tr>
+          <tr><td><strong>Instrumentation</strong></td><td>81%</td><td>80%</td><td>+1%</td><td>SN Bhatt</td><td>0</td><td><span class="chip chip-g">On Track</span></td></tr>
+          <tr><td><strong>Painting &amp; Insulation</strong></td><td>72%</td><td>72%</td><td>0%</td><td>GR Sinha</td><td>0</td><td><span class="chip chip-g">On Track</span></td></tr>
+          <tr><td><strong>Pre-commissioning</strong></td><td>38%</td><td>45%</td><td>-7%</td><td>RD Kulkarni</td><td>0</td><td><span class="chip chip-y">At Risk</span></td></tr>
+          <tr><td><strong>Commissioning</strong></td><td>12%</td><td>10%</td><td>+2%</td><td>PS Iyer</td><td>0</td><td><span class="chip chip-b">Early Stage</span></td></tr>
+          <tr><td><strong>Safety Systems</strong></td><td>85%</td><td>85%</td><td>0%</td><td>HS Mathur</td><td>0</td><td><span class="chip chip-g">On Track</span></td></tr>
+          <tr><td><strong>Utilities &amp; Services</strong></td><td>69%</td><td>70%</td><td>-1%</td><td>DK Rao</td><td>0</td><td><span class="chip chip-g">On Track</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script>
+function toggleTheme(){var h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');localStorage.setItem('lt-theme',h.getAttribute('data-theme'));}
+(function(){document.documentElement.setAttribute('data-theme',localStorage.getItem('lt-theme')||'light');})();
+function exportCSV(){
+  var d=new Date().toISOString().split('T')[0];
+  var csv=[['L&T PROJECT EXECUTION DOMAIN FULL REPORT'],['Generated',new Date().toLocaleString()],['Health Score','71%'],[],
+    ['EXECUTION SUMMARY'],['Total Packages','11'],['On Track','6'],['At Risk','1'],['Behind Schedule','4'],[],
+    ['ALL PACKAGES'],['Package','Progress','Planned','Variance','Owner','Issues','Status'],
+    ['Structural Steel','78%','80%','-2%','EJ Raut','0','On Track'],
+    ['Civil & Foundation','92%','90%','+2%','KP Agarwal','0','Ahead'],
+    ['Equipment Setting','64%','72%','-8%','AM Desai','1','At Risk'],
+    ['Piping (Above Ground)','55%','70%','-15%','VS Patil','2','Delayed'],
+    ['Electrical (HT/LT)','54%','68%','-14%','VR Naik','3','Delayed'],
+    ['Instrumentation','81%','80%','+1%','SN Bhatt','0','On Track'],
+    ['Painting & Insulation','72%','72%','0%','GR Sinha','0','On Track'],
+    ['Pre-commissioning','38%','45%','-7%','RD Kulkarni','0','At Risk'],
+    ['Commissioning','12%','10%','+2%','PS Iyer','0','Early Stage'],
+    ['Safety Systems','85%','85%','0%','HS Mathur','0','On Track'],
+    ['Utilities & Services','69%','70%','-1%','DK Rao','0','On Track'],
+  ];
+  var str=csv.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([str],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='L_and_T_Execution_Full_Report_'+d+'.csv';
+  document.body.appendChild(link);link.click();document.body.removeChild(link);
+  showToast('Project Execution report downloaded!','success');
+}
+function showToast(m,t){var c=document.getElementById('toast-container');var d=document.createElement('div');d.className='toast';d.innerHTML='<span style="color:'+{success:'#1ab754',error:'#e63050'}[t]+'">&#xf058;</span><span>'+m+'</span>';c.appendChild(d);setTimeout(function(){d.classList.add('fadeout');setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},320);},3200);}
+</script>
+</body>
+</html>

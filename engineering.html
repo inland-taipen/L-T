@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Engineering Domain | L&T PMG Dashboard</title>
+<meta name="description" content="Engineering domain detail — drawings, approvals, ECR tracking."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.topbar-logo-txt { display:flex;flex-direction:column; }
+.domain-stat-hero { display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;gap:14px;margin-bottom:24px; }
+@media(max-width:1100px){.domain-stat-hero{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:700px){.domain-stat-hero{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a class="topbar-logo" href="index.html">
+    <img src="lt-logo.png" alt="L&T"/>
+    <div class="topbar-logo-txt">
+      <div class="topbar-title">L&T PMG</div>
+      <div class="topbar-sub">Operational Dashboard</div>
+    </div>
+  </a>
+  <div class="topbar-divider"></div>
+  <div style="font-size:12px;color:var(--text-muted);font-weight:500;"><i class="fa-solid fa-drafting-compass" style="color:var(--blue);margin-right:5px"></i>Engineering Domain</div>
+  <div class="topbar-actions">
+    <div class="theme-toggle-wrap">
+      <i class="fa-solid fa-moon theme-icon" id="themeIconMoon"></i>
+      <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" role="button" aria-label="Toggle theme"></div>
+      <i class="fa-solid fa-sun theme-icon" id="themeIconSun"></i>
+    </div>
+    <button class="btn btn-back" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+    <button class="btn btn-primary" onclick="exportDomainCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+  </div>
+</header>
+
+<!-- DOMAIN PAGE -->
+<div class="domain-page">
+
+  <!-- PAGE HEADER -->
+  <div class="domain-page-hdr">
+    <div class="domain-icon-big" style="background:rgba(0,145,255,.12);color:var(--blue);">
+      <i class="fa-solid fa-drafting-compass"></i>
+    </div>
+    <div class="domain-page-hdr-left">
+      <div class="domain-breadcrumb">
+        <a href="index.html"><i class="fa-solid fa-house"></i> PMG Dashboard</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Engineering</span>
+      </div>
+      <div class="domain-page-title">Engineering Domain</div>
+      <div class="domain-page-sub">Drawing management &middot; Engineering Change Requests &middot; Approval workflows &middot; IFC releases</div>
+    </div>
+    <div class="domain-page-hdr-right">
+      <div style="text-align:center;padding:10px 16px;background:rgba(0,145,255,.08);border:1px solid rgba(0,145,255,.2);border-radius:12px;">
+        <div style="font-size:28px;font-weight:900;color:var(--blue);font-family:'JetBrains Mono',monospace;">82%</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;">Health Score</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="domain-content">
+
+    <!-- BUCKET METRICS -->
+    <div class="sec-hdr"><h2 class="sec-title">Drawing Pipeline Metrics</h2><div class="sec-line"></div><div class="sec-tag">Live</div></div>
+    <div class="domain-stat-hero">
+      <div class="bucket-card">
+        <div class="bc-icon" style="background:rgba(0,145,255,.1);color:var(--blue);"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="bc-val" style="color:var(--text-h);">312</div>
+        <div class="bc-lbl">Total Drawings</div>
+        <div class="bc-sub">All categories</div>
+      </div>
+      <div class="bucket-card alert-bucket">
+        <div class="bc-icon" style="background:rgba(230,48,80,.12);color:var(--red);"><i class="fa-solid fa-hourglass-half"></i></div>
+        <div class="bc-val" style="color:var(--red);">23</div>
+        <div class="bc-lbl">Awaiting Approval</div>
+        <div class="bc-sub">Action required</div>
+      </div>
+      <div class="bucket-card warn-bucket">
+        <div class="bc-icon" style="background:rgba(245,166,35,.12);color:var(--yellow);"><i class="fa-solid fa-user-clock"></i></div>
+        <div class="bc-val" style="color:var(--yellow);">11</div>
+        <div class="bc-lbl">Pending — Client</div>
+        <div class="bc-sub">Awaiting client sign-off</div>
+      </div>
+      <div class="bucket-card">
+        <div class="bc-icon" style="background:rgba(26,183,84,.1);color:var(--green);"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="bc-val" style="color:var(--green);">247</div>
+        <div class="bc-lbl">IFC Released</div>
+        <div class="bc-sub">Issued for Construction</div>
+      </div>
+      <div class="bucket-card alert-bucket">
+        <div class="bc-icon" style="background:rgba(230,48,80,.12);color:var(--red);"><i class="fa-solid fa-code-merge"></i></div>
+        <div class="bc-val" style="color:var(--red);">8</div>
+        <div class="bc-lbl">ECR Open</div>
+        <div class="bc-sub">Engineering Change Requests</div>
+      </div>
+      <div class="bucket-card good-bucket">
+        <div class="bc-icon" style="background:rgba(0,212,176,.1);color:var(--teal);"><i class="fa-solid fa-check-double"></i></div>
+        <div class="bc-val" style="color:var(--teal);">14</div>
+        <div class="bc-lbl">ECR Closed</div>
+        <div class="bc-sub">This month</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="charts-row">
+      <!-- Drawing Pipeline Bar Chart -->
+      <div class="chart-card">
+        <div class="chart-title">Drawing Approval Pipeline</div>
+        <div class="chart-sub">Current stage distribution of all drawings</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label bar-label-left">IFC Released</div>
+            <div class="bar-track"><div class="bar-fill" style="width:79%;background:linear-gradient(90deg,#1ab754,#0ea04a)"><span class="bar-val">247</span></div></div>
+            <div class="bar-val-out">247</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label bar-label-left">Approved</div>
+            <div class="bar-track"><div class="bar-fill" style="width:31%;background:linear-gradient(90deg,#0091ff,#0050cc)"><span class="bar-val">98</span></div></div>
+            <div class="bar-val-out">98</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label bar-label-left">Under Review</div>
+            <div class="bar-track"><div class="bar-fill" style="width:19%;background:linear-gradient(90deg,#9b5de5,#5b67e8)"><span class="bar-val">60</span></div></div>
+            <div class="bar-val-out">60</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label bar-label-left">Awaiting Approval</div>
+            <div class="bar-track"><div class="bar-fill" style="width:7%;background:linear-gradient(90deg,#f5a623,#d08a14)"><span class="bar-val">23</span></div></div>
+            <div class="bar-val-out">23</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label bar-label-left">Pending Client</div>
+            <div class="bar-track"><div class="bar-fill" style="width:4%;background:linear-gradient(90deg,#e63050,#b8002a)"><span class="bar-val">11</span></div></div>
+            <div class="bar-val-out">11</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ECR Donut -->
+      <div class="chart-card">
+        <div class="chart-title">ECR Breakdown by Type</div>
+        <div class="chart-sub">Engineering Change Request classification</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="52" fill="none" stroke="var(--ring-track)" stroke-width="22"/>
+            <!-- Client Initiated: 4/22 = 18% = 65.7° → dasharray=326.7, offset=326.7*(1-0.18)=267.9 -->
+            <circle cx="70" cy="70" r="52" fill="none" stroke="#e63050" stroke-width="22" stroke-dasharray="326.7" stroke-dashoffset="267.9" transform="rotate(-90 70 70)"/>
+            <!-- Internal: 10/22 = 45% = dashoffset=326.7*(1-0.18-0.45)=120.9 -->
+            <circle cx="70" cy="70" r="52" fill="none" stroke="#0091ff" stroke-width="22" stroke-dasharray="326.7" stroke-dashoffset="120.9" transform="rotate(-90 70 70)"/>
+            <!-- Design Change: 8/22 = 36% -->
+            <circle cx="70" cy="70" r="52" fill="none" stroke="#9b5de5" stroke-width="22" stroke-dasharray="326.7" stroke-dashoffset="208.5" transform="rotate(-90 70 70)"/>
+            <text x="70" y="66" text-anchor="middle" font-size="18" font-weight="800" fill="var(--text-h)" font-family="'JetBrains Mono',monospace">22</text>
+            <text x="70" y="82" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="Inter,sans-serif">Total ECRs</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="donut-leg-item"><div class="donut-leg-dot" style="background:#0091ff"></div><span class="donut-leg-lbl">Internal</span><span class="donut-leg-val">10</span></div>
+            <div class="donut-leg-item"><div class="donut-leg-dot" style="background:#9b5de5"></div><span class="donut-leg-lbl">Design Change</span><span class="donut-leg-val">8</span></div>
+            <div class="donut-leg-item"><div class="donut-leg-dot" style="background:#e63050"></div><span class="donut-leg-lbl">Client Initiated</span><span class="donut-leg-val">4</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRAWINGS AWAITING APPROVAL TABLE -->
+    <div class="sec-hdr"><h2 class="sec-title">Drawings Awaiting Approval</h2><div class="sec-line"></div><div class="sec-tag">23 pending</div></div>
+    <div class="chart-card" style="margin-bottom:20px;">
+      <table class="domain-table">
+        <thead>
+          <tr><th>Drawing No.</th><th>Description</th><th>Revision</th><th>Submitted</th><th>Pending With</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>EPC-07</strong></td><td>Heat Exchanger GA Drawing</td><td>Rev.3</td><td>27 Jul 2026</td><td>Client (PMG)</td><td><span class="chip chip-r"><i class="fa-solid fa-circle-exclamation"></i> Overdue 5d</span></td></tr>
+          <tr><td><strong>EPC-12</strong></td><td>Structural Frame Detail</td><td>Rev.1</td><td>30 Jul 2026</td><td>Internal PMG</td><td><span class="chip chip-y"><i class="fa-solid fa-clock"></i> Pending</span></td></tr>
+          <tr><td><strong>EPC-19</strong></td><td>Pressure Vessel Nozzle Layout</td><td>Rev.2</td><td>01 Aug 2026</td><td>Client (L&T ECC)</td><td><span class="chip chip-y"><i class="fa-solid fa-clock"></i> Pending</span></td></tr>
+          <tr><td><strong>EPC-23</strong></td><td>Piping Isometric — Line 4</td><td>Rev.0</td><td>02 Aug 2026</td><td>Process Dept.</td><td><span class="chip chip-b"><i class="fa-solid fa-rotate"></i> In Review</span></td></tr>
+          <tr><td><strong>EPC-31</strong></td><td>Civil Foundation Drawing</td><td>Rev.1</td><td>03 Aug 2026</td><td>Civil Head</td><td><span class="chip chip-b"><i class="fa-solid fa-rotate"></i> In Review</span></td></tr>
+        </tbody>
+      </table>
+      <div style="padding:10px 0 0;font-size:11px;color:var(--text-muted);text-align:right;">Showing 5 of 23 pending drawings &bull; <a href="#" style="color:var(--blue)" onclick="alert('Full list export triggered')">Export all →</a></div>
+    </div>
+
+    <!-- OPEN ECR TABLE -->
+    <div class="sec-hdr"><h2 class="sec-title">Open Engineering Change Requests</h2><div class="sec-line"></div><div class="sec-tag">8 open</div></div>
+    <div class="chart-card" style="margin-bottom:24px;">
+      <table class="domain-table">
+        <thead>
+          <tr><th>ECR No.</th><th>Description</th><th>Type</th><th>Raised By</th><th>Impact</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>ECR-041</strong></td><td>Nozzle orientation change — V-101</td><td><span class="chip chip-r">Client</span></td><td>Client PMG</td><td>+3 drawings affected</td><td><span class="chip chip-y">Open</span></td></tr>
+          <tr><td><strong>ECR-038</strong></td><td>Increase pipe schedule 40→80 on Line 4</td><td><span class="chip chip-b">Internal</span></td><td>Stress Dept.</td><td>+2 days MFG impact</td><td><span class="chip chip-y">Open</span></td></tr>
+          <tr><td><strong>ECR-035</strong></td><td>Foundation depth revision — Bay 3</td><td><span class="chip chip-p">Design</span></td><td>Civil Lead</td><td>+5 days civil</td><td><span class="chip chip-r">Critical</span></td></tr>
+          <tr><td><strong>ECR-033</strong></td><td>Instrument tapping relocation — FT-202</td><td><span class="chip chip-b">Internal</span></td><td>Instrument Dept.</td><td>Minor</td><td><span class="chip chip-b">In Review</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+function toggleTheme(){var h=document.documentElement;var t=h.getAttribute('data-theme');h.setAttribute('data-theme',t==='dark'?'light':'dark');localStorage.setItem('lt-theme',h.getAttribute('data-theme'));}
+(function(){var t=localStorage.getItem('lt-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+function exportDomainCSV(){
+  var dateStr=new Date().toISOString().split('T')[0];
+  var csv=[
+    ['L&T ENGINEERING DOMAIN FULL REPORT'],
+    ['Generated',new Date().toLocaleString()],
+    ['Health Score','82%'],
+    [],
+    ['DRAWING METRICS'],
+    ['Total Drawings','312'],
+    ['Awaiting Approval','23'],
+    ['Pending Client Sign-off','11'],
+    ['IFC Released','247'],
+    ['ECR Open','8'],
+    ['ECR Closed (Month)','14'],
+    [],
+    ['DRAWINGS AWAITING APPROVAL'],
+    ['Drawing No.','Description','Rev','Submitted','Pending With','Status'],
+    ['EPC-07','Heat Exchanger GA Drawing','Rev.3','27 Jul 2026','Client (PMG)','Overdue 5d'],
+    ['EPC-12','Structural Frame Detail','Rev.1','30 Jul 2026','Internal PMG','Pending'],
+    ['EPC-19','Pressure Vessel Nozzle Layout','Rev.2','01 Aug 2026','Client (L&T ECC)','Pending'],
+    ['EPC-23','Piping Isometric — Line 4','Rev.0','02 Aug 2026','Process Dept.','In Review'],
+    ['EPC-31','Civil Foundation Drawing','Rev.1','03 Aug 2026','Civil Head','In Review'],
+    [],
+    ['OPEN ECR'],
+    ['ECR No.','Description','Type','Raised By','Impact','Status'],
+    ['ECR-041','Nozzle orientation change — V-101','Client','Client PMG','+3 drawings affected','Open'],
+    ['ECR-038','Increase pipe schedule 40→80 on Line 4','Internal','Stress Dept.','+2 days MFG impact','Open'],
+    ['ECR-035','Foundation depth revision — Bay 3','Design','Civil Lead','+5 days civil','Critical'],
+    ['ECR-033','Instrument tapping relocation — FT-202','Internal','Instrument Dept.','Minor','In Review'],
+  ];
+  var str=csv.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([str],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='L_and_T_Engineering_Full_Report_'+dateStr+'.csv';
+  document.body.appendChild(link);link.click();document.body.removeChild(link);
+  showToast('Engineering full report downloaded!','success');
+}
+function showToast(msg,type){var cols={success:'#1ab754',error:'#e63050',warn:'#f5a623',info:'#0091ff'};var t=document.createElement('div');t.className='toast';t.innerHTML='<span style="color:'+cols[type]+';font-size:14px">&#x'+{success:'f058',error:'f057',warn:'f071',info:'f05a'}[type]+';</span><span>'+msg+'</span>';var c=document.getElementById('toast-container');c.appendChild(t);setTimeout(function(){t.classList.add('fadeout');setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},320);},3200);}
+</script>
+</body>
+</html>

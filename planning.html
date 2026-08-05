@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Planning Domain | L&T PMG Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.topbar-logo-txt{display:flex;flex-direction:column;}
+.plan-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+@media(max-width:900px){.plan-kpi-row{grid-template-columns:repeat(2,1fr);}}
+.big-progress-card{background:var(--bg-card-solid);border:1px solid var(--border-subtle);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-card);}
+.big-prog-val{font-size:56px;font-weight:900;font-family:'JetBrains Mono',monospace;line-height:1;margin-bottom:4px;}
+.sub-plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+@media(max-width:800px){.sub-plans-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar-logo" href="index.html">
+    <img src="lt-logo.png" alt="L&T"/>
+    <div class="topbar-logo-txt"><div class="topbar-title">L&T PMG</div><div class="topbar-sub">Operational Dashboard</div></div>
+  </a>
+  <div class="topbar-divider"></div>
+  <div style="font-size:12px;color:var(--text-muted);font-weight:500;"><i class="fa-solid fa-calendar-days" style="color:var(--green);margin-right:5px"></i>Planning Domain</div>
+  <div class="topbar-actions">
+    <div class="theme-toggle-wrap">
+      <i class="fa-solid fa-moon theme-icon"></i>
+      <div class="theme-toggle" onclick="toggleTheme()" role="button" aria-label="Toggle theme"></div>
+      <i class="fa-solid fa-sun theme-icon"></i>
+    </div>
+    <button class="btn btn-back" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary" onclick="exportCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+  </div>
+</header>
+
+<div class="domain-page">
+  <div class="domain-page-hdr">
+    <div class="domain-icon-big" style="background:rgba(26,183,84,.1);color:var(--green);">
+      <i class="fa-solid fa-calendar-days"></i>
+    </div>
+    <div class="domain-page-hdr-left">
+      <div class="domain-breadcrumb">
+        <a href="index.html"><i class="fa-solid fa-house"></i> PMG Dashboard</a>
+        <i class="fa-solid fa-chevron-right"></i><span>Planning</span>
+      </div>
+      <div class="domain-page-title">Planning Domain</div>
+      <div class="domain-page-sub">Schedule adherence &middot; Resource planning &middot; 3-week lookahead &middot; Activity tracking</div>
+    </div>
+    <div class="domain-page-hdr-right">
+      <div style="text-align:center;padding:10px 16px;background:rgba(26,183,84,.08);border:1px solid rgba(26,183,84,.2);border-radius:12px;">
+        <div style="font-size:28px;font-weight:900;color:var(--green);font-family:'JetBrains Mono',monospace;">91%</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;">Health Score</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="domain-content">
+
+    <!-- KPI ROW -->
+    <div class="sec-hdr"><h2 class="sec-title">Planning KPIs</h2><div class="sec-line"></div><div class="sec-tag">Live</div></div>
+    <div class="plan-kpi-row">
+      <div class="bucket-card">
+        <div class="bc-icon" style="background:rgba(0,145,255,.1);color:var(--blue);"><i class="fa-solid fa-diagram-project"></i></div>
+        <div class="bc-val" style="color:var(--text-h);">24</div>
+        <div class="bc-lbl">Active Projects</div>
+        <div class="bc-sub">Under PMG governance</div>
+      </div>
+      <div class="bucket-card good-bucket">
+        <div class="bc-icon" style="background:rgba(26,183,84,.1);color:var(--green);"><i class="fa-solid fa-check"></i></div>
+        <div class="bc-val" style="color:var(--green);">218</div>
+        <div class="bc-lbl">Activities On Track</div>
+        <div class="bc-sub">Per WBS baseline</div>
+      </div>
+      <div class="bucket-card alert-bucket">
+        <div class="bc-icon" style="background:rgba(230,48,80,.12);color:var(--red);"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div class="bc-val" style="color:var(--red);">22</div>
+        <div class="bc-lbl">Delayed Activities</div>
+        <div class="bc-sub">Beyond baseline date</div>
+      </div>
+      <div class="bucket-card warn-bucket">
+        <div class="bc-icon" style="background:rgba(155,93,229,.1);color:var(--purple);"><i class="fa-solid fa-people-arrows"></i></div>
+        <div class="bc-val" style="color:var(--yellow);">3</div>
+        <div class="bc-lbl">Resource Conflicts</div>
+        <div class="bc-sub">Crew allocation clashes</div>
+      </div>
+    </div>
+
+    <!-- OVERALL PROGRESS CARD -->
+    <div class="sec-hdr"><h2 class="sec-title">Overall Project Progress</h2><div class="sec-line"></div></div>
+    <div class="big-progress-card">
+      <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:16px;">
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">Overall Schedule Progress</div>
+          <div class="big-prog-val" style="color:var(--green);">67<span style="font-size:28px">%</span></div>
+          <div style="font-size:12px;color:var(--text-muted);">vs. planned 72% &mdash; <span style="color:var(--yellow);font-weight:600;">-5% behind baseline</span></div>
+        </div>
+        <div style="flex:1;max-width:600px;">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:5px;"><span>0%</span><span>Planned: 72%</span><span>100%</span></div>
+          <div style="position:relative;height:20px;background:var(--ring-track);border-radius:10px;overflow:visible;">
+            <div style="height:100%;width:67%;background:linear-gradient(90deg,#1ab754,#0ea04a);border-radius:10px;transition:width 1s ease;"></div>
+            <!-- Planned marker -->
+            <div style="position:absolute;top:-6px;left:72%;width:2px;height:32px;background:var(--yellow);border-radius:2px;"></div>
+            <div style="position:absolute;top:-20px;left:71%;font-size:9.5px;color:var(--yellow);font-weight:700;white-space:nowrap;">Planned 72%</div>
+          </div>
+        </div>
+      </div>
+      <!-- 3-week lookahead -->
+      <div style="padding:12px;background:rgba(0,145,255,.04);border:1px solid rgba(0,145,255,.12);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:12px;font-weight:600;color:var(--blue);"><i class="fa-solid fa-binoculars"></i>&nbsp; 3-Week Lookahead Readiness</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace;">84%</div><div style="font-size:9px;color:var(--text-muted);">Ready</div></div>
+          <div style="text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--yellow);font-family:'JetBrains Mono',monospace;">11%</div><div style="font-size:9px;color:var(--text-muted);">At Risk</div></div>
+          <div style="text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace;">5%</div><div style="font-size:9px;color:var(--text-muted);">Blocked</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUB-PLAN PROGRESS BARS -->
+    <div class="sec-hdr"><h2 class="sec-title">Sub-Plan Progress</h2><div class="sec-line"></div><div class="sec-tag">Gantt-style</div></div>
+    <div class="chart-card" style="margin-bottom:20px;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div><div class="prog-label"><span class="prog-name">Engineering (Drawings & Approvals)</span><span class="prog-pct" style="color:var(--blue)">82%</span></div><div class="prog"><div class="prog-fill" style="width:82%;background:linear-gradient(90deg,#0091ff,#0050cc)"></div></div></div>
+        <div><div class="prog-label"><span class="prog-name">Procurement (PO & Delivery)</span><span class="prog-pct" style="color:var(--yellow)">68%</span></div><div class="prog"><div class="prog-fill" style="width:68%;background:linear-gradient(90deg,#f5a623,#d08a14)"></div></div></div>
+        <div><div class="prog-label"><span class="prog-name">Manufacturing (Shop Fabrication)</span><span class="prog-pct" style="color:var(--red)">59%</span></div><div class="prog"><div class="prog-fill" style="width:59%;background:linear-gradient(90deg,#f0812a,#e63050)"></div></div></div>
+        <div><div class="prog-label"><span class="prog-name">Civil Works (Site Preparation)</span><span class="prog-pct" style="color:var(--green)">88%</span></div><div class="prog"><div class="prog-fill" style="width:88%;background:linear-gradient(90deg,#1ab754,#0ea04a)"></div></div></div>
+        <div><div class="prog-label"><span class="prog-name">Erection & Assembly</span><span class="prog-pct" style="color:var(--purple)">71%</span></div><div class="prog"><div class="prog-fill" style="width:71%;background:linear-gradient(90deg,#9b5de5,#5b67e8)"></div></div></div>
+        <div><div class="prog-label"><span class="prog-name">Piping Works</span><span class="prog-pct" style="color:var(--cyan)">62%</span></div><div class="prog"><div class="prog-fill" style="width:62%;background:linear-gradient(90deg,#00c8f0,#0091ff)"></div></div></div>
+        <div><div class="prog-label"><span class="prog-name">Electrical &amp; Instrumentation</span><span class="prog-pct" style="color:var(--teal)">54%</span></div><div class="prog"><div class="prog-fill" style="width:54%;background:linear-gradient(90deg,#00d4b0,#0091ff)"></div></div></div>
+        <div><div class="prog-label"><span class="prog-name">Quality Inspections</span><span class="prog-pct" style="color:var(--teal)">77%</span></div><div class="prog"><div class="prog-fill" style="width:77%;background:linear-gradient(90deg,#00d4b0,#1ab754)"></div></div></div>
+      </div>
+    </div>
+
+    <!-- DELAYED ACTIVITIES LIST -->
+    <div class="sec-hdr"><h2 class="sec-title">Delayed Activities</h2><div class="sec-line"></div><div class="sec-tag" style="background:rgba(230,48,80,.08);color:var(--red);border-color:rgba(230,48,80,.2);">22 delayed</div></div>
+    <div class="item-list" style="margin-bottom:24px;">
+      <div class="item-row"><div class="item-row-left"><div class="item-name">MFG-12 — Pressure Vessel Fabrication</div><div class="item-sub">Manufacturing &bull; Responsible: RK Sharma &bull; Delay reason: Material shortage (PROC-23)</div></div><div class="item-row-right"><span class="chip chip-r">+18d</span></div></div>
+      <div class="item-row"><div class="item-row-left"><div class="item-name">PROC-23 — Valve Procurement Closure</div><div class="item-sub">Procurement &bull; Responsible: MN Kumar &bull; Delay reason: Vendor (Kirloskar) late delivery</div></div><div class="item-row-right"><span class="chip chip-r">+9d</span></div></div>
+      <div class="item-row"><div class="item-row-left"><div class="item-name">EPC-07 — HE Drawing Approval</div><div class="item-sub">Engineering &bull; Responsible: AS Rao &bull; Delay reason: Client sign-off pending</div></div><div class="item-row-right"><span class="chip chip-y">+5d</span></div></div>
+      <div class="item-row"><div class="item-row-left"><div class="item-name">PLN-11 — Resource Rebalancing Plan</div><div class="item-sub">Planning &bull; Responsible: SK Das &bull; Delay reason: Welding crew conflict — Wk30</div></div><div class="item-row-right"><span class="chip chip-y">+2d</span></div></div>
+      <div class="item-row"><div class="item-row-left"><div class="item-name">ELE-04 — MCC Panel Installation</div><div class="item-sub">Electrical &bull; Responsible: VR Naik &bull; Delay reason: Civil work not handed over</div></div><div class="item-row-right"><span class="chip chip-y">+4d</span></div></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script>
+function toggleTheme(){var h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');localStorage.setItem('lt-theme',h.getAttribute('data-theme'));}
+(function(){document.documentElement.setAttribute('data-theme',localStorage.getItem('lt-theme')||'light');})();
+function exportCSV(){
+  var d=new Date().toISOString().split('T')[0];
+  var csv=[['L&T PLANNING DOMAIN FULL REPORT'],['Generated',new Date().toLocaleString()],['Health Score','91%'],[],
+    ['PLANNING KPIs'],['Active Projects','24'],['Activities On Track','218'],['Delayed Activities','22'],['Resource Conflicts','3'],[],
+    ['OVERALL PROGRESS'],['Overall Schedule Progress','67%'],['Planned Progress','72%'],['Variance','-5%'],[],
+    ['SUB-PLAN PROGRESS'],['Plan','Progress'],['Engineering','82%'],['Procurement','68%'],['Manufacturing','59%'],['Civil Works','88%'],['Erection & Assembly','71%'],['Piping Works','62%'],['Electrical & Instrumentation','54%'],['Quality Inspections','77%'],[],
+    ['DELAYED ACTIVITIES'],['Activity','Domain','Owner','Delay','Reason'],
+    ['MFG-12 — Pressure Vessel Fabrication','Manufacturing','RK Sharma','+18d','Material shortage (PROC-23)'],
+    ['PROC-23 — Valve Procurement Closure','Procurement','MN Kumar','+9d','Vendor late delivery'],
+    ['EPC-07 — HE Drawing Approval','Engineering','AS Rao','+5d','Client sign-off pending'],
+    ['PLN-11 — Resource Rebalancing Plan','Planning','SK Das','+2d','Welding crew conflict'],
+    ['ELE-04 — MCC Panel Installation','Electrical','VR Naik','+4d','Civil not handed over'],
+  ];
+  var str=csv.map(function(r){return r.map(function(c){return '"'+(c+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([str],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='L_and_T_Planning_Full_Report_'+d+'.csv';
+  document.body.appendChild(link);link.click();document.body.removeChild(link);
+  showToast('Planning report downloaded!','success');
+}
+function showToast(m,t){var c=document.getElementById('toast-container');var d=document.createElement('div');d.className='toast';d.innerHTML='<span style="color:'+{success:'#1ab754',error:'#e63050'}[t]+'">&#xf058;</span><span>'+m+'</span>';c.appendChild(d);setTimeout(function(){d.classList.add('fadeout');setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},320);},3200);}
+</script>
+</body>
+</html>
