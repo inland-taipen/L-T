@@ -797,6 +797,24 @@ function verifyPasscode(){
     <div class="ss-item ss-sync" style="border-right:none;margin-left:auto"><i class="fa-solid fa-rotate fa-spin"></i>Live &middot; <span id="lastUpdate">just now</span></div>
   </div>
 
+  <!-- GLOSSARY & MANAGER QUICK GUIDE -->
+  <div class="glossary-card" style="margin-top:14px;margin-bottom:18px;">
+    <div class="glossary-hdr">
+      <i class="fa-solid fa-book-open glossary-hdr-icon"></i>
+      <span class="glossary-hdr-title">Manager's Quick Guide &amp; Term Glossary</span>
+      <span class="glossary-hdr-hint">— hover over any underlined term across the dashboard for instant explanations &bull; click any card for full details</span>
+    </div>
+    <div class="glossary-grid">
+      <div class="gterm"><span class="gterm-abbr">Escalation</span><span class="gterm-sep">—</span><span class="gterm-def">Operational blocker raised to PMG/Director for formal decision &amp; resource approval</span></div>
+      <div class="gterm"><span class="gterm-abbr">Critical Path</span><span class="gterm-sep">—</span><span class="gterm-def">Sequence of dependent tasks — any delay directly pushes back final completion</span></div>
+      <div class="gterm"><span class="gterm-abbr">Schedule Exposure</span><span class="gterm-sep">—</span><span class="gterm-def">Total cumulative days of delay across critical activities (+37d current exposure)</span></div>
+      <div class="gterm"><span class="gterm-abbr">Overload Risk</span><span class="gterm-sep">—</span><span class="gterm-def">% above planned crew capacity — >80% increases defect rates &amp; fatigue</span></div>
+      <div class="gterm"><span class="gterm-abbr">Material Risk</span><span class="gterm-sep">—</span><span class="gterm-def">Risk of shop floor fabrication stoppage due to vendor delivery delays</span></div>
+      <div class="gterm"><span class="gterm-abbr">Quality Risk</span><span class="gterm-sep">—</span><span class="gterm-def">Inspection backlog or non-conformance rate threatening final handover clearance</span></div>
+      <div class="gterm"><span class="gterm-abbr">PMG</span><span class="gterm-sep">—</span><span class="gterm-def">Project Management Group (central governance authority across all 6 domains)</span></div>
+    </div>
+  </div>
+
   <!-- KPI GRID (Ordered by Executive Priority: Action Needed → Risk → Overview) -->
   <div class="kpi-grid">
     <!-- P1: Active Escalations -->
@@ -963,7 +981,7 @@ function verifyPasscode(){
       <div id="hmSummaryView" style="display:block;">
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;">
           <!-- Top Risk 1 -->
-          <div style="padding:14px;background:rgba(230,48,80,.05);border:1px solid rgba(230,48,80,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="showToast('Welding Crew — Critical Overload Risk (90%)','error')">
+          <div style="padding:14px;background:rgba(230,48,80,.05);border:1px solid rgba(230,48,80,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="openModal('resource-welding')" data-tip="Click for full Welding Crew risk breakdown">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
               <span style="font-size:12.5px;font-weight:800;color:var(--text-h);">1. Welding Crew</span>
               <span style="font-size:10px;font-weight:800;color:var(--red);background:rgba(230,48,80,.15);padding:2px 7px;border-radius:4px;">90% OVERLOAD</span>
@@ -973,7 +991,7 @@ function verifyPasscode(){
             <div style="height:6px;background:var(--ring-track);border-radius:3px;overflow:hidden;"><div style="height:100%;width:90%;background:linear-gradient(90deg,#e63050,#b8002a);border-radius:3px;"></div></div>
           </div>
           <!-- Top Risk 2 -->
-          <div style="padding:14px;background:rgba(240,129,42,.05);border:1px solid rgba(240,129,42,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="showToast('Procurement Officers — Critical Material Risk (88%)','error')">
+          <div style="padding:14px;background:rgba(240,129,42,.05);border:1px solid rgba(240,129,42,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="openModal('resource-procurement')" data-tip="Click for full Procurement Officers risk breakdown">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
               <span style="font-size:12.5px;font-weight:800;color:var(--text-h);">2. Procurement Officers</span>
               <span style="font-size:10px;font-weight:800;color:var(--orange);background:rgba(240,129,42,.15);padding:2px 7px;border-radius:4px;">88% MATERIAL</span>
@@ -983,7 +1001,7 @@ function verifyPasscode(){
             <div style="height:6px;background:var(--ring-track);border-radius:3px;overflow:hidden;"><div style="height:100%;width:88%;background:linear-gradient(90deg,#f0812a,#e63050);border-radius:3px;"></div></div>
           </div>
           <!-- Top Risk 3 -->
-          <div style="padding:14px;background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="showToast('QC Inspectors — Critical Quality Risk (82%)','warn')">
+          <div style="padding:14px;background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.2);border-radius:var(--radius-sm);cursor:pointer;" onclick="openModal('resource-qc')" data-tip="Click for full QC Inspectors risk breakdown">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
               <span style="font-size:12.5px;font-weight:800;color:var(--text-h);">3. QC Inspectors</span>
               <span style="font-size:10px;font-weight:800;color:var(--yellow);background:rgba(245,166,35,.15);padding:2px 7px;border-radius:4px;">82% QUALITY</span>
@@ -2109,6 +2127,21 @@ function openModal(type){
     'pmg-decisions':{title:'Pending PMG Decisions (8)',body:'<div style="display:flex;flex-direction:column;gap:8px">'+[['Approve MFG-12 recovery plan budget','Critical','2d overdue'],['Alternate vendor approval PROC-23 (Audco)','High','1d overdue'],['Welding crew reallocation PLN-07','Medium','Due today'],['QA protocol scale-up to MFG domain','Medium','Due Jul 26'],['Engineering-Client escalation EPC-07','Medium','Due Jul 22'],['NCR-07 repair authorization','Low','Due Jul 25'],['Wk31 overtime schedule approval','Low','Due Jul 25'],['Risk registry review Q3','Low','Due Aug 1']].map(function(d){return '<div class="ms-item" onclick="showToast(\'Decision logged: \'+this.querySelector(\'.ms-name\').textContent,\'success\')"><div class="ms-info"><div class="ms-name">'+d[0]+'</div><div class="ms-meta">Severity: '+d[1]+' &middot; '+d[2]+'</div></div><button class="btn btn-primary" style="padding:4px 10px;font-size:10.5px" onclick="event.stopPropagation();showToast(\'Decision approved\',\'success\')">Approve</button></div>';}).join('')+'</div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Close</button>'},
     governance:{title:'Governance Actions',body:'<div style="font-size:13px;color:var(--text-p);line-height:1.7">5 governance actions requiring PMG attention:<br><br>1. Risk mitigation plan for MFG-12<br>2. Vendor performance review — Kirloskar<br>3. Cross-domain sync protocol update<br>4. Q3 schedule exposure report<br>5. AI recommendation review session</div>',footer:'<button class="btn btn-outline" onclick="closeModal()">Close</button>'},
     meetings:{title:'Review Meetings This Week',body:'<div style="display:flex;flex-direction:column;gap:9px">'+[['Operational Review Meeting (ORM)','Mon Jul 28, 10:00 AM','PMG Lead + All Domain Heads','Conference Room 3A'],['MFG-12 Recovery Plan Review','Tue Jul 29, 2:00 PM','PMG + Manufacturing + Director','Video Call'],['Vendor Evaluation — PROC-23','Wed Jul 30, 11:00 AM','PMG + Procurement + VP Supply','Conference Room 1B']].map(function(m){return '<div class="ms-item"><div class="ms-ico" style="background:rgba(0,145,255,.1);color:var(--blue)"><i class="fa-solid fa-calendar"></i></div><div class="ms-info"><div class="ms-name">'+m[0]+'</div><div class="ms-meta">'+m[1]+' &middot; '+m[2]+'<br>'+m[3]+'</div></div></div>';}).join('')+'</div>',footer:'<button class="btn btn-primary" onclick="showToast(\"Meeting reminders set\",\"success\");closeModal()"><i class="fa-solid fa-bell"></i> Set Reminders</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'},
+    'resource-welding':{
+      title:'Critical Resource Breakdown — Welding Crew',
+      body:'<div style="padding:14px;background:rgba(230,48,80,.06);border:1px solid rgba(230,48,80,.2);border-radius:8px;margin-bottom:14px"><div style="font-size:13px;font-weight:800;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-fire"></i> 90% Capacity Overload — Vessel Bay 1 &amp; 2</div><div style="font-size:12px;color:var(--text-p);line-height:1.5">22 welders assigned. Peak load during Wk30-31 pressure vessel welding. Sustained overutilization increases NCR risk by 23%.</div></div><div class="dinfo-row"><span class="dinfo-lbl">Schedule Risk</span><span class="dinfo-val" style="color:var(--red)">85% (Critical)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Overload Risk</span><span class="dinfo-val" style="color:var(--red)">90% (Critical)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Material Risk</span><span class="dinfo-val" style="color:var(--orange)">70% (High)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Quality Risk</span><span class="dinfo-val" style="color:var(--orange)">65% (High)</span></div><div style="margin-top:14px;padding:10px;background:var(--table-stripe);border-radius:6px;border:1px solid var(--border-subtle)"><div style="font-size:11px;font-weight:700;color:var(--text-h);margin-bottom:4px">💡 Manager Action Recommendation</div><div style="font-size:11px;color:var(--text-muted);line-height:1.4">Reallocate 4 certified welders from Site Erection PLN-07 to Vessel Bay 1 for 10 days. Mandatory overtime approved by PMG.</div></div>',
+      footer:'<button class="btn btn-primary" onclick="showToast(\"Welding crew reallocation requested!\",\"success\");closeModal()"><i class="fa-solid fa-user-plus"></i> Approve Reallocation</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'
+    },
+    'resource-procurement':{
+      title:'Critical Resource Breakdown — Procurement Officers',
+      body:'<div style="padding:14px;background:rgba(240,129,42,.06);border:1px solid rgba(240,129,42,.2);border-radius:8px;margin-bottom:14px"><div style="font-size:13px;font-weight:800;color:var(--orange);margin-bottom:6px"><i class="fa-solid fa-truck-fast"></i> 88% Material Risk — PO-23 Valve Shortage</div><div style="font-size:12px;color:var(--text-p);line-height:1.5">Kirloskar control valve delivery delayed by 9 days. MFG-12 pressure vessel assembly is currently held in Vessel Bay.</div></div><div class="dinfo-row"><span class="dinfo-lbl">Material Risk</span><span class="dinfo-val" style="color:var(--red)">88% (Critical)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Schedule Risk</span><span class="dinfo-val" style="color:var(--orange)">72% (High)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Overload Risk</span><span class="dinfo-val" style="color:var(--orange)">60% (High)</span></div><div style="margin-top:14px;padding:10px;background:var(--table-stripe);border-radius:6px;border:1px solid var(--border-subtle)"><div style="font-size:11px;font-weight:700;color:var(--text-h);margin-bottom:4px">💡 Manager Action Recommendation</div><div style="font-size:11px;color:var(--text-muted);line-height:1.4">Approve alternate vendor Audco quote (3-day delivery window). Procurement officer assigned for daily expediting.</div></div>',
+      footer:'<button class="btn btn-primary" onclick="goTo(\'procurement.html\')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Procurement Page</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'
+    },
+    'resource-qc':{
+      title:'Critical Resource Breakdown — QC Inspectors',
+      body:'<div style="padding:14px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);border-radius:8px;margin-bottom:14px"><div style="font-size:13px;font-weight:800;color:var(--yellow);margin-bottom:6px"><i class="fa-solid fa-shield-check"></i> 82% Quality Risk — Re-inspection Backlog</div><div style="font-size:12px;color:var(--text-p);line-height:1.5">Re-qualification queue backlog following NCR-07 dimensional non-conformance.</div></div><div class="dinfo-row"><span class="dinfo-lbl">Quality Risk</span><span class="dinfo-val" style="color:var(--red)">82% (Critical)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Overload Risk</span><span class="dinfo-val" style="color:var(--orange)">78% (High)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Schedule Risk</span><span class="dinfo-val" style="color:var(--orange)">62% (High)</span></div><div style="margin-top:14px;padding:10px;background:var(--table-stripe);border-radius:6px;border:1px solid var(--border-subtle)"><div style="font-size:11px;font-weight:700;color:var(--text-h);margin-bottom:4px">💡 Manager Action Recommendation</div><div style="font-size:11px;color:var(--text-muted);line-height:1.4">Deploy 2 additional QC inspectors for weekend re-qualification testing to clear 72-hour backlog.</div></div>',
+      footer:'<button class="btn btn-primary" onclick="goTo(\'quality.html\')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Quality Page</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'
+    },
   };
 
   var m=modals[type];
