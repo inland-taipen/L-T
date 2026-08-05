@@ -13,6 +13,19 @@
 .domain-stat-hero { display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;gap:14px;margin-bottom:24px; }
 @media(max-width:1100px){.domain-stat-hero{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:700px){.domain-stat-hero{grid-template-columns:repeat(2,1fr);}}
+
+/* TOOLTIP */
+.has-tip { position:relative; cursor:help; border-bottom:1px dashed var(--text-muted); }
+.has-tip::after { content:attr(data-tip); position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%); background:var(--bg-card-solid); border:1px solid var(--border-main); padding:5px 10px; border-radius:7px; font-size:11px; color:var(--text-h); white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .2s; z-index:100; box-shadow:0 4px 16px rgba(0,0,0,.15); font-weight:500; font-style:normal; }
+.has-tip:hover::after { opacity:1; }
+
+/* GLOSSARY CARD */
+.glossary-card { background:var(--bg-card-solid); border:1px solid var(--border-subtle); border-radius:var(--radius); padding:14px 18px; margin-bottom:20px; box-shadow:var(--shadow-card); }
+.glossary-grid { display:flex; flex-wrap:wrap; gap:6px 20px; margin-top:8px; }
+.gterm { display:flex; align-items:baseline; gap:5px; font-size:11.5px; }
+.gterm-abbr { font-weight:800; color:var(--blue); font-family:'JetBrains Mono',monospace; font-size:11px; }
+.gterm-sep { color:var(--text-muted); font-size:10px; }
+.gterm-def { color:var(--text-p); }
 </style>
 </head>
 <body>
@@ -67,6 +80,29 @@
   <!-- CONTENT -->
   <div class="domain-content">
 
+    <!-- GLOSSARY OF TERMS -->
+    <div class="glossary-card">
+      <div style="display:flex;align-items:center;gap:7px;">
+        <i class="fa-solid fa-book-open" style="color:var(--blue);font-size:13px"></i>
+        <span style="font-size:12px;font-weight:700;color:var(--text-h);">Glossary of Terms</span>
+        <span style="font-size:10.5px;color:var(--text-muted);margin-left:4px;">Hover over any underlined term in the page for a quick explanation</span>
+      </div>
+      <div class="glossary-grid">
+        <div class="gterm"><span class="gterm-abbr">IFC</span><span class="gterm-sep">—</span><span class="gterm-def">Issued for Construction (drawing approved &amp; released to site)</span></div>
+        <div class="gterm"><span class="gterm-abbr">ECR</span><span class="gterm-sep">—</span><span class="gterm-def">Engineering Change Request (formal request to modify an approved design)</span></div>
+        <div class="gterm"><span class="gterm-abbr">EPC</span><span class="gterm-sep">—</span><span class="gterm-def">Engineering, Procurement &amp; Construction (project delivery model)</span></div>
+        <div class="gterm"><span class="gterm-abbr">GA</span><span class="gterm-sep">—</span><span class="gterm-def">General Arrangement Drawing (shows overall layout &amp; key dimensions)</span></div>
+        <div class="gterm"><span class="gterm-abbr">Rev.</span><span class="gterm-sep">—</span><span class="gterm-def">Revision (version number — higher = more recent update to the drawing)</span></div>
+        <div class="gterm"><span class="gterm-abbr">PMG</span><span class="gterm-sep">—</span><span class="gterm-def">Project Management Group (governance &amp; approval authority)</span></div>
+        <div class="gterm"><span class="gterm-abbr">P&amp;ID</span><span class="gterm-sep">—</span><span class="gterm-def">Piping &amp; Instrumentation Diagram (shows process flow, pipes, valves &amp; instruments)</span></div>
+        <div class="gterm"><span class="gterm-abbr">MFG</span><span class="gterm-sep">—</span><span class="gterm-def">Manufacturing (shop floor fabrication activities)</span></div>
+        <div class="gterm"><span class="gterm-abbr">ECC</span><span class="gterm-sep">—</span><span class="gterm-def">Engineering Construction &amp; Contracts (L&amp;T's infrastructure division)</span></div>
+        <div class="gterm"><span class="gterm-abbr">FT-202</span><span class="gterm-sep">—</span><span class="gterm-def">Flow Transmitter tag no. 202 (instrument tag per P&amp;ID numbering)</span></div>
+        <div class="gterm"><span class="gterm-abbr">V-101</span><span class="gterm-sep">—</span><span class="gterm-def">Vessel tag no. 101 (equipment tag per plot plan / PFD)</span></div>
+        <div class="gterm"><span class="gterm-abbr">NCR</span><span class="gterm-sep">—</span><span class="gterm-def">Non-Conformance Report (raised when work does not meet spec)</span></div>
+      </div>
+    </div>
+
     <!-- BUCKET METRICS -->
     <div class="sec-hdr"><h2 class="sec-title">Drawing Pipeline Metrics</h2><div class="sec-line"></div><div class="sec-tag">Live</div></div>
     <div class="domain-stat-hero">
@@ -91,20 +127,20 @@
       <div class="bucket-card">
         <div class="bc-icon" style="background:rgba(26,183,84,.1);color:var(--green);"><i class="fa-solid fa-circle-check"></i></div>
         <div class="bc-val" style="color:var(--green);">247</div>
-        <div class="bc-lbl">IFC Released</div>
-        <div class="bc-sub">Issued for Construction</div>
+        <div class="bc-lbl"><span class="has-tip" data-tip="Issued for Construction — drawing approved &amp; released for site use">IFC</span> Released</div>
+        <div class="bc-sub">Approved &amp; handed to site</div>
       </div>
       <div class="bucket-card alert-bucket">
         <div class="bc-icon" style="background:rgba(230,48,80,.12);color:var(--red);"><i class="fa-solid fa-code-merge"></i></div>
         <div class="bc-val" style="color:var(--red);">8</div>
-        <div class="bc-lbl">ECR Open</div>
-        <div class="bc-sub">Engineering Change Requests</div>
+        <div class="bc-lbl"><span class="has-tip" data-tip="Engineering Change Request — formal request to modify an approved design">ECR</span> Open</div>
+        <div class="bc-sub">Design modifications pending closure</div>
       </div>
       <div class="bucket-card good-bucket">
         <div class="bc-icon" style="background:rgba(0,212,176,.1);color:var(--teal);"><i class="fa-solid fa-check-double"></i></div>
         <div class="bc-val" style="color:var(--teal);">14</div>
-        <div class="bc-lbl">ECR Closed</div>
-        <div class="bc-sub">This month</div>
+        <div class="bc-lbl"><span class="has-tip" data-tip="Engineering Change Request — closed means design updated &amp; re-approved">ECR</span> Closed</div>
+        <div class="bc-sub">Change requests resolved this month</div>
       </div>
     </div>
 
@@ -214,31 +250,108 @@
     <div class="chart-card" style="margin-bottom:20px;">
       <table class="domain-table">
         <thead>
-          <tr><th>Drawing No.</th><th>Description</th><th>Revision</th><th>Submitted</th><th>Pending With</th><th>Status</th></tr>
+          <tr>
+            <th title="Drawing reference number (EPC = Engineering, Procurement &amp; Construction package)">Drawing No. ⓘ</th>
+            <th>Description</th>
+            <th title="Revision — version of the drawing (Rev.0 = first issue, higher = updated)">Rev. ⓘ</th>
+            <th>Submitted</th>
+            <th title="The person or team currently holding the drawing for review/sign-off">Pending With ⓘ</th>
+            <th>Status</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td><strong>EPC-07</strong></td><td>Heat Exchanger GA Drawing</td><td>Rev.3</td><td>27 Jul 2026</td><td>Client (PMG)</td><td><span class="chip chip-r"><i class="fa-solid fa-circle-exclamation"></i> Overdue 5d</span></td></tr>
-          <tr><td><strong>EPC-12</strong></td><td>Structural Frame Detail</td><td>Rev.1</td><td>30 Jul 2026</td><td>Internal PMG</td><td><span class="chip chip-y"><i class="fa-solid fa-clock"></i> Pending</span></td></tr>
-          <tr><td><strong>EPC-19</strong></td><td>Pressure Vessel Nozzle Layout</td><td>Rev.2</td><td>01 Aug 2026</td><td>Client (L&T ECC)</td><td><span class="chip chip-y"><i class="fa-solid fa-clock"></i> Pending</span></td></tr>
-          <tr><td><strong>EPC-23</strong></td><td>Piping Isometric — Line 4</td><td>Rev.0</td><td>02 Aug 2026</td><td>Process Dept.</td><td><span class="chip chip-b"><i class="fa-solid fa-rotate"></i> In Review</span></td></tr>
-          <tr><td><strong>EPC-31</strong></td><td>Civil Foundation Drawing</td><td>Rev.1</td><td>03 Aug 2026</td><td>Civil Head</td><td><span class="chip chip-b"><i class="fa-solid fa-rotate"></i> In Review</span></td></tr>
+          <tr>
+            <td><strong title="EPC-07: Heat Exchanger drawing package, item 07">EPC-07</strong></td>
+            <td><span class="has-tip" data-tip="GA = General Arrangement Drawing — shows overall layout and key dimensions of the heat exchanger">Heat Exchanger GA Drawing</span></td>
+            <td title="Third revision — two earlier versions were reviewed and revised">Rev.3</td>
+            <td>27 Jul 2026</td>
+            <td><span class="has-tip" data-tip="PMG = Project Management Group — the client-side governance authority responsible for approval">Client (PMG)</span></td>
+            <td><span class="chip chip-r"><i class="fa-solid fa-circle-exclamation"></i> Overdue 5d</span></td>
+          </tr>
+          <tr>
+            <td><strong title="EPC-12: Structural drawing package, item 12">EPC-12</strong></td>
+            <td>Structural Frame Detail</td>
+            <td title="First revision — initial issue submitted for approval">Rev.1</td>
+            <td>30 Jul 2026</td>
+            <td><span class="has-tip" data-tip="PMG internal team — being reviewed within the project management group before external sign-off">Internal PMG</span></td>
+            <td><span class="chip chip-y"><i class="fa-solid fa-clock"></i> Pending</span></td>
+          </tr>
+          <tr>
+            <td><strong title="EPC-19: Pressure vessel drawing package, item 19">EPC-19</strong></td>
+            <td>Pressure Vessel Nozzle Layout</td>
+            <td title="Second revision">Rev.2</td>
+            <td>01 Aug 2026</td>
+            <td><span class="has-tip" data-tip="L&amp;T ECC = L&amp;T Engineering, Construction &amp; Contracts division — the client entity for this package">Client (L&amp;T ECC)</span></td>
+            <td><span class="chip chip-y"><i class="fa-solid fa-clock"></i> Pending</span></td>
+          </tr>
+          <tr>
+            <td><strong title="EPC-23: Piping drawing package, item 23">EPC-23</strong></td>
+            <td><span class="has-tip" data-tip="Piping Isometric = 3D pipe routing diagram showing bends, fittings and weld joints for a specific line number">Piping Isometric — Line 4</span></td>
+            <td title="First issue — no revisions yet">Rev.0</td>
+            <td>02 Aug 2026</td>
+            <td>Process Dept.</td>
+            <td><span class="chip chip-b"><i class="fa-solid fa-rotate"></i> In Review</span></td>
+          </tr>
+          <tr>
+            <td><strong title="EPC-31: Civil drawing package, item 31">EPC-31</strong></td>
+            <td>Civil Foundation Drawing</td>
+            <td title="First revision">Rev.1</td>
+            <td>03 Aug 2026</td>
+            <td>Civil Head</td>
+            <td><span class="chip chip-b"><i class="fa-solid fa-rotate"></i> In Review</span></td>
+          </tr>
         </tbody>
       </table>
       <div style="padding:10px 0 0;font-size:11px;color:var(--text-muted);text-align:right;">Showing 5 of 23 pending drawings &bull; <a href="#" style="color:var(--blue)" onclick="alert('Full list export triggered')">Export all →</a></div>
     </div>
 
     <!-- OPEN ECR TABLE -->
-    <div class="sec-hdr"><h2 class="sec-title">Open Engineering Change Requests</h2><div class="sec-line"></div><div class="sec-tag">8 open</div></div>
+    <div class="sec-hdr"><h2 class="sec-title">Open <span class="has-tip" data-tip="ECR = Engineering Change Request — a formal document to revise an already-approved design">ECR</span>s — Engineering Change Requests</h2><div class="sec-line"></div><div class="sec-tag">8 open</div></div>
     <div class="chart-card" style="margin-bottom:24px;">
       <table class="domain-table">
         <thead>
-          <tr><th>ECR No.</th><th>Description</th><th>Type</th><th>Raised By</th><th>Impact</th><th>Status</th></tr>
+          <tr>
+            <th title="ECR serial number">ECR No.</th>
+            <th>Description</th>
+            <th title="Client = requested by client. Internal = raised by engineering team. Design = triggered by a design finding.">Type ⓘ</th>
+            <th>Raised By</th>
+            <th title="Impact on other drawings, schedule or downstream activities">Impact ⓘ</th>
+            <th>Status</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td><strong>ECR-041</strong></td><td>Nozzle orientation change — V-101</td><td><span class="chip chip-r">Client</span></td><td>Client PMG</td><td>+3 drawings affected</td><td><span class="chip chip-y">Open</span></td></tr>
-          <tr><td><strong>ECR-038</strong></td><td>Increase pipe schedule 40→80 on Line 4</td><td><span class="chip chip-b">Internal</span></td><td>Stress Dept.</td><td>+2 days MFG impact</td><td><span class="chip chip-y">Open</span></td></tr>
-          <tr><td><strong>ECR-035</strong></td><td>Foundation depth revision — Bay 3</td><td><span class="chip chip-p">Design</span></td><td>Civil Lead</td><td>+5 days civil</td><td><span class="chip chip-r">Critical</span></td></tr>
-          <tr><td><strong>ECR-033</strong></td><td>Instrument tapping relocation — FT-202</td><td><span class="chip chip-b">Internal</span></td><td>Instrument Dept.</td><td>Minor</td><td><span class="chip chip-b">In Review</span></td></tr>
+          <tr>
+            <td><strong>ECR-041</strong></td>
+            <td><span class="has-tip" data-tip="V-101 = Vessel tag number 101 per equipment list. Nozzle = pipe connection point on the vessel.">Nozzle orientation change — V-101</span></td>
+            <td><span class="chip chip-r" title="Client-initiated: the client has requested this design change">Client</span></td>
+            <td><span class="has-tip" data-tip="PMG = Project Management Group — client's governance team">Client PMG</span></td>
+            <td>+3 drawings affected</td>
+            <td><span class="chip chip-y">Open</span></td>
+          </tr>
+          <tr>
+            <td><strong>ECR-038</strong></td>
+            <td><span class="has-tip" data-tip="Pipe schedule = wall thickness standard (Sch 40 is thinner; Sch 80 is heavier-duty, required for higher pressure)">Increase pipe schedule 40→80 on Line 4</span></td>
+            <td><span class="chip chip-b" title="Internal: raised by the engineering team based on stress analysis findings">Internal</span></td>
+            <td><span class="has-tip" data-tip="Stress Dept. = Piping stress analysis team — validates pipe flexibility and load distribution">Stress Dept.</span></td>
+            <td><span class="has-tip" data-tip="MFG = Manufacturing — heavier pipe means different procurement &amp; shop fabrication time">+2 days MFG impact</span></td>
+            <td><span class="chip chip-y">Open</span></td>
+          </tr>
+          <tr>
+            <td><strong>ECR-035</strong></td>
+            <td>Foundation depth revision — Bay 3</td>
+            <td><span class="chip chip-p" title="Design-triggered: a finding during detailed design required this change">Design</span></td>
+            <td>Civil Lead</td>
+            <td>+5 days civil</td>
+            <td><span class="chip chip-r">Critical</span></td>
+          </tr>
+          <tr>
+            <td><strong>ECR-033</strong></td>
+            <td><span class="has-tip" data-tip="FT-202 = Flow Transmitter tag no. 202 (per P&amp;ID). Tapping = the physical connection point on the pipe where the instrument is mounted.">Instrument tapping relocation — FT-202</span></td>
+            <td><span class="chip chip-b" title="Internal: raised by instrumentation team">Internal</span></td>
+            <td><span class="has-tip" data-tip="Instrument Dept. = the instrumentation &amp; control engineering team">Instrument Dept.</span></td>
+            <td>Minor</td>
+            <td><span class="chip chip-b">In Review</span></td>
+          </tr>
         </tbody>
       </table>
     </div>
