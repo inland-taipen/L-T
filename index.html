@@ -843,11 +843,11 @@ function verifyPasscode(){
     </div>
   </div>
 
-  <!-- ═══ PRIORITY 1: CRITICAL ESCALATIONS & BOTTLENECKS ═══ -->
+  <!-- ═══ TIER 1: CRITICAL ESCALATIONS & BOTTLENECKS ═══ -->
   <div class="sec-hdr" id="sec-p1">
-    <h2 class="sec-title"><span style="color:var(--red);font-weight:900;">P1</span> &middot; Active Escalations &amp; Critical Bottlenecks</h2>
+    <h2 class="sec-title"><span style="background:var(--red);color:#fff;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:900;margin-right:6px;">TIER 1</span> Active Escalations &amp; Critical Bottlenecks</h2>
     <div class="sec-line"></div>
-    <div class="sec-tag" style="background:rgba(230,48,80,.1);color:var(--red);border-color:rgba(230,48,80,.3);font-weight:700;">IMMEDIATE ACTION REQUIRED</div>
+    <div class="sec-tag" style="background:rgba(230,48,80,.12);color:var(--red);border-color:rgba(230,48,80,.3);font-weight:800;">🔴 ACTION REQUIRED NOW</div>
   </div>
   <div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
     <!-- Escalation Monitor Card -->
@@ -941,17 +941,17 @@ function verifyPasscode(){
     </div>
   </div>
 
-  <!-- ═══ PRIORITY 2: RESOURCE RISK HEATMAP ═══ -->
+  <!-- ═══ TIER 2: RESOURCE RISK EXPOSURE ═══ -->
   <div class="sec-hdr" id="sec-heatmap">
-    <h2 class="sec-title"><span style="color:var(--orange);font-weight:900;">P2</span> &middot; Resource Risk Exposure</h2>
+    <h2 class="sec-title"><span style="background:var(--orange);color:#fff;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:900;margin-right:6px;">TIER 2</span> Resource &amp; Capacity Risks</h2>
     <div class="sec-line"></div>
-    <div class="sec-tag" style="background:rgba(240,129,42,.1);color:var(--orange);border-color:rgba(240,129,42,.3);font-weight:700;">EXECUTIVE BIRD'S EYE VIEW</div>
+    <div class="sec-tag" style="background:rgba(240,129,42,.1);color:var(--orange);border-color:rgba(240,129,42,.3);font-weight:700;">🟠 HIGH-RISK RESOURCE BOTTLENECKS</div>
   </div>
   <div class="card" style="margin-bottom:24px;">
     <div class="card-hdr" style="display:flex;justify-content:space-between;align-items:center;">
       <div class="card-title">
         <div class="c-icon" style="background:rgba(230,48,80,.1);color:var(--red)"><i class="fa-solid fa-fire-flame-curved"></i></div>
-        Resource Exposure (Bird's Eye Overview)
+        Top 3 At-Risk Resource Categories
       </div>
       <div style="display:flex;gap:4px;background:var(--table-stripe);padding:3px;border-radius:8px;border:1px solid var(--border-subtle);">
         <button id="btnSummaryView" class="btn btn-ghost" style="padding:4px 10px;font-size:11px;border-radius:6px;background:var(--bg-card-solid);color:var(--text-h);font-weight:700;" onclick="toggleHeatmapView('summary')"><i class="fa-solid fa-chart-pie"></i> Executive Summary</button>
@@ -994,8 +994,8 @@ function verifyPasscode(){
           </div>
         </div>
         <div style="font-size:11px;color:var(--text-muted);background:var(--table-stripe);padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;">
-          <span>💡 <strong>Bird's Eye Takeaway:</strong> 3 out of 8 resource categories require active management. The remaining 5 (Piping, Electrical, Design, Planning, Civil) are operating within normal risk limits.</span>
-          <button class="btn btn-ghost" style="font-size:10.5px;padding:3px 8px;" onclick="toggleHeatmapView('grid')">View Full 32-Cell Grid &rarr;</button>
+          <span>💡 <strong>Manager Summary:</strong> 3 out of 8 categories require active management intervention. The remaining 5 are operating within normal limits.</span>
+          <button class="btn btn-ghost" style="font-size:10.5px;padding:3px 8px;" onclick="toggleHeatmapView('grid')">View Full Grid &rarr;</button>
         </div>
       </div>
 
@@ -1122,11 +1122,11 @@ function verifyPasscode(){
     </div>
   </div>
 
-  <!-- ═══ PRIORITY 4: MILESTONE TRACKING & DEPENDENCY STATUS ═══ -->
+  <!-- ═══ TIER 4: MILESTONE TRACKING & DEPENDENCY STATUS ═══ -->
   <div class="sec-hdr" id="sec-milestones">
-    <h2 class="sec-title"><span style="color:var(--blue);font-weight:900;">P4</span> &middot; Milestone Tracking &amp; Critical Path Schedule</h2>
+    <h2 class="sec-title"><span style="background:var(--blue);color:#fff;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:900;margin-right:6px;">TIER 4</span> Milestone Tracking &amp; Critical Path Schedule</h2>
     <div class="sec-line"></div>
-    <div class="sec-tag">SORTED BY DELAY SEVERITY</div>
+    <div class="sec-tag">🔵 SORTED BY DELAY SEVERITY</div>
   </div>
   <div class="card" style="margin-bottom:24px;">
     <div class="card-hdr">
@@ -1183,11 +1183,11 @@ function verifyPasscode(){
     </div>
   </div>
 
-  <!-- ═══ PRIORITY 5: WORKFLOW DOMAIN DIRECTORY ═══ -->
+  <!-- ═══ TIER 5: WORKFLOW DOMAIN LAUNCHPADS ═══ -->
   <div class="sec-hdr" id="sec-domains">
-    <h2 class="sec-title"><span style="color:var(--teal);font-weight:900;">P5</span> &middot; Workflow Domain Dashboards</h2>
+    <h2 class="sec-title"><span style="background:var(--teal);color:#000;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:900;margin-right:6px;">TIER 5</span> Detailed Domain Dashboards</h2>
     <div class="sec-line"></div>
-    <div class="sec-tag">FULL-PAGE LAUNCHPADS</div>
+    <div class="sec-tag">🩵 FULL-PAGE LAUNCHPADS</div>
   </div>
   <div class="domains-grid" style="margin-bottom:24px">
     <!-- 1. Manufacturing (Highest Risk) -->
