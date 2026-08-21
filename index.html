@@ -741,7 +741,7 @@ function verifyPasscode(){
   <div class="sb-item" onclick="goTo('procurement.html')"><i class="fa-solid fa-truck-fast"></i> Procurement</div>
   <div class="sb-item" onclick="goTo('planning.html')"><i class="fa-solid fa-calendar-days"></i> Planning</div>
   <div class="sb-item" onclick="goTo('manufacturing.html')"><i class="fa-solid fa-industry"></i> Manufacturing</div>
-  <div class="sb-item" onclick="goTo('quality.html')"><i class="fa-solid fa-shield-check"></i> Quality</div>
+  <div class="sb-item" onclick="goTo('quality.html')"><i class="fa-solid fa-clipboard-check"></i> Quality</div>
   <div class="sb-item" onclick="goTo('execution.html')"><i class="fa-solid fa-diagram-project"></i> Project Execution</div>
   <div class="sb-label">Governance</div>
   <div class="sb-item" onclick="sbClick(this,'#sec-exec');openDrawer('esc-all')"><i class="fa-solid fa-triangle-exclamation"></i> Escalations <span class="sb-badge">7</span></div>
@@ -1230,7 +1230,7 @@ function verifyPasscode(){
 
     <!-- 4. Quality (Stable) -->
     <div class="domain-card" style="--dc:linear-gradient(90deg,#00d4b0,#0091ff)" data-domain="Quality" onclick="goTo('quality.html')" data-tip="Priority 4 Domain: Stable status — 77% pass rate">
-      <div class="dc-icon" style="background:rgba(0,212,176,.1);color:var(--teal)"><i class="fa-solid fa-shield-check"></i></div>
+      <div class="dc-icon" style="background:rgba(0,212,176,.1);color:var(--teal)"><i class="fa-solid fa-clipboard-check"></i></div>
       <div class="dc-name" style="color:var(--teal)">Quality</div>
       <div class="dc-sub">Inspection &middot; NCR status &middot; Re-qualification</div>
       <div class="dc-stats"><div class="dc-stat"><strong>186</strong>Inspections</div><div class="dc-stat"><strong>77%</strong>Pass Rate</div><div class="dc-stat"><strong>7</strong>NCR Open</div></div>
@@ -1705,7 +1705,7 @@ var domainData={
     h:59,stats:{jobs:18,onTime:'59%',critical:7,throughput:'72%',wip:'59%'},
     summary:'CRITICAL: MFG-12 is 18 days behind. Mandatory overtime approved. Recovery plan submitted to PMG.',
     items:['MFG-12 Pressure Vessel — Delayed +18d (CRITICAL)','MFG-09 Batch B — QC rejection, NCR open','MFG-14 Skid Assembly — On schedule']},
-  quality:{name:'Quality',color:'var(--teal)',icon:'fa-shield-check',bg:'rgba(0,212,176,.08)',
+  quality:{name:'Quality',color:'var(--teal)',icon:'fa-clipboard-check',bg:'rgba(0,212,176,.08)',
     h:77,stats:{inspections:42,passRate:'77%',ncr:3,hold:2,cleared:37},
     summary:'Pass rates improved +12% since QA-04 protocol. 3 NCRs open. Scale QA-04 to Manufacturing recommended.',
     items:['QA-04 Protocol — Active (pass rate +12%)','NCR-07 Batch B rejection — Pending resolution','QA-18 Weld inspection — Cleared']},
@@ -2232,7 +2232,7 @@ function openModal(type){
     },
     'resource-qc':{
       title:'Critical Resource Breakdown — QC Inspectors',
-      body:'<div style="padding:14px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);border-radius:8px;margin-bottom:14px"><div style="font-size:13px;font-weight:800;color:var(--yellow);margin-bottom:6px"><i class="fa-solid fa-shield-check"></i> 82% Quality Risk — Re-inspection Backlog</div><div style="font-size:12px;color:var(--text-p);line-height:1.5">Re-qualification queue backlog following NCR-07 dimensional non-conformance.</div></div><div class="dinfo-row"><span class="dinfo-lbl">Quality Risk</span><span class="dinfo-val" style="color:var(--red)">82% (Critical)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Overload Risk</span><span class="dinfo-val" style="color:var(--orange)">78% (High)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Schedule Risk</span><span class="dinfo-val" style="color:var(--orange)">62% (High)</span></div><div style="margin-top:14px;padding:10px;background:var(--table-stripe);border-radius:6px;border:1px solid var(--border-subtle)"><div style="font-size:11px;font-weight:700;color:var(--text-h);margin-bottom:4px">💡 Manager Action Recommendation</div><div style="font-size:11px;color:var(--text-muted);line-height:1.4">Deploy 2 additional QC inspectors for weekend re-qualification testing to clear 72-hour backlog.</div></div>',
+      body:'<div style="padding:14px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);border-radius:8px;margin-bottom:14px"><div style="font-size:13px;font-weight:800;color:var(--yellow);margin-bottom:6px"><i class="fa-solid fa-clipboard-check"></i> 82% Quality Risk — Re-inspection Backlog</div><div style="font-size:12px;color:var(--text-p);line-height:1.5">Re-qualification queue backlog following NCR-07 dimensional non-conformance.</div></div><div class="dinfo-row"><span class="dinfo-lbl">Quality Risk</span><span class="dinfo-val" style="color:var(--red)">82% (Critical)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Overload Risk</span><span class="dinfo-val" style="color:var(--orange)">78% (High)</span></div><div class="dinfo-row"><span class="dinfo-lbl">Schedule Risk</span><span class="dinfo-val" style="color:var(--orange)">62% (High)</span></div><div style="margin-top:14px;padding:10px;background:var(--table-stripe);border-radius:6px;border:1px solid var(--border-subtle)"><div style="font-size:11px;font-weight:700;color:var(--text-h);margin-bottom:4px">💡 Manager Action Recommendation</div><div style="font-size:11px;color:var(--text-muted);line-height:1.4">Deploy 2 additional QC inspectors for weekend re-qualification testing to clear 72-hour backlog.</div></div>',
       footer:'<button class="btn btn-primary" onclick="goTo(\'quality.html\')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Quality Page</button><button class="btn btn-outline" onclick="closeModal()">Close</button>'
     },
   };
